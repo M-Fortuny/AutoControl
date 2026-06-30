@@ -117,7 +117,10 @@ h2, h3 {
     padding-bottom: 5px;
 }
 
-.orange-mode h2, .orange-mode h3 { color: #f97316 !important; }
+/* SIN !important para permitir que el estilo base prevalezca al quitar la clase */
+.orange-mode h2, 
+.orange-mode h3 { 
+    color: #f97316; }
 
 
 h1, h2, h3 { 
@@ -506,6 +509,16 @@ body.dark-mode .alerta-urgente {
 .orange-mode h3 {
     color: #f97316 !important; /* Forzamos el naranja cuando la clase esté activa */
 }
+
+
+body {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+.orange-mode h1, .orange-mode h2, .orange-mode h3 {
+    color: orange !important;
+}
+
+
 
 /* ======================================================= */
 /* 10. COMPONENTE FOOTER - EASTER EGG (UNIFICADO)          */
@@ -1021,15 +1034,29 @@ body.dark-mode .alerta-urgente {
         <h2>Backup de Datos</h2>
         <p style="font-size: 13px; color: #64748b; margin-top: -8px;">Exporta o importa tus datos para no perderlos.</p>
         <div class="flex-group">
-            <button class="btn btn-secondary" style="margin-top:0;" onclick="exportarDatos()">📥 Exportar JSON</button>
-            <button class="btn btn-secondary" style="margin-top:0;" onclick="document.getElementById('importFile').click()">📤 Importar JSON</button>
-        </div>
-        <input type="file" id="importFile" class="hidden" accept=".json" onchange="importarDatos(event)">
-    </div>
+            
+     </div>
+        
 
+<div class="button-row">
+    <button class="btn btn-secondary" id="btn-importar" onclick="document.getElementById('importFile').click()">📤 Importar JSON</button>
+
+        <input type="file" id="importFile" class="hidden" accept=".json" onchange="importarDatos(event)">
+ 
+    <button class="btn btn-secondary" id="btn-exportar" onclick="exportarDatos()">📥 Exportar JSON</button>        
+    </button>
+
+</div>
+	</div>
+		</div>
+
+
+
+<!-- Archivo oculto para el easter egg -->
+<audio id="audio-secreto" src="https://github.com/M-Fortuny/AutoControl/raw/refs/heads/main/Audio.mp3" preload="auto"></audio>
 
 <footer>
-    <p>Desarrollado por <span id="easter-egg-trigger">Manuel Fortuny Ruiz</span></p>
+    <p>Desarrollado por <span id="easter-egg-trigger" style="cursor: pointer;">Manuel Fortuny Ruiz</span></p>
 </footer>
 
 
@@ -1040,8 +1067,33 @@ body.dark-mode .alerta-urgente {
 
 
 
-
 <script>
+
+
+
+	// Reproduce la Musica.
+
+document.getElementById('easter-egg-trigger').addEventListener('click', function() {
+
+
+    // 2. Reproducir el audio (solo si el modo naranja está activo)
+    const audio = document.getElementById('audio-secreto');
+    
+    // Verificamos si estamos activando el modo (si la clase está presente)
+    if (document.body.classList.contains('orange-mode')) {
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play().catch(error => {
+                console.log("El navegador bloqueó el audio:", error);
+            });
+        }
+    }
+
+    // 3. Eliminamos la línea 'this.style.pointerEvents = 'none';' 
+    // para que el usuario pueda volver a pulsar el botón.
+});
+
+
 
 
 
@@ -1049,7 +1101,6 @@ function limpiarTexto(input) {
   // Esta línea elimina instantáneamente cualquier cosa que no sea número o punto
   input.value = input.value.replace(/[^0-9.]/g, '');
 }
-
 
 
 
@@ -2248,7 +2299,6 @@ function eliminarRegistro(index) {
     }
 }
 
-
     
     const trigger = document.getElementById('easter-egg-trigger');
 
@@ -2272,10 +2322,6 @@ function eliminarRegistro(index) {
 
 
 
-
-
-
-
 // 4. Validación global para evitar números negativos
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('input[type="number"]').forEach(input => {
@@ -2284,7 +2330,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
 
     
 
