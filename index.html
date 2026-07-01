@@ -1049,15 +1049,18 @@ body {
 </div>
 	</div>
 		</div>
-
+		
 
 
 <!-- Archivo oculto para el easter egg -->
 <audio id="audio-secreto" src="https://github.com/M-Fortuny/AutoControl/raw/refs/heads/main/Audio.mp3" preload="auto"></audio>
 
+
 <footer>
     <p>Desarrollado por <span id="easter-egg-trigger" style="cursor: pointer;">Manuel Fortuny Ruiz</span></p>
 </footer>
+
+
 
 
     </div>
@@ -1071,27 +1074,7 @@ body {
 
 
 
-	// Reproduce la Musica.
 
-document.getElementById('easter-egg-trigger').addEventListener('click', function() {
-
-
-    // 2. Reproducir el audio (solo si el modo naranja está activo)
-    const audio = document.getElementById('audio-secreto');
-    
-    // Verificamos si estamos activando el modo (si la clase está presente)
-    if (document.body.classList.contains('orange-mode')) {
-        if (audio) {
-            audio.currentTime = 0;
-            audio.play().catch(error => {
-                console.log("El navegador bloqueó el audio:", error);
-            });
-        }
-    }
-
-    // 3. Eliminamos la línea 'this.style.pointerEvents = 'none';' 
-    // para que el usuario pueda volver a pulsar el botón.
-});
 
 
 
@@ -2329,6 +2312,29 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.value < 0) this.value = 0;
         });
     });
+});
+
+
+	// Reproduce la Musica.
+
+document.getElementById('easter-egg-trigger').addEventListener('click', function() {
+
+
+    // 2. Reproducir el audio (solo si el modo naranja está activo)
+    const audio = document.getElementById('audio-secreto');
+    
+    // Verificamos si estamos activando el modo (si la clase está presente)
+    if (document.body.classList.contains('orange-mode')) {
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play().catch(error => {
+                console.log("El navegador bloqueó el audio:", error);
+            });
+        }
+    }
+
+    // 3. Eliminamos la línea 'this.style.pointerEvents = 'none';' 
+    // para que el usuario pueda volver a pulsar el botón.
 });
 
     
