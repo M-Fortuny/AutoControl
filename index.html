@@ -539,6 +539,68 @@ body {
 }
 
 
+/* --- CORRECCIÓN DEFINITIVA MANTENIMIENTOS EN MÓVIL --- */
+
+@media (max-width: 600px) {
+    /* 1. Convertimos la fila en una columna apilada */
+    .maint-item {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important; /* Alinea todo a la izquierda */
+        gap: 8px !important; /* Espacio entre el texto y el badge */
+        padding: 15px 0 !important; 
+    }
+
+    /* 2. El contenedor de los textos debe ocupar todo el ancho */
+    .maint-item > div {
+        width: 100% !important;
+    }
+
+    /* 3. Obligamos al Título (Cambio de aceite, etc.) a usar su propia línea */
+    .maint-item > div > strong {
+        display: block !important;
+        margin-bottom: 4px !important;
+        font-size: 1.05rem !important;
+    }
+
+    /* 4. Obligamos al Subtítulo (Kilómetros restantes) a ir debajo */
+    .maint-item > div > small,
+    .maint-item > div > span[id^="maint"] {
+        display: block !important;
+        white-space: normal !important;
+        line-height: 1.4 !important;
+        color: var(--text-muted) !important;
+    }
+
+    /* 5. Acomodamos el Badge para que no se deforme ni ocupe todo el ancho */
+    .maint-item > .badge {
+        align-self: flex-start !important; /* Lo mantiene a la izquierda */
+        margin-top: 5px !important;
+        width: max-content !important; /* Se ajusta solo al texto que contiene */
+
+
+}
+
+
+@media (max-width: 650px) {
+  /* Apunta directamente al h2 que contiene el nombre del vehículo */
+  h2:has(#nombre-vehiculo-activo) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+
+  /* Aseguramos que el texto ocupe todo el ancho sin cortes raros */
+  #nombre-vehiculo-activo {
+    display: block !important;
+    width: 100% !important;
+    word-break: break-word !important;
+  }
+}
+
+
 
     </style>
 </head>
@@ -570,7 +632,7 @@ body {
             
             <span style="margin-left: 10px; padding: 2px 5px; background: #e2e8f0; font-size: 0.6rem; border-radius: 4px; color: #64748b;">v3.0</span>
             
-        </h1>
+        
 
     </div> 
 </div>
@@ -652,11 +714,13 @@ body {
     </div>
 
 
-
-
-
     <button class="btn-custom" style="margin-top: 25px; width: 100%;" onclick="toggleInfo()">Cerrar Información</button>
 </div>
+
+
+
+
+
 
 
 <div class="card">
@@ -665,7 +729,8 @@ body {
 
         <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">
 
-            <h4>Kilometraje actual: <strong id="displayKmActuales" style="color: var(--primary);">0</strong> Km</h4>
+            <h4>Kilometraje actual: <strong id="displayKmActuales" style="color: var(--primary);">0</strong> Km
+        </p></h4>
 
 
         <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">
@@ -675,6 +740,8 @@ body {
         <select id="selectorVehiculo" onchange="cambiarVehiculoActivo()"></select>
 
     </div>
+
+
 
     <div class="button-row" style="display: flex; gap: 10px; flex-wrap: wrap;">
         <button class="btn btn-secondary" onclick="iniciarAsistenteNuevoVehiculo()">+ Nuevo</button>
