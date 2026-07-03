@@ -651,17 +651,29 @@ body {
         </section>
     </div>
 
+
+
+
+
     <button class="btn-custom" style="margin-top: 25px; width: 100%;" onclick="toggleInfo()">Cerrar Información</button>
 </div>
 
+
 <div class="card">
-    <h2>Vehículo Activo</h2>
+        <h2>Vehículo Activo: <span id="nombre-vehiculo-activo" style="color: var(--primary);"></span></h2>
+
+
+        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">
+
+            <h4>Kilometraje actual: <strong id="displayKmActuales" style="color: var(--primary);">0</strong> Km</h4>
+
+
+        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">
+
     <div class="form-group">
         <label>Selecciona un vehículo</label>
         <select id="selectorVehiculo" onchange="cambiarVehiculoActivo()"></select>
-        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">
-            Kilometraje actual: <strong id="displayKmActuales" style="color: var(--primary);">0</strong> Km
-        </p>
+
     </div>
 
     <div class="button-row" style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -671,6 +683,7 @@ body {
         <button class="btn btn-danger" onclick="eliminarVehiculo()">🗑️ Eliminar</button>
     </div>
 </div>
+
 
 <div id="nuevoVehiculoForm" class="hidden modal-overlay">
     <div class="modal-content card">
@@ -697,15 +710,17 @@ body {
 
 <div class="card">
     <h2>Mantenimiento Vehículo</h2>
-    <div class="form-group">
-        <label for="kmOdom">Kilómetros Actuales del Coche (Odómetro)</label>
-        <input type="text" inputmode="numeric" id="kmOdom" class="form-control" placeholder="Ej: 145000" oninput="this.value = this.value.replace(/[^0-9]/g, ''); guardarKmActuales();">
-    </div>
+
+
+    
 
     <button class="btn btn-secondary" style="margin-bottom: 12px;" onclick="toggleForm('maintPlanForm')">⚙️ Configurar Mantenimientos</button>
     
     <div id="maintPlanForm" class="hidden" style="background: var(--surface); padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid var(--border);">
-        <label style="font-weight: 500;">Próximos Servicios:</label>
+        <label style="font-weight: 500;">Próximos Servicios:</
+    </div>
+
+
         <div class="maint-inputs-grid">
             <div style="margin-top: 8px;">
                 <label style="font-size: 12px;">Próxima ITV (Km)</label>
@@ -1057,8 +1072,9 @@ body {
 
 
 <footer>
-    <p>Desarrollado por <span id="easter-egg-trigger" style="cursor: pointer;">Manuel Fortuny Ruiz</span></p>
+    <p><span id="easter-egg-trigger" style="cursor: pointer;">Desarrollado por Manuel Fortuny Ruiz</span></p>
 </footer>
+
 
 
 
@@ -1561,6 +1577,19 @@ function guardarKmActuales() {
     }
 
 
+
+function actualizarNombreVehiculo(nombreSeleccionado) {
+    const displayElement = document.getElementById('nombre-vehiculo-activo');
+    // El 'if' es nuestra red de seguridad: solo actualiza si el HTML existe realmente
+    if (displayElement) {
+        displayElement.textContent = nombreSeleccionado;
+    }
+}
+
+
+
+
+
 function cargarDatosVehiculo() {
     const coche = baseDatos[vehiculoActivo];
     
@@ -1597,6 +1626,7 @@ function cargarDatosVehiculo() {
     calcularEstadoITV(coche.fechaITV);
     calcularAutonomia();
     calcularGastoDesplazamiento();
+	 actualizarNombreVehiculo(vehiculoActivo);
 }
 
 
@@ -2336,6 +2366,8 @@ document.getElementById('easter-egg-trigger').addEventListener('click', function
     // 3. Eliminamos la línea 'this.style.pointerEvents = 'none';' 
     // para que el usuario pueda volver a pulsar el botón.
 });
+
+
 
     
 
