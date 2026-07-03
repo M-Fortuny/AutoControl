@@ -520,56 +520,58 @@ body {
 
 
 
-/* ======================================================= */
-/* 10. COMPONENTE FOOTER - EASTER EGG (UNIFICADO)          */
-/* ======================================================= */
-
-/* Estado base del elemento */
-#easter-egg-trigger {
-    transition: color 0.4s ease; /* Define la transición aquí */
-    cursor: pointer;
-    /* Si necesitas asegurar el color inicial, puedes definirlo aquí, 
-       pero heredará del padre si no lo fuerzas */
-}
-
-/* Estado activo cuando la aplicación entra en modo naranja */
-/* He quitado !important para permitir que la transición fluya */
-.orange-mode #easter-egg-trigger {
-    color: #f97316; 
-}
-
-
-/* --- CORRECCIÓN FINAL PARA MÓVIL (Android/Pantallas estrechas) --- */
+/* --- CORRECCIÓN DEFINITIVA MANTENIMIENTOS EN MÓVIL --- */
 @media (max-width: 600px) {
-    /* 1. Forzamos la estructura de columna vertical */
-    .resultado-item {
+    .maint-item {
         display: flex !important;
-        flex-direction: column !important; 
-        align-items: stretch !important;
-        width: 100% !important;
-        padding: 15px !important;
-        margin-bottom: 10px !important;
-        box-sizing: border-box !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        padding: 15px 0 !important; 
     }
 
-    /* 2. Aseguramos que el contenido interno no flote, sino que caiga */
-    .resultado-item > div, 
-    .resultado-item > span,
-    .resultado-item p {
+    .maint-item > div {
+        width: 100% !important;
+    }
+
+    .maint-item > div > strong {
+        display: block !important;
+        margin-bottom: 4px !important;
+        font-size: 1.05rem !important;
+    }
+
+    .maint-item > div > small,
+    .maint-item > div > span[id^="maint"] {
+        display: block !important;
+        white-space: normal !important;
+        line-height: 1.4 !important;
+        color: var(--text-muted) !important;
+    }
+
+    .maint-item > .badge {
+        align-self: flex-start !important;
+        margin-top: 5px !important;
+        width: max-content !important;
+    } /* LLAVE DE CIERRE AÑADIDA */
+} /* LLAVE DE CIERRE AÑADIDA PARA EL MEDIA QUERY */
+
+@media (max-width: 650px) {
+    h2:has(#nombre-vehiculo-activo) {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+        border-bottom: 1px solid var(--border) !important;
+    }
+
+    #nombre-vehiculo-activo {
         display: block !important;
         width: 100% !important;
-        margin: 5px 0 !important;
-        text-align: left !important;
-    }
-
-    /* 3. Ajuste específico para tus badges (etiquetas de estado) */
-    .badge {
-        display: inline-block !important;
-        width: auto !important;
-        margin-top: 5px !important;
-        align-self: flex-start !important;
+        word-break: break-word !important;
     }
 }
+
+
 
 
 /* 11. PUNTO DE ESTADO (INDICADOR AUTO) */
