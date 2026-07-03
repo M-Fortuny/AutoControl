@@ -539,65 +539,73 @@ body {
 }
 
 
-/* --- CORRECCIÓN DEFINITIVA MANTENIMIENTOS EN MÓVIL --- */
-
+/* --- CORRECCIÓN FINAL PARA MÓVIL (Android/Pantallas estrechas) --- */
 @media (max-width: 600px) {
-    /* 1. Convertimos la fila en una columna apilada */
-    .maint-item {
+    /* 1. Forzamos la estructura de columna vertical */
+    .resultado-item {
         display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important; /* Alinea todo a la izquierda */
-        gap: 8px !important; /* Espacio entre el texto y el badge */
-        padding: 15px 0 !important; 
-    }
-
-    /* 2. El contenedor de los textos debe ocupar todo el ancho */
-    .maint-item > div {
+        flex-direction: column !important; 
+        align-items: stretch !important;
         width: 100% !important;
+        padding: 15px !important;
+        margin-bottom: 10px !important;
+        box-sizing: border-box !important;
     }
 
-    /* 3. Obligamos al Título (Cambio de aceite, etc.) a usar su propia línea */
-    .maint-item > div > strong {
+    /* 2. Aseguramos que el contenido interno no flote, sino que caiga */
+    .resultado-item > div, 
+    .resultado-item > span,
+    .resultado-item p {
         display: block !important;
-        margin-bottom: 4px !important;
-        font-size: 1.05rem !important;
+        width: 100% !important;
+        margin: 5px 0 !important;
+        text-align: left !important;
     }
 
-    /* 4. Obligamos al Subtítulo (Kilómetros restantes) a ir debajo */
-    .maint-item > div > small,
-    .maint-item > div > span[id^="maint"] {
-        display: block !important;
-        white-space: normal !important;
-        line-height: 1.4 !important;
-        color: var(--text-muted) !important;
-    }
-
-    /* 5. Acomodamos el Badge para que no se deforme ni ocupe todo el ancho */
-    .maint-item > .badge {
-        align-self: flex-start !important; /* Lo mantiene a la izquierda */
+    /* 3. Ajuste específico para tus badges (etiquetas de estado) */
+    .badge {
+        display: inline-block !important;
+        width: auto !important;
         margin-top: 5px !important;
-        width: max-content !important; /* Se ajusta solo al texto que contiene */
-
-
+        align-self: flex-start !important;
+    }
 }
 
 
-@media (max-width: 650px) {
-  /* Apunta directamente al h2 que contiene el nombre del vehículo */
-  h2:has(#nombre-vehiculo-activo) {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 6px !important;
-    border-bottom: 1px solid var(--border) !important;
-  }
+/* 11. PUNTO DE ESTADO (INDICADOR AUTO) */
+.punto-estado {
+    width: 10px; /* Aumentado ligeramente para mejor visibilidad */
+    height: 10px;
+    background-color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    display: inline-block; /* Asegura que se dibuje */
+}
 
-  /* Aseguramos que el texto ocupe todo el ancho sin cortes raros */
-  #nombre-vehiculo-activo {
-    display: block !important;
-    width: 100% !important;
-    word-break: break-word !important;
-  }
+.punto-estado.activo {
+    background-color: #22c55e !important;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+
+/* --- INTEGRACIÓN SEGURA DEL PUNTO DE ESTADO --- */
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    background-color: var(--text-muted); /* Color inicial gris */
+    border-radius: 50%;
+    margin-left: 8px; /* Espacio manual, no dependiente del flex */
+    flex-shrink: 0;   /* ESTO ES LA CLAVE: evita que se encoja aunque el contenedor esté lleno */
+    transition: background-color 0.3s ease;
+}
+
+/* Clase para activar el punto verde */
+.status-indicator.activo {
+    background-color: var(--success); /* Verde definido en tus variables */
+    box-shadow: 0 0 6px var(--success);
 }
 
 
@@ -613,10 +621,13 @@ body {
 
 
 <div class="button-container" style="display: flex; gap: 10px; margin-bottom: 5px; justify-content: center; align-items: center;">
+    <div id="indicador-auto" class="punto-estado" onclick="toggleAutoMode()" title="Activar/Desactivar modo automático"></div>
+    
     <button class="btn-custom" onclick="toggleDarkMode()">🌓 Modo Visual</button>
     <button class="btn-custom" onclick="toggleAyuda()">❓ Ayuda</button>
     <button class="btn-custom" onclick="toggleInfo()">ℹ️ Info Pro</button>
 </div>
+
 
 
 <div id="fechaHora" style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;"></div>
@@ -1149,11 +1160,59 @@ body {
 </div>
 
 
-
-
-
 <script>
 
+
+
+// 1. FUNCIONES LÓGICAS (Definición primero)
+
+function aplicarModoSegunHora() {
+    // Solo aplicamos si el usuario tiene el modo automático ACTIVO
+    const estaActivo = localStorage.getItem('autoMode') === 'true';
+    
+    if (!estaActivo) return; // Si está desactivado, no hacemos nada
+
+    const hora = new Date().getHours();
+    const esDeNoche = hora >= 20 || hora < 7;
+
+    if (esDeNoche) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+}
+
+function toggleAutoMode() {
+    const indicador = document.getElementById('indicador-auto');
+    if (!indicador) return;
+
+    const estaActivo = indicador.classList.toggle('activo');
+    
+    // Guardar estado
+    localStorage.setItem('autoMode', estaActivo);
+    
+    // Si lo acabamos de activar, aplicamos el modo inmediatamente
+    if (estaActivo) {
+        aplicarModoSegunHora();
+    }
+}
+
+// 2. INICIALIZACIÓN (Una sola vez al cargar)
+
+document.addEventListener('DOMContentLoaded', () => {
+    // A. Recuperar estado del punto
+    const estaActivo = localStorage.getItem('autoMode') === 'true';
+    const indicador = document.getElementById('indicador-auto');
+    
+    if (indicador && estaActivo) {
+        indicador.classList.add('activo');
+        // B. Aplicar modo si estaba activo
+        aplicarModoSegunHora();
+    }
+    
+    // C. Configurar el intervalo (se ejecuta cada minuto)
+    setInterval(aplicarModoSegunHora, 60000);
+});
 
 
 
