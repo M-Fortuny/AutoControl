@@ -572,37 +572,39 @@ body {
 }
 
 
+/* 11. PUNTO DE ESTADO Y NAVEGACIÓN UNIFICADOS */
 
+/* Contenedor flexible de la fila superior */
+/* 1. Contenedor: Volvemos a centrar y usamos flex para gestionar todo */
+.top-nav-row {
+    display: flex;
+    justify-content: center; /* Centra el conjunto de botones + punto */
+    align-items: center;
+    width: 100%;
+    position: relative;
+    gap: 15px; /* Define el espacio entre botones y el punto */
+}
 
-/* 11. PUNTO DE ESTADO (INDICADOR AUTO) */
+/* 2. Punto: Eliminamos el absoluto */
 .punto-estado {
-    width: 10px; /* Aumentado ligeramente para mejor visibilidad */
-    height: 10px;
-    background-color: var(--text);
+    position: static; /* Ya no flota */
+    width: 12px;
+    height: 12px;
+    background-color: #ef4444 !important; /* Rojo por defecto */
     border: 1px solid var(--border);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease;
-    flex-shrink: 0;
-    display: inline-block; /* Asegura que se dibuje */
+    flex-shrink: 0; /* Asegura que no se deforme */
 }
 
+/* Estado Activo */
 .punto-estado.activo {
     background-color: #22c55e !important;
     box-shadow: 0 0 8px #22c55e;
 }
 
 
-/* --- INTEGRACIÓN SEGURA DEL PUNTO DE ESTADO --- */
-.status-indicator {
-    width: 12px;
-    height: 12px;
-    background-color: var(--text-muted); /* Color inicial gris */
-    border-radius: 50%;
-    margin-left: 8px; /* Espacio manual, no dependiente del flex */
-    flex-shrink: 0;   /* ESTO ES LA CLAVE: evita que se encoja aunque el contenedor esté lleno */
-    transition: background-color 0.3s ease;
-}
 
 /* Clase para activar el punto verde */
 .status-indicator.activo {
@@ -611,7 +613,17 @@ body {
 }
 
 
+/* Estado Inactivo (Rojo) */
+.punto-estado {
+    background-color: #ef4444 !important; /* Rojo */
+    transition: background-color 0.3s ease;
+}
 
+/* Estado Activo (Verde) */
+.punto-estado.activo {
+    background-color: #22c55e !important; /* Verde */
+    box-shadow: 0 0 8px #22c55e; /* Un pequeño brillo para resaltar */
+}
 
 
 
@@ -622,8 +634,11 @@ body {
 
 
 
-<div class="button-container" style="display: flex; gap: 10px; margin-bottom: 5px; justify-content: center; align-items: center;">
-    <div id="indicador-auto" class="punto-estado" onclick="toggleAutoMode()" title="Activar/Desactivar modo automático"></div>
+
+
+<div class="button-container" style="display: flex; position: relative; justify-content: center; align-items: center; gap: 10px; width: 100%;">
+    
+    <div id="indicador-auto" class="punto-estado" onclick="toggleAutoMode()"></div>
     
     <button class="btn-custom" onclick="toggleDarkMode()">🌓 Modo Visual</button>
     <button class="btn-custom" onclick="toggleAyuda()">❓ Ayuda</button>
@@ -632,7 +647,10 @@ body {
 
 
 
+
 <div id="fechaHora" style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;"></div>
+
+
 
 
     
