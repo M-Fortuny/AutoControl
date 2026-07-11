@@ -571,6 +571,20 @@ body {
     }
 }
 
+@media (max-width: 768px) {
+    /* Ocultamos el texto largo estándar */
+    .texto-largo {
+        display: none;
+    }
+    
+    /* Mostramos el texto corto que definiremos en cada HTML */
+    .card-title::after {
+        display: inline;
+        content: attr(data-mobile); /* Toma el texto del HTML automáticamente */
+        font-size: 1.2rem;
+        margin-left: 5px; /* Espacio opcional entre el icono y el texto */
+    }
+}
 
 
 
@@ -627,6 +641,22 @@ body {
 
 
 
+@media (max-width: 768px) {
+    /* Esto afectará tanto a h2 como a h4 con la clase card-title */
+    .texto-largo {
+        display: none;
+    }
+    
+    .card-title::after {
+        content: attr(data-mobile);
+        display: inline;
+        margin-right: 5px;
+        font-size: 1.1rem; /* Ajuste para h4 */
+    }
+}
+
+
+
 
     </style>
 </head>
@@ -675,7 +705,6 @@ body {
     <h2 style="margin-top: 0; color: var(--primary);">📖 Guía de Operación: AutoControl IA Pro</h2>
 
     <div style="display: grid; gap: 20px; margin-top: 20px;">
-
 
 
         
@@ -743,28 +772,26 @@ body {
     </div>
 
 
-
-
-
     <button class="btn-custom" style="margin-top: 25px; width: 100%;" onclick="toggleInfo()">Cerrar Información</button>
 </div>
 
 
+
+
 <div class="card">
-        <h2>Vehículo Activo: <span id="nombre-vehiculo-activo" style="color: var(--primary);"></span></h2>
+    <h2 class="card-title" data-mobile="Vehículo Activo">
+        <span class="texto-largo">Vehículo Activo:</span> 
+        <span id="nombre-vehiculo-activo" style="color: var(--primary);"></span>
+    </h2>
 
-
-        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">
-
-            <h4>Kilometraje actual: <strong id="displayKmActuales" style="color: var(--primary);">0</strong> Km</h4>
-
-
-        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">
+    <h4 class="card-title" data-mobile="Kilometraje actual:">
+        <span class="texto-largo">Kilometraje actual:</span> 
+        <strong id="displayKmActuales" style="color: var(--primary);">0</strong> Km
+    </h4>
 
     <div class="form-group">
         <label>Selecciona un vehículo</label>
         <select id="selectorVehiculo" onchange="cambiarVehiculoActivo()"></select>
-
     </div>
 
     <div class="button-row" style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -799,17 +826,34 @@ body {
 </div>
 
 
+
+
 <div class="card">
-    <h2>Mantenimiento Vehículo</h2>
+
+    <!-- 2. Mantenimiento Vehículo -->
+<h2 class="card-title" data-mobile="Mantenimiento Vehículo">
+     <span class="texto-largo">Mantenimiento Vehículo</span>
+</h2>
 
 
-    
 
     <button class="btn btn-secondary" style="margin-bottom: 12px;" onclick="toggleForm('maintPlanForm')">⚙️ Configurar Mantenimientos</button>
+
+
     
     <div id="maintPlanForm" class="hidden" style="background: var(--surface); padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid var(--border);">
         <label style="font-weight: 500;">Próximos Servicios:</
     </div>
+
+
+			
+			<div style="margin-top: 8px;" class="hidden">
+    <label>Kilómetros Actuales del Coche (Odómetro)</label>
+    <input type="number" id="kmOdom" placeholder="Ej: 145000" oninput="guardarKmActuales()">
+</div>
+
+
+				
 
 
         <div class="maint-inputs-grid">
@@ -817,6 +861,7 @@ body {
                 <label style="font-size: 12px;">Próxima ITV (Km)</label>
                 <input type="date" id="planITV" oninput="guardarPlanesMantenimiento()">
             </div>
+
             
             <div class="form-group">
                 <label for="planRevisionGeneral" style="font-size: 14px; color: var(--text-muted);">Próxima Revisión General (Km)</label>
@@ -857,11 +902,12 @@ body {
 
             </div>
         </div>
+
         
 
 <div id="maintList">
 
-        
+
 
 
 <div class="maint-item" style="text-align: left;">
@@ -939,8 +985,12 @@ body {
     </div>
 </div>
 
-    <div class="card">
-        <h2>Gasolineras Frecuentes</h2>
+
+<!-- 3. Gasolineras Frecuentes -->
+<div class="card">
+<h2 class="card-title" data-mobile="Tus Gasolineras">
+     <span class="texto-largo">Gasolineras Frecuentes</span>
+</h2>
         <button class="btn btn-secondary" onclick="toggleForm('nuevaGasolineraForm')">+ Gestion Gasolineras</button>
 
         
@@ -952,9 +1002,13 @@ body {
             </div>
         </div>
     </div>
-    
-    <div class="card">
-        <h2>Nuevo Repostaje</h2>
+
+
+<!-- 4. Nuevo Repostaje/Combustible -->
+<div class="card">
+<h2 class="card-title" data-mobile="Nuevo Repostaje">
+     <span class="texto-largo">Nuevo Repostaje</span>
+</h2>
         <form id="fuelForm">
             <div class="form-group">
                 <label>Gasolinera</label>
@@ -1014,31 +1068,46 @@ body {
         </form>
     </div>
 
+
+
+<!-- 5. Título de Eficiencia -->
     <div class="card">
-        <h2>🏆 Destacados de Eficiencia</h2>
+<h2 class="card-title" data-mobile="Los mas Eficientes">
+    🏆 <span class="texto-largo">Destacados de Eficiencia</span>
+</h2>
         <div class="grid-stats">
             <div class="stat-box best-box">
+
                 <span>🥇 Gasolinera con Menor Consumo</span>
                 <strong id="topGasolinera">-</strong>
             </div>
-            <div class="stat-box best-box">
+		<div class="stat-box best-box">
+		
+		
                 <span>🚗 Vehículo más Eficiente</span>
                 <strong id="topVehiculo">-</strong>
             </div>
         </div>
     </div>
 
-    <!-- NUEVO: Gráficos de tendencias *****íticas -->
+
+
+<!-- 6. Título de Historial Técnico -->
     <div class="card">
-        <h2>📈 Tendencias e Historial Técnico</h2>
+<h2 class="card-title" data-mobile="Historial Técnico">
+    📈 <span class="texto-largo">Historial Técnico</span>
+</h2>
         <div class="chart-container">
             <canvas id="graficoCombustible"></canvas>
         </div>
     </div>
-    
 
-    <div class="card">
-        <h2>Cálculos del Último Depósito</h2>
+
+<!-- 7. Título de Último Depósito -->
+		<div class="card">
+<h2 class="card-title" data-mobile="Último Depósito">
+     <span class="texto-largo">Cálculos del Último Depósito</span>
+</h2>
         <div class="grid-stats">
 		<div class="stat-box">
     <span>Autonomía Estimada</span>
@@ -1063,8 +1132,12 @@ body {
         </div>
     </div>
 
-    <div class="card" style="overflow-x: auto;">
-        <h2>📊 Comparador de Gasolineras</h2>
+
+	<!-- 8. Comparador de Gasolineras -->
+	<div class="card" style="overflow-x: auto;">
+<h2 class="card-title" data-mobile="Gasolineras">
+    📊 <span class="texto-largo">Comparador de Gasolineras</span>
+</h2>
         <p style="font-size: 13px; color: #64748b; margin-top: -8px;">Muestra los promedios globales acumulados por establecimiento para este coche.</p>
         <table>
             <thead>
@@ -1080,8 +1153,12 @@ body {
     </div>
 
 
-    <div class="card" style="overflow-x: auto;">
-        <h2>Historial de Viajes</h2>
+
+<!-- 9. Título de Estadísticas -->
+<div class="card" style="overflow-x: auto;">
+<h2 class="card-title" data-mobile="Historial de Viajes">
+     <span class="texto-largo">Historial de Viajes</span>
+</h2>
         <table>
             <thead>
                 <tr>
@@ -1101,9 +1178,12 @@ body {
     </div>
 
 
-<div class="card">
-    <h2>💰 Control Gasto Desplazamiento</h2>
 
+<!-- 5. Control Gasto Desplazamiento -->
+<div class="card">
+<h2 class="card-title" data-mobile="Desplazamientos">
+    💰 <span class="texto-largo">Control Gasto Desplazamiento</span>
+</h2>
     
 <div style="margin-bottom: 15px;">
     <label for="diasSemana" style="font-size: 0.8rem; color: var(--text-muted);">Días laborables por semana:</label>
@@ -1114,10 +1194,6 @@ body {
            oninput="this.value = this.value.replace(/[^1-7]/g, ''); guardarDesplazamientoEnBD(); calcularGastoDesplazamiento();" 
            style="width: 100%; display: block; margin-top: 4px;">
 </div>
-
-
-    
-
 
     
     <div style="margin-bottom: 15px;">
