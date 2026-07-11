@@ -1307,10 +1307,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-
-
-
 function limpiarTexto(input) {
   // Esta línea elimina instantáneamente cualquier cosa que no sea número o punto
   input.value = input.value.replace(/[^0-9.]/g, '');
@@ -2238,14 +2234,28 @@ function eliminarRegistro(index) {
 
 
     function exportarDatos() {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({baseDatos, gasolineras}));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "backup_combustible.json");
-        document.body.appendChild(downloadAnchorNode);
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
-    }
+    // 1. Empaquetamos los datos en formato JSON
+    const datosExportar = JSON.stringify({ baseDatos, gasolineras });
+
+    // 2. Creamos un "Blob" (iOS reconoce esto como un archivo real seguro)
+    const blob = new Blob([datosExportar], { type: "application/json" });
+
+    // 3. Generamos una URL temporal en la memoria del navegador
+    const url = URL.createObjectURL(blob);
+
+    // 4. Creamos el enlace y forzamos la descarga
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.href = url;
+    downloadAnchorNode.download = "backup_combustible.json";
+    
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+
+    // 5. Limpieza crítica (Libera memoria, especialmente importante en móviles)
+    document.body.removeChild(downloadAnchorNode);
+    URL.revokeObjectURL(url);
+}
+
 
 
 
