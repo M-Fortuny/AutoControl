@@ -21,7 +21,7 @@
 :root {
     --primary: #2563eb;
     --primary-rgb: 37, 99, 235;
-    --background: #f8fafc;
+    --background: #f1f5f9; /* Un gris ligerísimamente más oscuro para que el blanco de la tarjeta resalte más */
     --surface: #ffffff;
     --card-bg: #ffffff;
     --text: #1e293b;
@@ -39,8 +39,8 @@ body.dark-mode {
     --text: #f1f5f9;
     --text-muted: #94a3b8;
     --border: #334155;
-    --primary: #60a5fa;
-    --primary-rgb: 96, 165, 250;
+    --primary: #3b82f6; /* Azul un poco más brillante para modo oscuro */
+    --primary-rgb: 59, 130, 246;
     --accent: #f8fafc;
 }
 
@@ -59,25 +59,27 @@ body {
 
 /* 1. HERO DASHBOARD (ENCABEZADO UNIFICADO) */
 .hero-card {
-    background: linear-gradient(135deg, var(--primary), #1e40af);
+    background: linear-gradient(135deg, #1d4ed8, #1e3a8a); /* Degradado más profundo */
     color: white;
-    padding: 25px 20px;
+    padding: 30px 20px;
     border-radius: 20px;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.3);
+    box-shadow: 0 15px 30px -5px rgba(29, 78, 216, 0.4);
     margin-bottom: 25px;
     position: relative;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 body.dark-mode .hero-card {
     background: linear-gradient(135deg, #1e293b, #020617);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    box-shadow: 0 15px 30px -5px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .hero-title {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: rgba(255,255,255,0.8);
+    font-size: 1.3rem; /* Aumentado */
+    font-weight: 800;
+    color: rgba(255,255,255,0.9);
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 15px;
@@ -88,24 +90,26 @@ body.dark-mode .hero-card {
 }
 
 .hero-vehicle-name {
-    font-size: clamp(1.8rem, 6vw, 2.4rem);
-    font-weight: 800;
+    font-size: clamp(2rem, 7vw, 2.8rem); /* Aumentado */
+    font-weight: 900;
     margin: 0 0 5px 0;
     line-height: 1.1;
+    color: #fbbf24; /* Dorado/Amarillo vibrante para máximo contraste */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Sombra para resaltar */
 }
 
 .hero-mileage {
-    font-size: 1.2rem;
-    color: #93c5fd;
+    font-size: 1.3rem;
+    color: #e0f2fe; /* Azul muy clarito */
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-body.dark-mode .hero-mileage { color: #60a5fa; }
+body.dark-mode .hero-mileage { color: #bae6fd; }
 
 .btn-hero {
-    background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
     color: white;
     padding: 12px 25px;
     border-radius: 12px;
@@ -117,31 +121,39 @@ body.dark-mode .hero-mileage { color: #60a5fa; }
     align-items: center;
     gap: 8px;
     transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.btn-hero:hover { background: rgba(255,255,255,0.3); }
+.btn-hero:hover { background: rgba(255,255,255,0.25); transform: translateY(-1px); }
 
-/* 2. TARJETAS GENERALES */
+/* 2. TARJETAS GENERALES (DISEÑO MEJORADO) */
 .card { 
     background: var(--surface); 
-    padding: 20px; 
+    padding: 22px; 
     border-radius: 16px; 
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-    margin-bottom: 20px; 
+    box-shadow: 0 8px 20px -4px rgba(0,0,0,0.08), 0 4px 10px -4px rgba(0,0,0,0.04); /* Sombras más potentes */
+    margin-bottom: 25px; 
     border: 1px solid var(--border);
+    border-top: 4px solid var(--primary); /* Acento de color superior para romper la monotonía */
+}
+
+body.dark-mode .card {
+    box-shadow: 0 8px 20px -4px rgba(0,0,0,0.4);
+    border-top: 4px solid var(--primary);
 }
 
 h2, h3 { color: var(--accent); margin-top: 0; }
 .card-title {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 8px;
-    margin-bottom: 15px;
+    border-bottom: 2px solid var(--background); /* Línea más gruesa */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 /* 3. BOTONES SUPERIORES Y CONTROLES */
@@ -157,46 +169,49 @@ h2, h3 { color: var(--accent); margin-top: 0; }
     background: var(--surface);
     border: 1px solid var(--border); 
     color: var(--text-muted);
-    padding: 6px 12px;
-    border-radius: 8px; 
+    padding: 8px 16px;
+    border-radius: 10px; 
     cursor: pointer; 
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
     gap: 6px;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 } 
-.btn-custom:active { background: var(--border); }
+.btn-custom:active { background: var(--border); transform: scale(0.98); }
 
 .punto-estado {
-    width: 12px; height: 12px;
-    background-color: #ef4444; /* Rojo */
-    border: 1px solid var(--border);
+    width: 14px; height: 14px; /* Un poco más grande */
+    background-color: #ef4444; 
+    border: 2px solid var(--surface);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease;
     flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-.punto-estado.activo { background-color: #22c55e !important; box-shadow: 0 0 8px #22c55e; }
+.punto-estado.activo { background-color: #22c55e !important; box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
 
 /* 4. FORMULARIOS MODERNOS (FLOATING LABELS) */
 .floating-group {
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 18px;
     width: 100%;
 }
 .floating-input, .floating-select {
     width: 100%;
-    padding: 20px 15px 8px 15px; /* Espacio para la etiqueta flotante */
-    font-size: 1rem;
+    padding: 22px 15px 8px 15px; 
+    font-size: 1.05rem;
     border: 2px solid var(--border);
     border-radius: 12px;
     background: var(--surface);
     color: var(--text);
     outline: none;
-    transition: border-color 0.2s ease;
+    transition: all 0.2s ease;
     box-sizing: border-box;
+    font-weight: 500;
 }
 .floating-label {
     position: absolute;
@@ -208,128 +223,132 @@ h2, h3 { color: var(--accent); margin-top: 0; }
     transition: all 0.2s ease;
     pointer-events: none;
 }
-/* Activación de la etiqueta al enfocar o si hay texto */
 .floating-input:focus ~ .floating-label,
 .floating-input:not(:placeholder-shown) ~ .floating-label,
 .floating-select:focus ~ .floating-label,
 .floating-select:valid ~ .floating-label {
-    top: 12px;
+    top: 14px;
     font-size: 0.75rem;
     color: var(--primary);
-    font-weight: 600;
+    font-weight: 700;
 }
 .floating-input:focus, .floating-select:focus {
     border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
 }
-.floating-select { padding: 15px 15px 5px 15px; height: 52px; appearance: none; }
+.floating-select { padding: 15px 15px 5px 15px; height: 56px; appearance: none; }
 
 /* BOTONES GLOBALES */
 .btn { 
     background: var(--primary);
     color: white; 
     border: none; 
-    padding: 14px; 
+    padding: 16px; 
     width: 100%;
     border-radius: 12px;
     cursor: pointer; 
-    font-weight: 600;
-    font-size: 1rem;
-    transition: opacity 0.2s;
+    font-weight: 700;
+    font-size: 1.05rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px rgba(var(--primary-rgb), 0.2);
 } 
-.btn:active { opacity: 0.8; }
-.btn-secondary { background: var(--border); color: var(--text); margin-top: 10px; } 
+.btn:active { transform: scale(0.98); box-shadow: 0 2px 4px rgba(var(--primary-rgb), 0.2); }
+.btn-secondary { background: var(--background); color: var(--text); border: 1px solid var(--border); margin-top: 10px; box-shadow: none;} 
 .btn-danger { background: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; }
 body.dark-mode .btn-danger { background: #7f1d1d; color: #fecaca; border: 1px solid #b91c1c;}
 .button-row { display: flex; gap: 10px; width: 100%; flex-wrap: wrap; margin-top: 15px;}
 .button-row .btn { flex: 1; min-width: 120px; margin-top: 0;}
-.btn-delete { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.2rem;} 
+.btn-delete { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.3rem;} 
 
 /* 5. ACORDEÓN PARA PANEL DE CONTROL */
 .accordion-btn {
     background-color: var(--surface);
     color: var(--text);
     cursor: pointer;
-    padding: 15px;
+    padding: 18px 15px;
     width: 100%;
     text-align: left;
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 12px;
     outline: none;
     transition: 0.3s;
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 .accordion-btn:after {
     content: '\002B'; /* Símbolo Más */
     color: var(--primary);
     font-weight: bold;
-    float: right;
-    margin-left: 5px;
+    font-size: 1.2rem;
 }
+.accordion-btn.active { border-color: var(--primary); border-radius: 12px 12px 0 0; }
 .accordion-btn.active:after { content: "\2212"; /* Símbolo Menos */ }
 .accordion-content {
-    padding: 0 10px;
+    padding: 0 15px;
     background-color: var(--background);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-out;
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 12px 12px;
     margin-top: -10px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    border: 1px solid var(--primary);
+    border-top: none;
 }
-.accordion-inner { padding: 15px 5px; }
+.accordion-inner { padding: 20px 5px; }
 
 /* 6. MODALES Y DIÁLOGOS (Reemplazo Nativos) */
 .modal-overlay { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
+    background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(5px); /* Fondo más elegante */
     display: flex; align-items: center; justify-content: center; 
     z-index: 9999; opacity: 1; transition: opacity 0.3s ease;
 }
 .modal-content {
-    width: 90%; max-width: 450px; background: var(--surface); 
-    padding: 25px; border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    width: 92%; max-width: 450px; background: var(--surface); 
+    padding: 30px; border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
     max-height: 90vh; overflow-y: auto;
 }
 .hidden { display: none !important; opacity: 0; pointer-events: none;}
 
 /* 7. MÉTRICAS, TABLAS Y UTILIDADES */
 .grid-stats {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
 }
 .stat-box { 
-    background: var(--background); padding: 15px; border-radius: 12px; 
+    background: var(--background); padding: 18px 12px; border-radius: 14px; 
     text-align: center; border: 1px solid var(--border);
 }
 .stat-box.best-box { grid-column: span 2; background: rgba(var(--primary-rgb), 0.05); border-color: var(--primary);}
-.stat-box span { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase;}
-.stat-box strong { font-size: 1.3rem; color: var(--accent); }
+.stat-box span { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;}
+.stat-box strong { font-size: 1.4rem; color: var(--accent); }
 
 .maint-item { 
     display: flex; justify-content: space-between; align-items: center; 
-    padding: 12px 0; border-bottom: 1px solid var(--border); gap: 10px;
+    padding: 15px 0; border-bottom: 1px solid var(--border); gap: 10px;
 }
-.badge { padding: 5px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: bold; text-align: center; white-space: nowrap;}
-.badge.danger { background: #fee2e2; color: var(--danger); }
-.badge.success { background: #dcfce7; color: var(--success); }
-body.dark-mode .badge.danger { background: #7f1d1d; color: #fecaca; }
-body.dark-mode .badge.success { background: #064e3b; color: #a7f3d0; }
+.badge { padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; text-align: center; white-space: nowrap;}
+.badge.danger { background: #fee2e2; color: #dc2626; }
+.badge.success { background: #dcfce7; color: #16a34a; }
+body.dark-mode .badge.danger { background: #7f1d1d; color: #fca5a5; }
+body.dark-mode .badge.success { background: #064e3b; color: #6ee7b7; }
 
-.tabla-responsiva { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 12px;}
-table { width: 100%; border-collapse: collapse; min-width: 400px;}
-th { background: var(--background); padding: 12px; text-align: left; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;}
-td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.9rem;}
-.chart-container { position: relative; height: 250px; width: 100%; }
+.tabla-responsiva { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px;}
+table { width: 100%; border-collapse: collapse; min-width: 450px;}
+th { background: var(--background); padding: 14px 12px; text-align: left; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;}
+td { padding: 14px 12px; border-bottom: 1px solid var(--border); font-size: 0.95rem;}
+.chart-container { position: relative; height: 260px; width: 100%; margin-top: 10px; }
 
 .toast { 
-    position: fixed; bottom: 20px; right: 20px; background: var(--primary); 
-    color: white; padding: 15px 25px; border-radius: 12px; z-index: 10000; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-weight: 600;
+    position: fixed; bottom: 30px; right: 20px; left: 20px; margin: 0 auto; max-width: 350px;
+    background: var(--accent); color: white; padding: 16px 25px; border-radius: 12px; z-index: 10000; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-weight: 600; text-align: center;
     animation: fadeIn 0.3s, fadeOut 0.3s 2.7s forwards; 
 }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: translateY(0);} }
@@ -341,16 +360,15 @@ td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.9rem;}
 @media (max-width: 600px) {
     .maint-item { flex-direction: column; align-items: flex-start; }
     .maint-item > div { width: 100%; }
-    .badge { width: max-content; margin-top: 5px;}
-    .hero-vehicle-name { font-size: 1.8rem; }
+    .badge { width: max-content; margin-top: 8px;}
+    .hero-vehicle-name { font-size: 2.2rem; }
 }
 
-/* Modificación fecha nativa iOS para integrarse mejor en los Acordeones */
 input[type="date"] {
-    width: 100%; min-height: 45px; padding: 0 10px;
-    border: 2px solid var(--border); border-radius: 10px;
+    width: 100%; min-height: 50px; padding: 0 15px;
+    border: 2px solid var(--border); border-radius: 12px;
     background: var(--surface); color: var(--text);
-    font-size: 1rem; text-align: center;
+    font-size: 1.05rem; text-align: center; font-weight: 500;
 }
 </style>
 </head>
@@ -361,10 +379,10 @@ input[type="date"] {
     <button class="btn-custom" onclick="toggleDarkMode()">🌓 Modo Visual</button>
 </div>
 
-<div id="fechaHora" style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; font-weight: 500;"></div>
+<div id="fechaHora" style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; font-weight: 600;"></div>
 
 <div class="hero-card">
-    <div class="hero-title">🤖 AutoControl IA <span style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 6px; font-size: 0.7rem;">Pro</span></div>
+    <div class="hero-title">🤖 AutoControl IA <span style="background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 6px; font-size: 0.8rem; margin-left: 5px;">Pro</span></div>
     <h3 class="hero-vehicle-name" id="nombre-vehiculo-activo-hero">Cargando...</h3>
     <div class="hero-mileage"><strong id="displayKmActualesHero">0</strong> Km</div>
     
@@ -475,7 +493,7 @@ input[type="date"] {
 
 <div class="card">
     <h2 class="card-title">💰 Desplazamiento Diario</h2>
-    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:-10px;">Coste proyectado de ir al trabajo (Configurable en Ajustes).</p>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top:-10px;">Coste proyectado de ir al trabajo (Configurable en Ajustes).</p>
     <div class="grid-stats">
         <div class="stat-box"><span>Diario</span><strong id="gastoDia">-</strong></div>
         <div class="stat-box"><span>Semanal</span><strong id="gastoSemana">-</strong></div>
@@ -484,7 +502,7 @@ input[type="date"] {
     </div>
 </div>
 
-<footer style="text-align: center; margin: 30px 0; color: var(--text-muted); font-size: 0.9rem;">
+<footer style="text-align: center; margin: 40px 0; color: var(--text-muted); font-size: 0.95rem; font-weight: 500;">
     <p><span id="easter-egg-trigger" style="cursor: pointer;">Desarrollado por Manuel Fortuny Ruiz</span></p>
 </footer>
 
@@ -493,16 +511,16 @@ input[type="date"] {
 
 <div id="settingsModal" class="hidden modal-overlay">
     <div class="modal-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px;">
-            <h2 style="margin:0; font-size:1.4rem;">⚙️ Ajustes Pro</h2>
-            <button class="btn-delete" onclick="toggleForm('settingsModal')" style="font-size:1.8rem; padding: 0 10px;">×</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--background); padding-bottom: 15px;">
+            <h2 style="margin:0; font-size:1.6rem; font-weight: 800;">⚙️ Ajustes Pro</h2>
+            <button class="btn-delete" onclick="toggleForm('settingsModal')" style="font-size:2rem; padding: 0 10px; line-height: 1;">×</button>
         </div>
 
         <button class="accordion-btn">🚗 Gestión de Vehículos</button>
         <div class="accordion-content">
             <div class="accordion-inner">
-                <label style="font-size:0.85rem; color:var(--text-muted); display:block; margin-bottom:5px;">Vehículo Actual</label>
-                <select id="selectorVehiculo" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--background); color:var(--text); margin-bottom:15px;" onchange="cambiarVehiculoActivo()"></select>
+                <label style="font-size:0.9rem; font-weight: 600; color:var(--text-muted); display:block; margin-bottom:8px;">Vehículo Actual</label>
+                <select id="selectorVehiculo" style="width:100%; padding:12px; border-radius:10px; border:2px solid var(--border); background:var(--background); color:var(--text); font-size: 1.05rem; margin-bottom: 20px; font-weight: 600;" onchange="cambiarVehiculoActivo()"></select>
                 
                 <div class="floating-group">
                     <input type="text" id="kmOdom" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); guardarKmActuales()">
@@ -521,31 +539,31 @@ input[type="date"] {
         <button class="accordion-btn">🛠️ Planes de Mantenimiento</button>
         <div class="accordion-content">
             <div class="accordion-inner">
-                <p style="font-size: 0.8rem; color:var(--text-muted); margin-top:0;">Define a los cuántos Km totales del vehículo toca el próximo cambio.</p>
+                <p style="font-size: 0.85rem; color:var(--text-muted); margin-top:0; margin-bottom: 20px;">Define a los cuántos Km totales del vehículo toca el próximo cambio.</p>
                 
-                <label style="font-size: 0.85rem; color:var(--text-muted);">Próxima ITV</label>
-                <input type="date" id="planITV" style="margin-bottom: 15px;" oninput="guardarPlanesMantenimiento()">
+                <label style="font-size: 0.9rem; font-weight: 600; color:var(--text-muted);">Próxima ITV</label>
+                <input type="date" id="planITV" style="margin-bottom: 20px; margin-top: 5px;" oninput="guardarPlanesMantenimiento()">
 
                 <div class="floating-group"><input type="text" id="planRevisionGeneral" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); guardarPlanesMantenimiento()"><label class="floating-label">Km Prox. Revisión Gral.</label></div>
                 <div class="floating-group"><input type="text" id="planAceite" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); guardarPlanesMantenimiento()"><label class="floating-label">Km Prox. Aceite</label></div>
                 <div class="floating-group"><input type="text" id="planFiltro" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); guardarPlanesMantenimiento()"><label class="floating-label">Km Prox. Filtros</label></div>
                 <div class="floating-group"><input type="text" id="planRevision" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); guardarPlanesMantenimiento()"><label class="floating-label">Km Prox. Distribución</label></div>
 
-                <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
-                <h4 style="margin:0 0 10px 0;">Registrar Cambios Hoy (Reinicia contador)</h4>
+                <hr style="border:0; border-top:2px solid var(--background); margin:25px 0;">
+                <h4 style="margin:0 0 15px 0; font-weight: 800; color: var(--primary);">Registrar Cambios Hoy <br><span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(Reinicia los contadores visuales)</span></h4>
                 
-                <select id="tipoNeumaticoCambio" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--background); color:var(--text); margin-bottom:5px;">
+                <select id="tipoNeumaticoCambio" style="width:100%; padding:12px; border-radius:10px; border:2px solid var(--border); background:var(--background); color:var(--text); margin-bottom:10px; font-weight: 600;">
                     <option value="Delanteros">Neumáticos Delanteros</option><option value="Traseros">Neumáticos Traseros</option>
                 </select>
-                <input type="date" id="fechaCambioNeumatico" style="margin-bottom: 5px;">
-                <button class="btn btn-secondary" style="margin-bottom: 15px;" onclick="registrarCambioNeumatico()">Guardar Neumáticos</button>
+                <input type="date" id="fechaCambioNeumatico" style="margin-bottom: 10px;">
+                <button class="btn btn-secondary" style="margin-bottom: 25px;" onclick="registrarCambioNeumatico()">Guardar Neumáticos</button>
 
-                <label style="font-size: 0.85rem; color:var(--text-muted);">Líquido Refrigerante</label>
-                <input type="date" id="fechaCambioRefrigerante" style="margin-bottom: 5px;">
-                <button class="btn btn-secondary" style="margin-bottom: 15px;" onclick="registrarCambioRefrigerante()">Guardar Refrigerante</button>
+                <label style="font-size: 0.9rem; font-weight: 600; color:var(--text-muted);">Líquido Refrigerante</label>
+                <input type="date" id="fechaCambioRefrigerante" style="margin-top: 5px; margin-bottom: 10px;">
+                <button class="btn btn-secondary" style="margin-bottom: 25px;" onclick="registrarCambioRefrigerante()">Guardar Refrigerante</button>
 
-                <label style="font-size: 0.85rem; color:var(--text-muted);">Batería</label>
-                <input type="date" id="fechaCambioBateria" style="margin-bottom: 5px;">
+                <label style="font-size: 0.9rem; font-weight: 600; color:var(--text-muted);">Batería</label>
+                <input type="date" id="fechaCambioBateria" style="margin-top: 5px; margin-bottom: 10px;">
                 <button class="btn btn-secondary" onclick="registrarCambioBateria()">Guardar Batería</button>
             </div>
         </div>
@@ -578,21 +596,21 @@ input[type="date"] {
             </div>
         </div>
 
-        <button class="btn" style="margin-top: 20px; background:var(--text-muted);" onclick="toggleForm('settingsModal')">Cerrar Panel</button>
+        <button class="btn" style="margin-top: 25px; background:var(--text-muted);" onclick="toggleForm('settingsModal')">Cerrar Panel</button>
     </div>
 </div>
 
 <div id="ui-dialog" class="hidden modal-overlay">
-    <div class="modal-content" style="text-align: center; max-width: 350px; padding: 30px 20px;">
-        <h3 id="ui-dialog-title" style="margin-top:0; color: var(--primary); font-size:1.4rem;"></h3>
-        <p id="ui-dialog-msg" style="color: var(--text); font-size:1.05rem; margin-bottom: 25px; line-height: 1.4;"></p>
+    <div class="modal-content" style="text-align: center; max-width: 350px; padding: 35px 25px;">
+        <h3 id="ui-dialog-title" style="margin-top:0; color: var(--primary); font-size:1.5rem; font-weight: 800;"></h3>
+        <p id="ui-dialog-msg" style="color: var(--text); font-size:1.1rem; margin-bottom: 25px; line-height: 1.5; font-weight: 500;"></p>
         
         <div id="ui-dialog-input-group" class="floating-group hidden">
             <input type="text" id="ui-dialog-input" class="floating-input" placeholder=" ">
             <label class="floating-label">Valor</label>
         </div>
 
-        <div class="button-row" style="margin-top: 0;">
+        <div class="button-row" style="margin-top: 10px;">
             <button id="ui-dialog-btn-cancel" class="btn btn-secondary hidden">Cancelar</button>
             <button id="ui-dialog-btn-ok" class="btn">Aceptar</button>
         </div>
@@ -647,8 +665,10 @@ function customDialog(type, message, title = "Aviso", defaultValue = "", inputMo
         } else if (type === 'confirm') {
             btnCancel.classList.remove('hidden');
             btnOk.style.backgroundColor = 'var(--danger)'; // Visual cue para deletes
+            btnOk.style.boxShadow = '0 4px 6px rgba(220, 38, 38, 0.2)';
         } else {
             btnOk.style.backgroundColor = 'var(--primary)';
+            btnOk.style.boxShadow = '0 4px 6px rgba(37, 99, 235, 0.2)';
         }
 
         overlay.classList.remove('hidden');
@@ -658,6 +678,7 @@ function customDialog(type, message, title = "Aviso", defaultValue = "", inputMo
             btnOk.onclick = null;
             btnCancel.onclick = null;
             btnOk.style.backgroundColor = 'var(--primary)';
+            btnOk.style.boxShadow = '0 4px 6px rgba(37, 99, 235, 0.2)';
         };
 
         btnOk.onclick = () => {
@@ -775,27 +796,47 @@ async function iniciarAsistenteNuevoVehiculo() {
     const nombre = await customPrompt("Nombre o modelo del vehículo:", "", "Nuevo Vehículo", "text");
     if (!nombre) return;
     
-    if (baseDatos[nombre]) { await customAlert("Ya existe un vehículo con ese nombre."); return; }
+    if (baseDatos[nombre]) { 
+        await customAlert("Ya existe un vehículo con ese nombre."); 
+        return; 
+    }
 
     let kmStr = await customPrompt("Kilómetros iniciales actuales:", "", "Odómetro", "decimal");
     if (kmStr === null) return;
+    const kmActuales = parseFloat(kmStr) || 0;
     
     let capStr = await customPrompt("Capacidad del depósito (Litros):", "", "Capacidad", "decimal");
     if (capStr === null) return;
 
+    // Nuevos campos opcionales para mantenimientos preventivos
+    let aceiteStr = await customPrompt("Próximo cambio de aceite (Km o 0 para omitir):", kmActuales + 10000, "Mantenimiento", "decimal");
+    if (aceiteStr === null) return;
+
+    let filtroStr = await customPrompt("Próximo cambio de filtros (Km o 0 para omitir):", kmActuales + 15000, "Mantenimiento", "decimal");
+    if (filtroStr === null) return;
+
+    let revisionStr = await customPrompt("Próxima revisión general (Km o 0 para omitir):", kmActuales + 20000, "Mantenimiento", "decimal");
+    if (revisionStr === null) return;
+
     baseDatos[nombre] = {
-        kmActuales: parseFloat(kmStr) || 0,
+        kmActuales: kmActuales,
         capacidadDeposito: parseFloat(capStr) || 0,
-        proxAceite: 0, proxFiltro: 0, proxRevision: 0,
-        historialBateria: [], registros: []
+        proxAceite: parseFloat(aceiteStr) || 0,
+        proxFiltro: parseFloat(filtroStr) || 0,
+        proxRevision: parseFloat(revisionStr) || 0,
+        historialBateria: [], 
+        registros: []
     };
 
     vehiculoActivo = nombre;
     localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
-    guardarEnStorage(); actualizarSelectorVehiculos(); cargarDatosVehiculo();
+    guardarEnStorage(); 
+    actualizarSelectorVehiculos(); 
+    cargarDatosVehiculo();
     toggleForm('settingsModal'); // Cerrar modal para ver cambios
     mostrarNotificacion(`Vehículo ${nombre} creado`);
 }
+
 
 async function renombrarVehiculo() {
     const nuevoNombre = await customPrompt(`Nuevo nombre para ${vehiculoActivo}:`, vehiculoActivo, "Renombrar", "text");
@@ -1113,7 +1154,7 @@ function actualizarTablayStats() {
     const fragment = document.createDocumentFragment();
     coche.registros.forEach((r, idx) => {
         const row = document.createElement('tr');
-        row.innerHTML = `<td style="color:#64748b; font-weight:500; font-size:0.8rem;">${escapeHTML(r.fecha||'')}</td>
+        row.innerHTML = `<td style="color:#64748b; font-weight:500; font-size:0.85rem;">${escapeHTML(r.fecha||'')}</td>
             <td><strong>${escapeHTML(r.gasolinera)}</strong></td>
             <td><span class="badge" style="background:var(--border); color:var(--text);">${escapeHTML(r.combustible||'-')}</span></td>
             <td>${r.kmHechos}</td><td>${r.litros}L</td>
