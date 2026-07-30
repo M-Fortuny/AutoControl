@@ -448,7 +448,7 @@ input[type="date"] {
 </div>
 
 
-<hr id="lineaSeparadora" style="margin: 25px 0; border: 0; border-top: 1px solid #334155;">
+
 
 
 <div id="panelAyuda" style="display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); color: var(--text);">
@@ -586,6 +586,41 @@ input[type="date"] {
     </div>
 </div>
 
+
+
+
+
+
+
+
+
+<div class="card">
+    <h3 class="card-title">⚖️ Comparativa de Eficiencia Global</h3>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: -5px; margin-bottom: 15px;">
+        Compara el coste real a los 100km entre tus vehículos de combustión y eléctricos.
+    </p>
+    <div class="tabla-responsiva">
+        <table>
+            <thead>
+                <tr>
+                    <th>Vehículo</th>
+                    <th>Motor</th>
+                    <th>Consumo Medio</th>
+                    <th>Precio Medio</th>
+                    <th>Coste / 100km</th>
+                </tr>
+            </thead>
+            <tbody id="body-comparativa">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
 <div class="card">
     <h2 class="card-title">🔮 Calculadora de Viajes Predictiva</h2>
     <p style="font-size: 0.9rem; color: var(--text-muted); margin-top:-10px;">Simula el consumo y coste de tu próxima ruta basándose en tu histórico real.</p>
@@ -605,6 +640,7 @@ input[type="date"] {
     <h2 class="card-title">📈 Historial Técnico</h2>
     <div class="chart-container"><canvas id="graficoCombustible"></canvas></div>
 </div>
+
 
 <div class="card">
     <h2 class="card-title">📊 Último Depósito</h2>
@@ -1361,6 +1397,69 @@ async function compartirUltimoDeposito() {
         await customAlert("¡Texto copiado al portapapeles!", "Portapapeles");
     }
 }
+
+
+
+// Función ADAPTADA para calcular y renderizar la comparativa entre vehículos
+function generarComparativaEficiencia() {
+    const tbody = document.getElementById('body-comparativa');
+    if (!tbody) return; // Si no existe la tabla en el HTML, no hace nada
+    
+    tbody.innerHTML = ''; // Limpiamos la tabla antes de renderizar
+
+    // Iteramos sobre cada vehículo guardado en nuestra baseDatos principal
+    Object.keys(baseDatos).forEach(nombreVehiculo => {
+        const coche = baseDatos[nombreVehiculo];
+        
+        // Si el vehículo tiene registros de repostaje/carga, hacemos los cálculos
+        if (coche.registros && coche.registros.length > 0) {
+            let costeTotalSum = 0;
+            let distanciaTotalSum = 0;
+            let energiaTotalSum = 0;
+
+            // Sumamos todos los registros históricos de este vehículo
+            coche.registros.forEach(rep => {
+                costeTotalSum += parseFloat(rep.costeTotal) || 0;
+                distanciaTotalSum += parseFloat(rep.kmHechos) || 0;
+                energiaTotalSum += parseFloat(rep.litros) || 0; // Usado para L o kWh
+            });
+
+            // Evitamos divisiones por cero
+            if (distanciaTotalSum > 0 && energiaTotalSum > 0) {
+                // 3. Cálculos de eficiencia definitivos
+                const coste100km = (costeTotalSum / distanciaTotalSum) * 100;
+                const consumoMedio = (energiaTotalSum / distanciaTotalSum) * 100;
+                const precioMedioUnidad = costeTotalSum / energiaTotalSum;
+
+                // 4. Determinar la unidad según nuestro tipo de motor
+                const esElectrico = coche.tipo === 'BEV';
+                const unidadEnergia = esElectrico ? 'kWh' : 'L';
+                const tipoMotorDisplay = coche.tipo || 'Combustión';
+
+                // 5. Crear la fila e inyectarla en la tabla
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${escapeHTML(nombreVehiculo)}</strong></td>
+                    <td><span class="badge" style="background:var(--border); color:var(--text);">${escapeHTML(tipoMotorDisplay)}</span></td>
+                    <td style="color:var(--primary); font-weight:bold;">${consumoMedio.toFixed(2)} ${unidadEnergia}/100</td>
+                    <td>${precioMedioUnidad.toFixed(3)} €/${unidadEnergia}</td>
+                    <td style="color:var(--success); font-weight:bold;">${coste100km.toFixed(2)} €</td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+    });
+}
+
+
+
+
+
+// Ejecutar la función cuando cargue la página o cuando se añada un nuevo repostaje
+document.addEventListener('DOMContentLoaded', generarComparativaEficiencia);
+
+
+
 
 function calcularViajePredictivo() {
     const coche = baseDatos[vehiculoActivo];
