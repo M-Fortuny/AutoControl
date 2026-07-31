@@ -379,6 +379,35 @@ td { padding: 14px 12px; border-bottom: 1px solid var(--border); font-size: 0.95
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+/* Modo Navegador Pantalla Completa */
+#miMapa.modo-pantalla-completa {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    border-radius: 0 !important;
+}
+
+/* Botón Flotante para Salir del Navegador */
+#btn-cerrar-navegador {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100000;
+    background: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-size: 0.95em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    backdrop-filter: blur(5px);
+}
 
 
 
@@ -448,10 +477,12 @@ input[type="date"] {
 <div class="top-controls" id="topControls">
     <div id="indicador-auto" class="punto-estado" onclick="toggleAutoMode()" title="Modo Automático"></div>
     <button class="btn-custom" onclick="toggleDarkMode()">🌓 Modo Visual</button>
+    <button class="btn-custom" onclick="abrirNavegador()">🧭 Navegador</button>
     <button class="btn-custom" onclick="toggleAyuda()">❓ Ayuda</button>
     <button class="btn-custom" onclick="toggleInfo()">ℹ️ Info Pro</button>
     <div id="fechaHora"></div>
 </div>
+
 
 <div class="hero-toggle" onclick="toggleTopControls()" role="button" tabindex="0" aria-label="Mostrar u ocultar controles superiores">
     <div class="hero-card">
@@ -588,24 +619,49 @@ input[type="date"] {
 
 
 
+
 <div class="card" id="modulo-mapa">
     <h2 class="card-title">🗺️ Calculadora de Rutas</h2>
     
-    <!-- Controles de Origen y Destino -->
-    <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px;">
-        <div class="floating-group" style="margin-bottom: 0;">
+
+
+<!-- Controles de Origen y Destino con Invertir y GPS -->
+<div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+    <!-- Campo Origen + Botón GPS -->
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <div class="floating-group" style="margin-bottom: 0; flex: 1;">
             <input type="text" id="origen-ruta" class="floating-input" required placeholder=" ">
             <label class="floating-label">Origen (ej. Madrid)</label>
         </div>
-        <div class="floating-group" style="margin-bottom: 0;">
-            <input type="text" id="destino-ruta" class="floating-input" required placeholder=" ">
-            <label class="floating-label">Destino (ej. Barcelona)</label>
-        </div>
+        <button type="button" class="btn-custom" onclick="usarUbicacionActual()" title="Usar mi ubicación actual" style="height: 48px; padding: 0 12px; font-size: 1.2em;">
+            🎯
+        </button>
     </div>
-    
-    <button type="button" class="btn" id="btn-calcular-ruta" style="margin-bottom: 20px;">
+
+   
+
+    <!-- Campo Destino -->
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <div class="floating-group" style="margin-bottom: 0; flex: 1;">
+        <input type="text" id="destino-ruta" class="floating-input" required placeholder=" ">
+        <label class="floating-label">Destino (ej. Barcelona)</label>
+    </div>
+	 <button type="button" class="btn-custom" onclick="invertirRuta()" title="Invertir trayecto" style="height: 48px; padding: 0 12px; font-size: 1.2em;">
+            🔄
+</div>
+
+
+<button type="button" class="btn" id="btn-calcular-ruta" style="margin-bottom: 20px;">
         Calcular Ruta
     </button>
+
+
+
+
+
+<button type="button" class="btn btn-secondary" id="btn-ir-navegador" onclick="abrirNavegador()" style="margin-bottom: 15px; display: none;">
+    🚀 Ir al Navegador en Pantalla Completa
+</button>
 
 
     
@@ -856,6 +912,14 @@ input[type="date"] {
         </div>
     </div>
 </div>
+
+
+<!-- Botón flotante para salir de pantalla completa -->
+<button id="btn-cerrar-navegador" onclick="cerrarNavegador()">
+    ❌ Salir del Navegador
+</button>
+
+
 
 <script>
 const staticVehiculosPredeterminados = { "MG3 Hybrid +": { kmActuales: 5000, proxAceite: 15000, proxFiltro: 15000, proxRevision: 100000, registros: [] } };
@@ -1600,6 +1664,12 @@ document.getElementById('btn-calcular-ruta').addEventListener('click', async () 
             const coche = baseDatos[vehiculoActivo];
             let costeEstimado = 0;
 
+			// Mostrar el botón de ir al navegador al calcular una ruta
+document.getElementById('btn-ir-navegador').style.display = 'block';
+
+
+
+
             // Si hay registros previos, usamos el último consumo medio y precio guardados
             if (coche && coche.registros && coche.registros.length > 0) {
                 const ultimoRegistro = coche.registros[0];
@@ -1816,6 +1886,82 @@ function renderizarGrafico(registros) {
         }
     });
 }
+
+
+
+// Función 1: Invertir valores y recalcular si ya hay datos
+function invertirRuta() {
+    const origenInput = document.getElementById('origen-ruta');
+    const destinoInput = document.getElementById('destino-ruta');
+
+    const temp = origenInput.value;
+    origenInput.value = destinoInput.value;
+    destinoInput.value = temp;
+
+    // Si ambos campos tienen texto, recalcula la ruta automáticamente al invertir
+    if (origenInput.value && destinoInput.value) {
+        document.getElementById('btn-calcular-ruta').click();
+    }
+}
+
+// Función 2: Obtener la posición actual del usuario mediante GPS
+function usarUbicacionActual() {
+    if (!navigator.geolocation) {
+        alert("Tu navegador o dispositivo no soporta la geolocalización.");
+        return;
+    }
+
+    const origenInput = document.getElementById('origen-ruta');
+    origenInput.value = "Obteniendo ubicación...";
+
+    navigator.geolocation.getCurrentPosition(
+        (posicion) => {
+            const lat = posicion.coords.latitude;
+            const lon = posicion.coords.longitude;
+            // Guardamos las coordenadas en formato legible para Nominatim
+            origenInput.value = `${lat}, ${lon}`;
+        },
+        (error) => {
+            alert("No se pudo obtener tu ubicación. Verifica los permisos de GPS de tu navegador.");
+            origenInput.value = "";
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+    );
+}
+
+
+
+
+function abrirNavegador() {
+    const mapaDiv = document.getElementById('miMapa');
+    const btnCerrar = document.getElementById('btn-cerrar-navegador');
+    
+    // Expandir el mapa y mostrar el botón de cierre
+    mapaDiv.classList.add('modo-pantalla-completa');
+    btnCerrar.style.display = 'block';
+
+    // ¡CLAVE! Avisar a Leaflet de que la pantalla ha cambiado de tamaño para que redibuje los mapas
+    setTimeout(() => {
+        if (mapa) mapa.invalidateSize();
+    }, 200);
+}
+
+function cerrarNavegador() {
+    const mapaDiv = document.getElementById('miMapa');
+    const btnCerrar = document.getElementById('btn-cerrar-navegador');
+    
+    // Restaurar tamaño original
+    mapaDiv.classList.remove('modo-pantalla-completa');
+    btnCerrar.style.display = 'none';
+
+    // Avisar a Leaflet de nuevo
+    setTimeout(() => {
+        if (mapa) mapa.invalidateSize();
+    }, 200);
+}
+
+
+
 
 function exportarDatos() {
     const blob = new Blob([JSON.stringify({ baseDatos, gasolineras })], { type: "application/json" });
