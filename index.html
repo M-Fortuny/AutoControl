@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AutoControl IA Pro</title>
     <link rel="manifest" href="manifest.json">
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+<!-- Cargar CSS y JS de Leaflet Routing Machine -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -364,6 +374,15 @@ td { padding: 14px 12px; border-bottom: 1px solid var(--border); font-size: 0.95
 
 .orange-mode h1, .orange-mode h2, .orange-mode h3 { color: orange !important; }
 
+
+<!-- Cargar CSS y JS de Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+
+
+
 @media (max-width: 600px) {
     .maint-item { flex-direction: column; align-items: flex-start; }
     .maint-item > div { width: 100%; }
@@ -420,6 +439,7 @@ input[type="date"] {
 .controls-hidden .hero-card {
     opacity: 0.95;
 }
+
 
 </style>
 </head>
@@ -561,17 +581,55 @@ input[type="date"] {
             <label class="floating-label">% Batería Final (Opcional)</label>
         </div>
 
-        <div class="floating-group">
-            <select id="aireAcondicionado" class="floating-select">
-                <option value="No">No</option>
-                <option value="Sí">Sí</option>
-            </select>
-            <label class="floating-label">¿Aire Acondicionado?</label>
-        </div>
-
         <button type="submit" class="btn">Guardar Registro</button>
     </form>
 </div>
+
+
+
+
+<div class="card" id="modulo-mapa">
+    <h2 class="card-title">🗺️ Calculadora de Rutas</h2>
+    
+    <!-- Controles de Origen y Destino -->
+    <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px;">
+        <div class="floating-group" style="margin-bottom: 0;">
+            <input type="text" id="origen-ruta" class="floating-input" required placeholder=" ">
+            <label class="floating-label">Origen (ej. Madrid)</label>
+        </div>
+        <div class="floating-group" style="margin-bottom: 0;">
+            <input type="text" id="destino-ruta" class="floating-input" required placeholder=" ">
+            <label class="floating-label">Destino (ej. Barcelona)</label>
+        </div>
+    </div>
+    
+    <button type="button" class="btn" id="btn-calcular-ruta" style="margin-bottom: 20px;">
+        Calcular Ruta
+    </button>
+
+
+    
+    <!-- Contenedor del mapa -->
+    <div id="miMapa" style="height: 300px; width: 100%; border-radius: 8px; z-index: 1;"></div>
+</div>
+
+
+<!-- Bloque de resultados (oculto por defecto) -->
+<div id="resultado-ruta" style="display: none; margin-bottom: 15px; padding: 12px; background: var(--bg-card, #f8f9fa); border: 1px solid var(--border, #e0e0e0); border-radius: 8px;">
+    <div style="display: flex; justify-content: space-around; text-align: center;">
+        <div>
+            <span style="font-size: 0.85em; color: var(--text-muted);">Distancia</span>
+            <div style="font-size: 1.2em; font-weight: bold;"><span id="distancia-val">0</span> Km</div>
+        </div>
+        <div>
+            <span style="font-size: 0.85em; color: var(--text-muted);">Coste Estimado</span>
+            <div style="font-size: 1.2em; font-weight: bold; color: var(--primary);"><span id="coste-val">0.00</span> €</div>
+        </div>
+    </div>
+</div>
+
+
+
 
 
 <div class="card">
@@ -979,6 +1037,7 @@ function inicializar() {
     actualizarSelectorVehiculos();
     actualizarSelectorGasolineras();
     cargarDatosVehiculo();
+	 inicializarMapa();
 }
 
 function actualizarReloj() {
@@ -1379,17 +1438,18 @@ document.getElementById('fuelForm').addEventListener('submit', async (e) => {
     const costeTotal = litros * precio;
     const consMedio = (litros / kmHechos) * 100;
     
-    coche.kmActuales = kmTot;
+        coche.kmActuales = kmTot;
     coche.registros.unshift({
         fecha: new Date().toLocaleDateString('es-ES', {year:'numeric',month:'2-digit',day:'2-digit'}),
         gasolinera: document.getElementById('gasolinera').value,
         combustible: document.getElementById('tipoCombustible').value,
-        kmHechos, litros, precioLitro: precio, aire: document.getElementById('aireAcondicionado').value,
+        kmHechos, litros, precioLitro: precio,
         costeTotal: costeTotal.toFixed(2), consumoMedio: consMedio.toFixed(2),
         kmPorLitro: (kmHechos/litros).toFixed(2), precioPorKm: (costeTotal/kmHechos).toFixed(3),
         modo: modoActivo,
         porcentajeBateria: porcentaje || null
     });
+
     
     guardarEnStorage();
     document.getElementById('fuelForm').reset();
@@ -1477,6 +1537,120 @@ function generarComparativaEficiencia() {
         }
     });
 }
+
+
+
+// Variable global para guardar el mapa
+let mapa; 
+let controlRuta = null;
+
+
+document.getElementById('btn-calcular-ruta').addEventListener('click', async () => {
+    const origenTexto = document.getElementById('origen-ruta').value;
+    const destinoTexto = document.getElementById('destino-ruta').value;
+
+    if (!origenTexto || !destinoTexto) {
+        alert("Por favor, introduce un origen y un destino.");
+        return;
+    }
+
+    // Cambiamos el texto del botón para que el usuario sepa que está cargando
+    const btn = document.getElementById('btn-calcular-ruta');
+    btn.innerText = "Calculando...";
+
+    try {
+        // 1. Buscar coordenadas del Origen
+        const resOrigen = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(origenTexto)}`);
+        const dataOrigen = await resOrigen.json();
+        
+        // 2. Buscar coordenadas del Destino
+        const resDestino = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destinoTexto)}`);
+        const dataDestino = await resDestino.json();
+
+        if (dataOrigen.length === 0 || dataDestino.length === 0) {
+            alert("No se ha encontrado alguna de las ubicaciones. Prueba a ser más específico.");
+            btn.innerText = "Calcular Ruta";
+            return;
+        }
+
+        const latLngOrigen = L.latLng(dataOrigen[0].lat, dataOrigen[0].lon);
+        const latLngDestino = L.latLng(dataDestino[0].lat, dataDestino[0].lon);
+
+        // Si ya había una ruta dibujada de antes, la limpiamos del mapa
+        if (controlRuta) {
+            mapa.removeControl(controlRuta);
+        }
+
+        // 3. Dibujar la nueva ruta en el mapa
+        controlRuta = L.Routing.control({
+            waypoints: [latLngOrigen, latLngDestino],
+            routeWhileDragging: false,
+            addWaypoints: false, // Evita que el usuario añada paradas por error al hacer clic
+            show: false, // Ocultamos el panel gigante de instrucciones paso a paso para que no tape tu app
+            fitSelectedRoutes: true // Ajusta el zoom automáticamente para que se vea toda la ruta
+        }).addTo(mapa);
+
+        // 4. Extraer los Kilómetros cuando termine de calcular
+                controlRuta.on('routesfound', function(e) {
+            const rutas = e.routes;
+            const distanciaMetros = rutas[0].summary.totalDistance;
+            const kmTotales = (distanciaMetros / 1000).toFixed(1);
+            
+            // Obtener los datos del vehículo actual
+            const coche = baseDatos[vehiculoActivo];
+            let costeEstimado = 0;
+
+            // Si hay registros previos, usamos el último consumo medio y precio guardados
+            if (coche && coche.registros && coche.registros.length > 0) {
+                const ultimoRegistro = coche.registros[0];
+                const consumo = parseFloat(ultimoRegistro.consumoMedio) || 0; // L/100km o kWh/100km
+                const precio = parseFloat(ultimoRegistro.precioLitro) || 0;   // €/L o €/kWh
+
+                // Fórmula: (KmTotales / 100) * ConsumoMedio * PrecioUnidad
+                const unidadesNecesarias = (kmTotales / 100) * consumo;
+                costeEstimado = unidadesNecesarias * precio;
+            }
+
+            // Pintar los datos en la pantalla
+            document.getElementById('distancia-val').innerText = kmTotales;
+            document.getElementById('coste-val').innerText = costeEstimado.toFixed(2);
+            document.getElementById('resultado-ruta').style.display = 'block';
+
+            btn.innerText = "Calcular Ruta";
+        });
+
+
+
+    } catch (error) {
+        console.error("Error al calcular la ruta:", error);
+        alert("Hubo un error al conectar con el servidor de mapas.");
+        btn.innerText = "Calcular Ruta";
+    }
+});
+
+
+
+function inicializarMapa() {
+    // Si el mapa ya existe, no lo volvemos a crear (evita errores al recargar la vista)
+    if (mapa) return; 
+
+    // 1. Inicializar el mapa en el div con id "miMapa"
+    // Las coordenadas [40.4168, -3.7038] corresponden a Madrid, con un zoom inicial de 6
+    mapa = L.map('miMapa').setView([40.4168, -3.7038], 6);
+
+    // 2. Añadir la capa visual (los "azulejos" del mapa de OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(mapa);
+
+    // 3. Añadir un pin (marcador) de prueba para ver cómo queda
+    L.marker([40.4168, -3.7038]).addTo(mapa)
+        .bindPopup('<b>¡Hola!</b><br>El mapa funciona correctamente.')
+        .openPopup();
+}
+
+
 
 function calcularViajePredictivo() {
     const coche = baseDatos[vehiculoActivo];
