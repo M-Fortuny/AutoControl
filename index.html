@@ -433,9 +433,6 @@ input[type="date"] {
     <div id="fechaHora"></div>
 </div>
 
-
-
-
 <div class="hero-toggle" onclick="toggleTopControls()" role="button" tabindex="0" aria-label="Mostrar u ocultar controles superiores">
     <div class="hero-card">
         <div class="hero-title">🤖 AutoControl IA <span style="background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 6px; font-size: 0.8rem; margin-left: 5px;">Pro</span></div>
@@ -446,9 +443,6 @@ input[type="date"] {
         </div>
     </div>
 </div>
-
-
-
 
 <div id="panelAyuda" style="display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); color: var(--text);">
     
@@ -518,11 +512,22 @@ input[type="date"] {
 </div>
 
 <div class="card">
-    <h2 class="card-title">⛽ Nuevo Repostaje</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 class="card-title" style="margin-bottom: 0; border: none; padding: 0;">⛽ Nuevo Registro</h2>
+    </div>
+    
+    <!-- Botones selectores de modo -->
+    <div class="button-row" style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <button type="button" id="btn-modo-combustible" class="btn btn-secondary" style="margin-top:0; border-color:var(--primary); color:var(--primary);" onclick="setModoRepostaje('combustible')">⛽ Combustible</button>
+        <button type="button" id="btn-modo-electrico" class="btn btn-secondary" style="margin-top:0;" onclick="setModoRepostaje('electrico')">⚡ Eléctrico</button>
+    </div>
+
     <form id="fuelForm">
+        <input type="hidden" id="modoRepostaje" value="combustible">
+        
         <div class="floating-group">
             <select id="gasolinera" class="floating-select" required></select>
-            <label class="floating-label">Estación de Servicio</label>
+            <label class="floating-label" id="lblEstacion">Estación / Punto de Carga</label>
         </div>
 
         <div class="floating-group">
@@ -531,7 +536,7 @@ input[type="date"] {
                 <option value="Súper 98">Súper 98</option>
                 <option value="Diesel">Diesel</option>
             </select>
-            <label class="floating-label">Combustible</label>
+            <label class="floating-label" id="lblTipoEnergia">Combustible</label>
         </div>
 
         <div class="floating-group">
@@ -542,12 +547,18 @@ input[type="date"] {
         <div class="grid-stats" style="gap: 15px; margin-bottom: 15px;">
             <div class="floating-group" style="margin-bottom:0;">
                 <input type="text" id="precioLitro" class="floating-input" inputmode="decimal" required placeholder=" " oninput="formatNumberInput(this)">
-                <label class="floating-label">Precio/Litro (€)</label>
+                <label class="floating-label" id="lblPrecio">Precio/Litro (€)</label>
             </div>
             <div class="floating-group" style="margin-bottom:0;">
                 <input type="text" id="litros" class="floating-input" inputmode="decimal" required placeholder=" " oninput="formatNumberInput(this)">
-                <label class="floating-label">Litros</label>
+                <label class="floating-label" id="lblCantidad">Litros</label>
             </div>
+        </div>
+
+        <!-- Campo exclusivo para modo eléctrico -->
+        <div class="floating-group" id="grupoPorcentajeBat" style="display: none;">
+            <input type="text" id="porcentajeBat" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this)">
+            <label class="floating-label">% Batería Final (Opcional)</label>
         </div>
 
         <div class="floating-group">
@@ -558,9 +569,10 @@ input[type="date"] {
             <label class="floating-label">¿Aire Acondicionado?</label>
         </div>
 
-        <button type="submit" class="btn">Guardar Repostaje</button>
+        <button type="submit" class="btn">Guardar Registro</button>
     </form>
 </div>
+
 
 <div class="card">
     <h2 class="card-title">🛠️ Estado del Vehículo</h2>
@@ -585,14 +597,6 @@ input[type="date"] {
     </div>
 </div>
 
-
-
-
-
-
-
-
-
 <div class="card">
     <h3 class="card-title">⚖️ Comparativa de Eficiencia Global</h3>
     <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: -5px; margin-bottom: 15px;">
@@ -610,15 +614,10 @@ input[type="date"] {
                 </tr>
             </thead>
             <tbody id="body-comparativa">
-                </tbody>
+            </tbody>
         </table>
     </div>
 </div>
-
-
-
-
-
 
 <div class="card">
     <h2 class="card-title">🔮 Calculadora de Viajes Predictiva</h2>
@@ -639,7 +638,6 @@ input[type="date"] {
     <h2 class="card-title">📈 Historial Técnico</h2>
     <div class="chart-container"><canvas id="graficoCombustible"></canvas></div>
 </div>
-
 
 <div class="card">
     <h2 class="card-title">📊 Último Depósito</h2>
@@ -912,6 +910,40 @@ function toggleForm(id) {
     form.classList.toggle('hidden');
     if (!form.classList.contains('hidden')) cargarDatosVehiculo();
 }
+
+
+
+function setModoRepostaje(modo) {
+    document.getElementById('modoRepostaje').value = modo;
+    const btnComb = document.getElementById('btn-modo-combustible');
+    const btnElec = document.getElementById('btn-modo-electrico');
+    const lblPrecio = document.getElementById('lblPrecio');
+    const lblCantidad = document.getElementById('lblCantidad');
+    const lblTipoEnergia = document.getElementById('lblTipoEnergia');
+    const selCombustible = document.getElementById('tipoCombustible');
+    const grupoPorcentaje = document.getElementById('grupoPorcentajeBat');
+
+    if (modo === 'electrico') {
+        btnElec.style.borderColor = 'var(--primary)'; btnElec.style.color = 'var(--primary)';
+        btnComb.style.borderColor = 'var(--border)'; btnComb.style.color = 'var(--text-muted)';
+        lblPrecio.textContent = 'Precio/kWh (€)';
+        lblCantidad.textContent = 'kWh Recargados';
+        lblTipoEnergia.textContent = 'Tipo de Carga';
+        selCombustible.innerHTML = '<option value="Carga CA (Lenta)">Carga CA (Lenta)</option><option value="Carga CC (Rápida)">Carga CC (Rápida)</option>';
+        grupoPorcentaje.style.display = 'block';
+    } else {
+        btnComb.style.borderColor = 'var(--primary)'; btnComb.style.color = 'var(--primary)';
+        btnElec.style.borderColor = 'var(--border)'; btnElec.style.color = 'var(--text-muted)';
+        lblPrecio.textContent = 'Precio/Litro (€)';
+        lblCantidad.textContent = 'Litros';
+        lblTipoEnergia.textContent = 'Combustible';
+        selCombustible.innerHTML = '<option value="Súper 95">Súper 95</option><option value="Súper 98">Súper 98</option><option value="Diesel">Diesel</option>';
+        grupoPorcentaje.style.display = 'none';
+        document.getElementById('porcentajeBat').value = ''; // Limpiar si se oculta
+    }
+}
+
+
 
 function toggleTopControls() {
     document.body.classList.toggle('controls-hidden');
@@ -1337,7 +1369,9 @@ document.getElementById('fuelForm').addEventListener('submit', async (e) => {
 
     const kmTot = parseFloat(document.getElementById('kmTotalesOdom').value);
     const precio = parseFloat(document.getElementById('precioLitro').value);
-    const litros = parseFloat(document.getElementById('litros').value);
+    const litros = parseFloat(document.getElementById('litros').value); // Guardará Litros o kWh dependiendo del modo
+    const modoActivo = document.getElementById('modoRepostaje').value;
+    const porcentaje = document.getElementById('porcentajeBat').value;
     
     if (kmTot <= coche.kmActuales) { await customAlert(`El kilometraje debe ser mayor al actual (${coche.kmActuales} Km).`, "Atención"); return; }
     
@@ -1352,14 +1386,18 @@ document.getElementById('fuelForm').addEventListener('submit', async (e) => {
         combustible: document.getElementById('tipoCombustible').value,
         kmHechos, litros, precioLitro: precio, aire: document.getElementById('aireAcondicionado').value,
         costeTotal: costeTotal.toFixed(2), consumoMedio: consMedio.toFixed(2),
-        kmPorLitro: (kmHechos/litros).toFixed(2), precioPorKm: (costeTotal/kmHechos).toFixed(3)
+        kmPorLitro: (kmHechos/litros).toFixed(2), precioPorKm: (costeTotal/kmHechos).toFixed(3),
+        modo: modoActivo,
+        porcentajeBateria: porcentaje || null
     });
     
     guardarEnStorage();
     document.getElementById('fuelForm').reset();
+    setModoRepostaje('combustible'); // Reiniciar formulario visualmente
     cargarDatosVehiculo();
-    mostrarNotificacion("Repostaje Guardado");
+    mostrarNotificacion("Registro Guardado");
 });
+
 
 async function eliminarRegistro(index) {
     const coche = baseDatos[vehiculoActivo];
@@ -1397,45 +1435,35 @@ async function compartirUltimoDeposito() {
     }
 }
 
-
-
-// Función ADAPTADA para calcular y renderizar la comparativa entre vehículos
 function generarComparativaEficiencia() {
     const tbody = document.getElementById('body-comparativa');
-    if (!tbody) return; // Si no existe la tabla en el HTML, no hace nada
+    if (!tbody) return; 
     
-    tbody.innerHTML = ''; // Limpiamos la tabla antes de renderizar
+    tbody.innerHTML = ''; 
 
-    // Iteramos sobre cada vehículo guardado en nuestra baseDatos principal
     Object.keys(baseDatos).forEach(nombreVehiculo => {
         const coche = baseDatos[nombreVehiculo];
         
-        // Si el vehículo tiene registros de repostaje/carga, hacemos los cálculos
         if (coche.registros && coche.registros.length > 0) {
             let costeTotalSum = 0;
             let distanciaTotalSum = 0;
             let energiaTotalSum = 0;
 
-            // Sumamos todos los registros históricos de este vehículo
             coche.registros.forEach(rep => {
                 costeTotalSum += parseFloat(rep.costeTotal) || 0;
                 distanciaTotalSum += parseFloat(rep.kmHechos) || 0;
-                energiaTotalSum += parseFloat(rep.litros) || 0; // Usado para L o kWh
+                energiaTotalSum += parseFloat(rep.litros) || 0; 
             });
 
-            // Evitamos divisiones por cero
             if (distanciaTotalSum > 0 && energiaTotalSum > 0) {
-                // 3. Cálculos de eficiencia definitivos
                 const coste100km = (costeTotalSum / distanciaTotalSum) * 100;
                 const consumoMedio = (energiaTotalSum / distanciaTotalSum) * 100;
                 const precioMedioUnidad = costeTotalSum / energiaTotalSum;
 
-                // 4. Determinar la unidad según nuestro tipo de motor
                 const esElectrico = coche.tipo === 'BEV';
                 const unidadEnergia = esElectrico ? 'kWh' : 'L';
                 const tipoMotorDisplay = coche.tipo || 'Combustión';
 
-                // 5. Crear la fila e inyectarla en la tabla
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td><strong>${escapeHTML(nombreVehiculo)}</strong></td>
@@ -1449,16 +1477,6 @@ function generarComparativaEficiencia() {
         }
     });
 }
-
-
-
-
-
-// Ejecutar la función cuando cargue la página o cuando se añada un nuevo repostaje
-document.addEventListener('DOMContentLoaded', generarComparativaEficiencia);
-
-
-
 
 function calcularViajePredictivo() {
     const coche = baseDatos[vehiculoActivo];
@@ -1528,6 +1546,7 @@ function actualizarTablayStats() {
     calcularPremiosYDestacados();
     renderizarGrafico(coche.registros);
     calcularViajePredictivo();
+    generarComparativaEficiencia();
 }
 
 function calcularComparativaGasolineras(registros) {
