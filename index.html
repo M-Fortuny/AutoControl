@@ -639,7 +639,7 @@ input[type="date"] {
         </div>
     </div>
 
-    <button type="button" class="btn btn-secondary" id="btn-ir-navegador" onclick="abrirNavegador()" style="margin-bottom:15px;display:none;">🧭 Pantalla Completa</button>
+    <button type="button" class="btn btn-secondary" id="btn-ir-navegador" onclick="abrirNavegador()" style="margin-bottom:15px;display:none;">🚀 Ir al Navegador en Pantalla Completa</button>
 
     <div id="map-wrapper" style="position:relative;width:100%;">
         <div id="miMapa" style="height:350px;width:100%;border-radius:8px;z-index:1;"></div>
@@ -675,7 +675,7 @@ input[type="date"] {
 </div>
 
 <div class="card">
-    <h3 class="card-title">⚖️ Comparativa de Eficiencia</h3>
+    <h3 class="card-title">⚖️ Comparativa de Eficiencia Global</h3>
     <p style="font-size:0.85rem;color:var(--text-muted);margin-top:-5px;margin-bottom:15px;">Compara el coste real a los 100km entre tus vehículos de combustión y eléctricos.</p>
     <div class="tabla-responsiva">
         <table>
@@ -693,6 +693,9 @@ input[type="date"] {
     </div>
 </div>
 
+<div class="card">
+    <h2 class="card-title">🔮 Calculadora de Viajes Predictiva</h2>
+    <p style="font-size:0.9rem;color:var(--text-muted);margin-top:-10px;">Simula el consumo y coste de tu próxima ruta basándose en tu histórico real.</p>
 
     <div class="floating-group">
         <input type="text" id="kmViajeInput" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); calcularViajePredictivo()">
@@ -868,6 +871,7 @@ input[type="date"] {
     </div>
 </div>
 
+<button id="btn-cerrar-navegador" onclick="cerrarNavegador()">❌ Salir del Navegador</button>
 
 <script>
 const staticVehiculosPredeterminados = { "MG3 Hybrid +": { kmActuales: 5000, proxAceite: 15000, proxFiltro: 15000, proxRevision: 100000, registros: [] } };
@@ -1302,29 +1306,16 @@ async function compartirUltimoDeposito() {
         await customAlert("No hay registros disponibles para compartir.", "Aviso");
         return;
     }
-    
     const ult = coche.registros[0];
-    const urlApp = "https://m-fortuny.github.io/AutoControl/";
     const shareText = `🚗 Mi viaje con el ${vehiculoActivo}: He recorrido ${ult.kmHechos} km con un consumo medio de ${ult.consumoMedio} L/100km. Gasto total: ${ult.costeTotal}€. ¡Supera esa eficiencia! 🏆 Registrado con AutoControl IA Pro.`;
-    
     if (navigator.share) {
-        try { 
-            await navigator.share({ 
-                title: 'AutoControl IA Pro - Estado del Vehículo', 
-                text: shareText,
-                url: urlApp  // El sistema operativo tratará esto como un enlace clicable
-            }); 
-        }
-        catch (err) { 
-            console.log('Compartir cancelado o no disponible', err); 
-        }
+        try { await navigator.share({ title: 'AutoControl IA Pro - Estado del Vehículo', text: shareText }); }
+        catch (err) { console.log('Compartir cancelado o no disponible', err); }
     } else {
-        // Fallback para portapapeles: añadimos la URL al texto directamente
-        navigator.clipboard.writeText(`${shareText} Visita la app aquí: ${urlApp}`);
+        navigator.clipboard.writeText(shareText);
         await customAlert("¡Texto copiado al portapapeles!", "Portapapeles");
     }
 }
-
 
 function generarComparativaEficiencia() {
     const tbody = document.getElementById('body-comparativa');
