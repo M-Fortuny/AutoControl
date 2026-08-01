@@ -18,6 +18,9 @@
     <link rel="apple-touch-icon" href="icono-app.png">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Tesseract.js OCR Engine -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
 <style>
 :root {
@@ -263,6 +266,35 @@ body.dark-mode .btn-danger { background: #7f1d1d; color: #fecaca; border: 1px so
 .button-row { display: flex; gap: 10px; width: 100%; flex-wrap: wrap; margin-top: 15px; }
 .button-row .btn { flex: 1; min-width: 120px; margin-top: 0; }
 .btn-delete { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.3rem; }
+
+/* NUEVOS BOTONES SCAN PREMIUM */
+.btn-scan-premium {
+    background: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary);
+    border: 1px solid rgba(var(--primary-rgb), 0.3);
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.btn-scan-premium:active { transform: scale(0.96); background: rgba(var(--primary-rgb), 0.2); }
+body.dark-mode .btn-scan-premium {
+    background: rgba(var(--primary-rgb), 0.2);
+    border-color: rgba(var(--primary-rgb), 0.4);
+    color: #60a5fa;
+}
+
+/* SPINNER OCR */
+#ocrSpinner { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); z-index: 99999; justify-content: center; align-items: center; color: white; flex-direction: column; gap: 1rem; font-weight: 600; backdrop-filter: blur(4px); }
+.spinner { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s ease-in-out infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.file-hidden { display: none; }
 
 .accordion-btn {
     background-color: var(--surface);
@@ -551,9 +583,17 @@ input[type="date"] {
     <button class="btn-custom" style="margin-top:25px;width:100%;" onclick="toggleInfo()">Cerrar Información</button>
 </div>
 
+<!-- ============================================== -->
+<!-- 🚀 NUEVA TARJETA DE REGISTRO CON OCR Y MODOS   -->
+<!-- ============================================== -->
 <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px; border-bottom: 2px solid var(--background); padding-bottom: 10px; flex-wrap: wrap; gap: 10px;">
         <h2 class="card-title" style="margin-bottom:0;border:none;padding:0;">⛽ Nuevo Registro</h2>
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <button type="button" class="btn-scan-premium" onclick="triggerScanOdometro()">📷 Odómetro</button>
+            <button type="button" class="btn-scan-premium" onclick="triggerScanTicket()">🧾 Ticket</button>
+            <button type="button" class="btn-scan-premium" onclick="scanGeolocalizacion()">📍 Ubicación</button>
+        </div>
     </div>
 
     <div class="button-row" style="margin-bottom:20px;display:flex;gap:10px;">
@@ -629,15 +669,20 @@ input[type="date"] {
     <button type="button" class="btn" id="btn-calcular-ruta" style="margin-bottom:20px;">Calcular Ruta</button>
 
     <div id="resultado-ruta" class="route-summary-card" style="display:none;margin-bottom:15px;position:relative;top:auto;left:auto;">
-        <div class="summary-item">
-            <span class="summary-label">Distancia Total:</span>
-            <span id="distancia-val" class="summary-value">0.0 km</span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-label">Coste Estimado:</span>
-            <span id="coste-val" class="summary-value">0.00 €</span>
-        </div>
+    <div class="summary-item">
+        <span class="summary-label">Distancia Total:</span>
+        <span id="distancia-val" class="summary-value">0.0 km</span>
     </div>
+    <div class="summary-item">
+        <span class="summary-label">Litros Consumidos:</span>
+        <span id="litros-val" class="summary-value">0.0 L</span>
+    </div>
+    <div class="summary-item">
+        <span class="summary-label">Coste Estimado:</span>
+        <span id="coste-val" class="summary-value">0.00 €</span>
+    </div>
+</div>
+
 
     <button type="button" class="btn btn-secondary" id="btn-ir-navegador" onclick="abrirNavegador()" style="margin-bottom:15px;display:none;">🧭 Pantalla Completa</button>
 
@@ -693,18 +738,6 @@ input[type="date"] {
     </div>
 </div>
 
-
-    <div class="floating-group">
-        <input type="text" id="kmViajeInput" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); calcularViajePredictivo()">
-        <label class="floating-label">Kilómetros del Viaje (Ej: 300)</label>
-    </div>
-
-    <div id="resultadoSimulacion" class="stat-box best-box" style="margin-top:15px;display:none;">
-        <span>Estimación de Ruta (Simulación IA)</span>
-        <strong id="textoSimulacion" style="font-size:1.1rem;line-height:1.4;display:block;margin-top:5px;">-</strong>
-    </div>
-</div>
-
 <div class="card">
     <h2 class="card-title">📈 Historial Técnico</h2>
     <div class="chart-container"><canvas id="graficoCombustible"></canvas></div>
@@ -736,6 +769,21 @@ input[type="date"] {
         <thead><tr><th>Fecha</th><th>Lugar</th><th>Comb.</th><th>Km</th><th>Litros</th><th>L/100</th><th>Coste</th><th>Borrar</th></tr></thead>
         <tbody id="historialTab"></tbody>
     </table>
+</div>
+
+<div class="card">
+    <h2 class="card-title">🔮 Calculadora de Viajes Predictiva</h2>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top:-10px;">Simula el consumo y coste de tu próxima ruta basándose en tu histórico real.</p>
+    
+    <div class="floating-group">
+        <input type="text" id="kmViajeInput" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); calcularViajePredictivo()">
+        <label class="floating-label">Kilómetros del Viaje (Ej: 300)</label>
+    </div>
+
+    <div id="resultadoSimulacion" class="stat-box best-box" style="margin-top: 15px; display: none;">
+        <span>Estimación de Ruta (Simulación IA)</span>
+        <strong id="textoSimulacion" style="font-size: 1.1rem; line-height: 1.4; display:block; margin-top:5px;">-</strong>
+    </div>
 </div>
 
 <div class="card">
@@ -825,6 +873,7 @@ input[type="date"] {
             </div>
         </div>
 
+
         <button class="accordion-btn">💼 Gasto de Trabajo</button>
         <div class="accordion-content">
             <div class="accordion-inner">
@@ -872,6 +921,16 @@ input[type="date"] {
     <button id="btn-cerrar-navegador" onclick="cerrarNavegador()"> ❌ Salir del Navegador </button>
 </div>
 
+<!-- ============================================== -->
+<!-- 📸 INPUTS OCULTOS DE CÁMARA PARA OCR           -->
+<!-- ============================================== -->
+<input type="file" id="fileOdometro" accept="image/*" capture="environment" class="file-hidden" onchange="processOdometroOCR(this)">
+<input type="file" id="fileTicket" accept="image/*" capture="environment" class="file-hidden" onchange="processTicketOCR(this)">
+
+<div id="ocrSpinner">
+    <div class="spinner"></div>
+    <div id="ocrSpinnerText" style="margin-top: 15px;">Procesando imagen con IA...</div>
+</div>
 
 <script>
 const staticVehiculosPredeterminados = { "MG3 Hybrid +": { kmActuales: 5000, proxAceite: 15000, proxFiltro: 15000, proxRevision: 100000, registros: [] } };
@@ -960,10 +1019,14 @@ const customSelectPrompt = (msg, options, def="", title="Seleccionar") => custom
 
 function formatNumberInput(input) { input.value = input.value.replace(/,/g, '.').replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); }
 function escapeHTML(str) { return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)); }
+
 function mostrarNotificacion(mensaje) { const toast = document.createElement('div'); toast.className = 'toast'; toast.textContent = mensaje; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
 function toggleForm(id) { const form = document.getElementById(id); if (!form) return; form.classList.toggle('hidden'); if (!form.classList.contains('hidden')) cargarDatosVehiculo(); }
 function toggleTopControls() { document.body.classList.toggle('controls-hidden'); }
 
+// ==========================================
+// FUNCIÓN ACTUALIZADA: MODO REPOSTAJE
+// ==========================================
 function setModoRepostaje(modo) {
     document.getElementById('modoRepostaje').value = modo;
     const btnComb = document.getElementById('btn-modo-combustible'), btnElec = document.getElementById('btn-modo-electrico');
@@ -977,11 +1040,13 @@ function setModoRepostaje(modo) {
         selCombustible.innerHTML = '<option value="Carga CA (Lenta)">Carga CA (Lenta)</option><option value="Carga CC (Rápida)">Carga CC (Rápida)</option>';
         grupoPorcentaje.style.display = 'block';
     } else {
+        // Asume modo 'combustible' por defecto, para no romper lógica anterior
         btnComb.style.borderColor = 'var(--primary)'; btnComb.style.color = 'var(--primary)';
         btnElec.style.borderColor = 'var(--border)'; btnElec.style.color = 'var(--text-muted)';
         lblPrecio.textContent = 'Precio/Litro (€)'; lblCantidad.textContent = 'Litros'; lblTipoEnergia.textContent = 'Combustible';
         selCombustible.innerHTML = '<option value="Súper 95">Súper 95</option><option value="Súper 98">Súper 98</option><option value="Diesel">Diesel</option>';
-        grupoPorcentaje.style.display = 'none'; document.getElementById('porcentajeBat').value = '';
+        grupoPorcentaje.style.display = 'none'; 
+        document.getElementById('porcentajeBat').value = '';
     }
 }
 
@@ -1010,7 +1075,7 @@ function inicializar() {
     actualizarSelectorVehiculos();
     actualizarSelectorGasolineras();
     cargarDatosVehiculo();
-    initRoutePlanner();
+    if(typeof initRoutePlanner === 'function') initRoutePlanner();
 }
 
 function actualizarReloj() {
@@ -1040,6 +1105,174 @@ function toggleDarkMode() {
 }
 function toggleAyuda() { const pA = document.getElementById('panelAyuda'), pI = document.getElementById('panelInfo'); pI.style.display = 'none'; pA.style.display = (pA.style.display === 'none' || pA.style.display === '') ? 'block' : 'none'; }
 function toggleInfo() { const pA = document.getElementById('panelAyuda'), pI = document.getElementById('panelInfo'); pA.style.display = 'none'; pI.style.display = (pI.style.display === 'none' || pI.style.display === '') ? 'block' : 'none'; }
+
+/* ===================================================================== 
+   MOTOR DE GEOLOCALIZACIÓN INTELIGENTE (Tu Código Avanzado Original)
+   ===================================================================== */
+async function scanGeolocalizacion() {
+    if (!navigator.geolocation) {
+        await customAlert("Geolocalización no soportada por el navegador.", "Error de Sistema");
+        return;
+    }
+    
+    mostrarNotificacion("📍 Buscando establecimiento...");
+    
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+        try {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            
+            // Reverse Geocoding via Nominatim
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`);
+            const data = await res.json();
+            
+            // Extraer el mejor nombre posible del lugar
+            let nombreDetectado = "Gasolinera Local";
+            if (data && data.address) {
+                nombreDetectado = data.address.amenity || data.address.shop || data.name || data.address.road || "Gasolinera Local";
+            } else if (data && data.name) {
+                nombreDetectado = data.name;
+            }
+
+            const selectGasolinera = document.getElementById('gasolinera');
+            const nombreUpper = nombreDetectado.toUpperCase();
+            
+            // Buscar coincidencias en nuestra base de datos
+            const match = gasolineras.find(g => 
+                g.toUpperCase() === nombreUpper || 
+                g.toUpperCase().includes(nombreUpper) || 
+                nombreUpper.includes(g.toUpperCase())
+            );
+            
+            if (match) {
+                selectGasolinera.value = match;
+                mostrarNotificacion(`Ubicación autocompletada: ${match}`);
+                selectGasolinera.dispatchEvent(new Event('change')); // Actualiza UI flotante
+            } else {
+                const conf = await customConfirm(`Detectamos que estás en o cerca de "${nombreDetectado}". No la tienes guardada. ¿Deseas añadirla para este repostaje?`, "📍 Ubicación Inteligente");
+                if (conf) {
+                    gasolineras.push(nombreDetectado);
+                    localStorage.setItem('app_gasolineras_data', JSON.stringify(gasolineras));
+                    actualizarSelectorGasolineras();
+                    selectGasolinera.value = nombreDetectado;
+                    mostrarNotificacion(`"${nombreDetectado}" añadida y seleccionada.`);
+                    selectGasolinera.dispatchEvent(new Event('change')); // Actualiza UI flotante
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            mostrarNotificacion("Error al traducir la dirección GPS.");
+        }
+    }, () => {
+        customAlert("No se pudo obtener tu ubicación. Verifica los permisos GPS de tu navegador.", "Sin GPS");
+    }, { enableHighAccuracy: true, timeout: 10000 });
+}
+
+/* ===================================================================== 
+   NUEVAS FUNCIONES: VISIÓN ARTIFICIAL (OCR) ODÓMETRO Y TICKETS
+   ===================================================================== */
+function triggerScanOdometro() { document.getElementById('fileOdometro').click(); }
+function triggerScanTicket() { document.getElementById('fileTicket').click(); }
+
+async function processOdometroOCR(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+
+    const spinner = document.getElementById('ocrSpinner');
+    document.getElementById('ocrSpinnerText').textContent = "Leyendo cuentakilómetros...";
+    spinner.style.display = 'flex';
+
+    try {
+        const result = await Tesseract.recognize(file, 'eng+spa');
+        spinner.style.display = 'none';
+        input.value = '';
+
+        const text = result.data.text;
+        const matches = text.match(/\b\d{5,6}\b/g);
+        if (matches && matches.length > 0) {
+            document.getElementById('kmTotalesOdom').value = matches[0];
+            document.getElementById('kmTotalesOdom').dispatchEvent(new Event('input')); // Dispara la etiqueta flotante
+            mostrarNotificacion("Odómetro detectado correctamente ✅");
+        } else {
+            const cleanNum = text.replace(/\D/g, '');
+            if (cleanNum.length >= 5) {
+                document.getElementById('kmTotalesOdom').value = cleanNum.substring(0, 6);
+                document.getElementById('kmTotalesOdom').dispatchEvent(new Event('input'));
+                mostrarNotificacion("Odómetro extraído parcialmente ⚠️");
+            } else {
+                customAlert("No se ha podido leer con claridad el kilometraje. Intenta con otra foto o escríbelo a mano.");
+            }
+        }
+    } catch (err) {
+        spinner.style.display = 'none';
+        input.value = '';
+        customAlert("Error de sistema al procesar la imagen del odómetro.");
+    }
+}
+
+async function processTicketOCR(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+
+    const spinner = document.getElementById('ocrSpinner');
+    document.getElementById('ocrSpinnerText').textContent = "Analizando ticket con IA...";
+    spinner.style.display = 'flex';
+
+    try {
+        const result = await Tesseract.recognize(file, 'spa');
+        spinner.style.display = 'none';
+        input.value = '';
+
+        const text = result.data.text;
+        const txtLower = text.toLowerCase();
+
+        // 1. Detectar si es recarga eléctrica o de combustión
+        const esElectrico = txtLower.includes('kwh') || txtLower.includes('recarga') || txtLower.includes('ionity') || txtLower.includes('tesla') || txtLower.includes('endesa') || txtLower.includes('cc') || txtLower.includes('ca');
+        
+        if (esElectrico) {
+            setModoRepostaje('electrico');
+            
+            const matchPrecioElec = text.match(/(\d[.,]\d{2,3})\s*(?:€\/kwh|€|eur)/i);
+            if (matchPrecioElec) document.getElementById('precioLitro').value = matchPrecioElec[1].replace(',', '.');
+            
+            const matchKWh = text.match(/(\d+[.,]\d{2})\s*(?:kwh)/i);
+            if (matchKWh) document.getElementById('litros').value = matchKWh[1].replace(',', '.');
+            
+            const matchBat = text.match(/(?:soc|bateria|hasta)?\s*(\d{2})\s*%/i);
+            if (matchBat) document.getElementById('porcentajeBat').value = matchBat[1];
+
+        } else {
+            setModoRepostaje('combustible');
+            
+            const matchPrecio = text.match(/(\d[.,]\d{2,3})\s*(?:€|\/l|eur)/i);
+            if (matchPrecio) document.getElementById('precioLitro').value = matchPrecio[1].replace(',', '.');
+            
+            const matchLitros = text.match(/(\d+[.,]\d{2})\s*(?:l|litros)/i);
+            if (matchLitros) document.getElementById('litros').value = matchLitros[1].replace(',', '.');
+            
+            const selCombustible = document.getElementById('tipoCombustible');
+            if (txtLower.includes('98')) selCombustible.value = 'Súper 98';
+            else if (txtLower.includes('diesel') || txtLower.includes('gasoleo')) selCombustible.value = 'Diesel';
+            else selCombustible.value = 'Súper 95';
+        }
+
+        // Actualizar UI Flotante forzando el evento input
+        ['precioLitro', 'litros', 'porcentajeBat'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el && el.value) el.dispatchEvent(new Event('input'));
+        });
+        const st = document.getElementById('tipoCombustible');
+        if (st) st.dispatchEvent(new Event('change'));
+
+        customAlert("Datos extraídos correctamente. Revisa y ajusta antes de guardar.", "IA Completada 🤖");
+    } catch (err) {
+        spinner.style.display = 'none';
+        input.value = '';
+        customAlert("Error al procesar el ticket de recarga/repostaje. Prueba de nuevo.");
+    }
+}
+/* ===================================================================== */
+
 
 async function iniciarAsistenteNuevoVehiculo() {
     const nombre = await customPrompt("Nombre o modelo del vehículo:", "", "Nuevo Vehículo", "text");
@@ -1140,8 +1373,18 @@ function cargarDatosVehiculo() {
     document.getElementById('planRevision').value = coche.proxRevision || '';
     document.getElementById('diasSemana').value = coche.diasSemana || '';
     document.getElementById('kmDiarios').value = coche.kmDiarios || '';
-    actualizarMantenimientoBateria(); actualizarMantenimientoRefrigerante(); actualizarMantenimientoNeumaticos();
-    actualizarTablayStats(); calcularMantenimiento(); calcularEstadoITV(coche.fechaITV); calcularAutonomia(); calcularGastoDesplazamiento(); calcularViajePredictivo();
+    actualizarMantenimientoBateria(); 
+    actualizarMantenimientoRefrigerante(); 
+    
+    // Ejecución segura en caso de que existan estas funciones en el código inferior
+    if(typeof actualizarMantenimientoNeumaticos === 'function') actualizarMantenimientoNeumaticos();
+    if(typeof actualizarTablayStats === 'function') actualizarTablayStats(); 
+    if(typeof calcularAutonomia === 'function') calcularAutonomia(); 
+    if(typeof calcularGastoDesplazamiento === 'function') calcularGastoDesplazamiento(); 
+    if(typeof calcularViajePredictivo === 'function') calcularViajePredictivo();
+
+    calcularMantenimiento(); 
+    calcularEstadoITV(coche.fechaITV); 
 }
 
 function guardarKmActuales() {
@@ -1316,19 +1559,17 @@ async function compartirUltimoDeposito() {
             await navigator.share({ 
                 title: 'AutoControl IA Pro - Estado del Vehículo', 
                 text: shareText,
-                url: urlApp  // El sistema operativo tratará esto como un enlace clicable
+                url: urlApp
             }); 
         }
         catch (err) { 
             console.log('Compartir cancelado o no disponible', err); 
         }
     } else {
-        // Fallback para portapapeles: añadimos la URL al texto directamente
         navigator.clipboard.writeText(`${shareText} Visita la app aquí: ${urlApp}`);
         await customAlert("¡Texto copiado al portapapeles!", "Portapapeles");
     }
 }
-
 
 function generarComparativaEficiencia() {
     const tbody = document.getElementById('body-comparativa');
@@ -1477,23 +1718,32 @@ async function calcularRuta() {
             lineOptions: { styles: [{ color: '#2563eb', opacity: 0.9, weight: 6 }] }
         }).addTo(mapa);
 
-        controlRuta.on('routesfound', function(e) {
+                controlRuta.on('routesfound', function(e) {
             const distanciaMetros = e.routes[0].summary.totalDistance;
             const kmTotales = (distanciaMetros / 1000);
             const coche = baseDatos[vehiculoActivo];
             let costeEstimado = 0;
+            let litrosConsumidos = 0; // 1. Inicializamos la variable
 
             if (coche && coche.registros && coche.registros.length > 0) {
                 const ultimoRegistro = coche.registros[0];
                 const consumo = parseFloat(ultimoRegistro.consumoMedio) || 0;
                 const precio = parseFloat(ultimoRegistro.precioLitro) || 0;
-                costeEstimado = ((kmTotales / 100) * consumo) * precio;
+                
+                // 2. Calculamos los litros reales basados en el consumo del coche
+                litrosConsumidos = (kmTotales / 100) * consumo;
+                costeEstimado = litrosConsumidos * precio;
             } else {
+                // 3. Estimación por defecto si no hay datos del coche (asumiendo aprox. 7L/100km para dar coherencia al coste)
+                litrosConsumidos = (kmTotales / 100) * 7; 
                 costeEstimado = kmTotales * 0.12;
             }
 
+            // 4. Pintamos el resultado en el HTML
             document.getElementById('distancia-val').innerText = `${kmTotales.toFixed(1)} km`;
+            document.getElementById('litros-val').innerText = `${litrosConsumidos.toFixed(1)} L`; // <- ¡Línea Nueva!
             document.getElementById('coste-val').innerText = `${costeEstimado.toFixed(2)} €`;
+            
             document.getElementById('resultado-ruta').style.display = 'block';
             document.getElementById('btn-ir-navegador').style.display = 'block';
             document.getElementById('btn-cerrar-navegador').style.display = document.getElementById('miMapa').classList.contains('modo-pantalla-completa') ? 'block' : 'none';
@@ -1502,6 +1752,7 @@ async function calcularRuta() {
             rutaDestino = destinoTexto;
             rutaWaypoints = waypointInputs.map(i => i.value.trim()).filter(Boolean);
         });
+
 
         controlRuta.on('routingerror', function() {
             alert("No se pudo trazar una ruta entre los puntos especificados.");
@@ -1703,71 +1954,6 @@ function renderizarGrafico(registros) {
     });
 }
 
-document.getElementById('fuelForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const coche = baseDatos[vehiculoActivo];
-    if (!coche) return;
-
-    const kmTot = parseFloat(document.getElementById('kmTotalesOdom').value);
-    const precio = parseFloat(document.getElementById('precioLitro').value);
-    const litros = parseFloat(document.getElementById('litros').value);
-    const modoActivo = document.getElementById('modoRepostaje').value;
-    const porcentaje = document.getElementById('porcentajeBat').value;
-
-    if (kmTot <= coche.kmActuales) { await customAlert(`El kilometraje debe ser mayor al actual (${coche.kmActuales} Km).`, "Atención"); return; }
-
-    const kmHechos = kmTot - coche.kmActuales;
-    const costeTotal = litros * precio;
-    const consMedio = (litros / kmHechos) * 100;
-
-    coche.kmActuales = kmTot;
-    coche.registros.unshift({
-        fecha: new Date().toLocaleDateString('es-ES', {year:'numeric',month:'2-digit',day:'2-digit'}),
-        gasolinera: document.getElementById('gasolinera').value,
-        combustible: document.getElementById('tipoCombustible').value,
-        kmHechos, litros, precioLitro: precio,
-        costeTotal: costeTotal.toFixed(2), consumoMedio: consMedio.toFixed(2),
-        kmPorLitro: (kmHechos/litros).toFixed(2), precioPorKm: (costeTotal/kmHechos).toFixed(3),
-        modo: modoActivo,
-        porcentajeBateria: porcentaje || null
-    });
-
-    guardarEnStorage();
-    document.getElementById('fuelForm').reset();
-    setModoRepostaje('combustible');
-    cargarDatosVehiculo();
-    mostrarNotificacion("Registro Guardado");
-});
-
-async function eliminarRegistro(index) {
-    const coche = baseDatos[vehiculoActivo];
-    if (!coche || !coche.registros[index]) return;
-    const conf = await customConfirm("¿Eliminar este registro y restaurar odómetro (si aplica)?", "Atención");
-    if (conf) {
-        if (index === 0) coche.kmActuales = Math.max(0, coche.kmActuales - coche.registros[0].kmHechos);
-        coche.registros.splice(index, 1);
-        guardarEnStorage(); cargarDatosVehiculo();
-    }
-}
-
-async function crearGasolinera() {
-    const nombre = document.getElementById('nuevaGasolineraNombre').value.trim();
-    if (!nombre) return;
-    if (gasolineras.includes(nombre)) { await customAlert("Esta gasolinera ya está registrada."); return; }
-    gasolineras.push(nombre); localStorage.setItem('app_gasolineras_data', JSON.stringify(gasolineras));
-    actualizarSelectorGasolineras(); document.getElementById('nuevaGasolineraNombre').value = ''; mostrarNotificacion("Gasolinera añadida");
-}
-
-function initGoogleMapsUrl(origenTexto, destinoTexto, waypointInputs) {
-    let url = `https://www.google.com/maps/dir/?api=1`;
-    if (origenTexto && origenTexto !== 'Mi Ubicación Actual') url += `&origin=${encodeURIComponent(origenTexto)}`;
-    if (destinoTexto) url += `&destination=${encodeURIComponent(destinoTexto)}`;
-    if (waypointInputs.length) url += `&waypoints=${waypointInputs.map(encodeURIComponent).join('%7C')}`;
-    return `${url}&travelmode=driving`;
-}
-
-document.getElementById('btn-cerrar-navegador').style.display = 'none';
-
 document.getElementById('easter-egg-trigger').addEventListener('click', () => {
     document.body.classList.toggle('orange-mode');
     localStorage.setItem('orangeMode', document.body.classList.contains('orange-mode') ? 'enabled' : 'disabled');
@@ -1802,7 +1988,6 @@ async function importarDatos(event) {
     reader.readAsText(input.files[0]);
 }
 
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body>
 </html>
