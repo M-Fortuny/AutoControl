@@ -6,13 +6,15 @@
     <title>AutoControl IA Pro</title>
     <link rel="manifest" href="manifest.json">
 
-    <!-- Leaflet CSS y JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Leaflet Routing Machine -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+<!-- Cargar CSS y JS de Leaflet Routing Machine -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -78,7 +80,9 @@ body {
     appearance: none;
 }
 
-.hero-toggle:focus { outline: none; }
+.hero-toggle:focus {
+    outline: none;
+}
 
 .hero-card {
     background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
@@ -182,7 +186,6 @@ h2, h3 { color: var(--accent); margin-top: 0; }
     align-items: center;
     gap: 12px;
     margin-bottom: 15px;
-    flex-wrap: wrap;
 }
 
 .btn-custom { 
@@ -214,31 +217,61 @@ h2, h3 { color: var(--accent); margin-top: 0; }
 }
 .punto-estado.activo { background-color: #22c55e !important; box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
 
-.floating-group { position: relative; margin-bottom: 18px; width: 100%; }
+.floating-group {
+    position: relative;
+    margin-bottom: 18px;
+    width: 100%;
+}
 .floating-input, .floating-select {
-    width: 100%; padding: 22px 15px 8px 15px; font-size: 1.05rem;
-    border: 2px solid var(--border); border-radius: 12px; background: var(--surface);
-    color: var(--text); outline: none; transition: all 0.2s ease; box-sizing: border-box; font-weight: 500;
+    width: 100%;
+    padding: 22px 15px 8px 15px; 
+    font-size: 1.05rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    font-weight: 500;
 }
 .floating-label {
-    position: absolute; top: 50%; left: 15px; transform: translateY(-50%);
-    color: var(--text-muted); font-size: 1rem; transition: all 0.2s ease; pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    pointer-events: none;
 }
 .floating-input:focus ~ .floating-label,
 .floating-input:not(:placeholder-shown) ~ .floating-label,
 .floating-select:focus ~ .floating-label,
 .floating-select:valid ~ .floating-label {
-    top: 14px; font-size: 0.75rem; color: var(--primary); font-weight: 700;
+    top: 14px;
+    font-size: 0.75rem;
+    color: var(--primary);
+    font-weight: 700;
 }
 .floating-input:focus, .floating-select:focus {
-    border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
 }
 .floating-select { padding: 15px 15px 5px 15px; height: 56px; appearance: none; }
 
 .btn { 
-    background: var(--primary); color: white; border: none; padding: 16px; 
-    width: 100%; border-radius: 12px; cursor: pointer; font-weight: 700;
-    font-size: 1.05rem; transition: all 0.2s; box-shadow: 0 4px 6px rgba(var(--primary-rgb), 0.2);
+    background: var(--primary);
+    color: white; 
+    border: none; 
+    padding: 16px; 
+    width: 100%;
+    border-radius: 12px;
+    cursor: pointer; 
+    font-weight: 700;
+    font-size: 1.05rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px rgba(var(--primary-rgb), 0.2);
 } 
 .btn:active { transform: scale(0.98); box-shadow: 0 2px 4px rgba(var(--primary-rgb), 0.2); }
 .btn-secondary { background: var(--background); color: var(--text); border: 1px solid var(--border); margin-top: 10px; box-shadow: none;} 
@@ -249,19 +282,43 @@ body.dark-mode .btn-danger { background: #7f1d1d; color: #fecaca; border: 1px so
 .btn-delete { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.3rem;} 
 
 .accordion-btn {
-    background-color: var(--surface); color: var(--text); cursor: pointer;
-    padding: 18px 15px; width: 100%; text-align: left; border: 1px solid var(--border);
-    border-radius: 12px; outline: none; transition: 0.3s; font-size: 1.05rem;
-    font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between;
-    align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    background-color: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    padding: 18px 15px;
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
-.accordion-btn:after { content: '\002B'; color: var(--primary); font-weight: bold; font-size: 1.2rem; }
+.accordion-btn:after {
+    content: '\002B';
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
 .accordion-btn.active { border-color: var(--primary); border-radius: 12px 12px 0 0; }
 .accordion-btn.active:after { content: "\2212"; }
 .accordion-content {
-    padding: 0 15px; background-color: var(--background); max-height: 0;
-    overflow: hidden; transition: max-height 0.3s ease-out; border-radius: 0 0 12px 12px;
-    margin-top: -10px; margin-bottom: 20px; border: 1px solid var(--primary); border-top: none;
+    padding: 0 15px;
+    background-color: var(--background);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    border-radius: 0 0 12px 12px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--primary);
+    border-top: none;
 }
 .accordion-inner { padding: 20px 5px; }
 
@@ -273,12 +330,15 @@ body.dark-mode .btn-danger { background: #7f1d1d; color: #fecaca; border: 1px so
 }
 .modal-content {
     width: 92%; max-width: 450px; background: var(--surface); 
-    padding: 30px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    padding: 30px; border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
     max-height: 90vh; overflow-y: auto;
 }
 .hidden { display: none !important; opacity: 0; pointer-events: none;}
 
-.grid-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.grid-stats {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+}
 .stat-box { 
     background: var(--background); padding: 18px 12px; border-radius: 14px; 
     text-align: center; border: 1px solid var(--border);
@@ -314,24 +374,143 @@ td { padding: 14px 12px; border-bottom: 1px solid var(--border); font-size: 0.95
 
 .orange-mode h1, .orange-mode h2, .orange-mode h3 { color: orange !important; }
 
-/* Modo Navegador Pantalla Completa y Controles */
+/* Modo Navegador Pantalla Completa */
 #miMapa.modo-pantalla-completa {
-    position: fixed !important; top: 0 !important; left: 0 !important;
-    width: 100vw !important; height: 100vh !important;
-    z-index: 99999 !important; border-radius: 0 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    border-radius: 0 !important;
 }
 
-.map-overlay-controls {
-    display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-    width: 90%; max-width: 400px; flex-direction: column; gap: 10px; z-index: 100000;
+/* Botón Flotante para Salir del Navegador */
+#btn-cerrar-navegador {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100000;
+    background: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-size: 0.95em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    backdrop-filter: blur(5px);
 }
 
-.btn-overlay {
-    width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 16px;
-    font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+/* Estilos de Tarjeta de Resumen Simplificada y Waypoints */
+.route-summary-card {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 12px 18px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    font-family: inherit;
+    z-index: 1000;
 }
-.btn-gmaps { background-color: #ffffff; color: #ea4335; border: 2px solid #ea4335; }
-.btn-exit { background-color: #333a50; color: #ffffff; }
+
+body.dark-mode .route-summary-card {
+    background: rgba(30, 41, 59, 0.95);
+    color: var(--text);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.summary-value {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+body.dark-mode .summary-value {
+    color: #f8fafc;
+}
+
+.btn-floating-gmaps {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+    cursor: pointer;
+    z-index: 1000;
+    transition: background 0.2s ease;
+}
+
+.btn-floating-gmaps:hover {
+    background-color: #3367D6;
+}
+
+.waypoints-controls {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.waypoint-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.waypoint-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.btn-remove-wp {
+    background: #fee2e2;
+    color: #ef4444;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon-action {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: flex-start;
+    box-shadow: 0 2px 6px rgba(var(--primary-rgb), 0.3);
+}
 
 @media (max-width: 600px) {
     .maint-item { flex-direction: column; align-items: flex-start; }
@@ -347,16 +526,33 @@ input[type="date"] {
     font-size: 1.05rem; text-align: center; font-weight: 500;
 }
 
+.top-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
 #fechaHora {
-    width: 100%; text-align: center; color: var(--text-muted);
-    font-size: 0.9rem; font-weight: 600; margin-top: 2px; margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 2px;
+    margin-bottom: 20px;
 }
 
 .controls-hidden .top-controls .btn-custom,
 .controls-hidden .top-controls #indicador-auto,
-.controls-hidden .top-controls #fechaHora { display: none !important; }
-.controls-hidden .hero-card { opacity: 0.95; }
+.controls-hidden .top-controls #fechaHora {
+    display: none !important;
+}
 
+.controls-hidden .hero-card {
+    opacity: 0.95;
+}
 </style>
 </head>
 <body>
@@ -381,31 +577,79 @@ input[type="date"] {
     </div>
 </div>
 
-<!-- Paneles de Ayuda e Info (Ocultos por defecto) -->
 <div id="panelAyuda" style="display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); color: var(--text);">
+    
     <h2 style="margin-top: 0; color: var(--primary);">📖 Guía de Operación: AutoControl IA Pro</h2>
+
     <div style="display: grid; gap: 20px; margin-top: 20px;">
-        <section><h4 style="margin-bottom: 5px;">🚗 Gestión de Vehículos</h4><p style="font-size: 0.9rem;"><strong>Añadir:</strong> Pulsa "+ Nuevo Vehículo", rellena el formulario y establece los KM actuales.<br><strong>Editar/Modificar:</strong> Utiliza el icono de edición sobre la ficha del vehículo para actualizar datos.</p></section>
-        <section><h4 style="margin-bottom: 5px;">🛠️ Mantenimiento y Alertas</h4><p style="font-size: 0.9rem;">Para registrar una revisión, selecciona el componente. La app guardará la fecha y KM. <br><em>IA Activa:</em> El sistema compara el tiempo transcurrido y el uso de KM.</p></section>
-        <section><h4 style="margin-bottom: 5px;">⛽ Combustible y Gasolineras</h4><p style="font-size: 0.9rem;"><strong>Ingresar Registro:</strong> Añade siempre litros, precio y KM. <br><strong>Gestión y Eficiencia:</strong> El sistema marca como <strong>"Destacada"</strong> la gasolinera donde obtienes más KM/€.</p></section>
+        <section>
+            <h4 style="margin-bottom: 5px;">🚗 Gestión de Vehículos</h4>
+            <p style="font-size: 0.9rem;">
+                <strong>Añadir:</strong> Pulsa "+ Nuevo Vehículo", rellena el formulario y establece los KM actuales.<br>
+                <strong>Editar/Modificar:</strong> Utiliza el icono de edición sobre la ficha del vehículo para actualizar datos (como KM actuales al realizar un viaje largo o una reparación).
+            </p>
+        </section>
+
+        <section>
+            <h4 style="margin-bottom: 5px;">🛠️ Mantenimiento y Alertas</h4>
+            <p style="font-size: 0.9rem;">
+                Para registrar una revisión, selecciona el componente (Batería, Aceite, etc.). La app guardará la fecha y KM. <br>
+                <em>IA Activa:</em> El sistema compara el tiempo transcurrido y el uso de KM. Si el componente está cerca de su límite, verás un indicador rojo en su ficha.
+            </p>
+        </section>
+
+        <section>
+            <h4 style="margin-bottom: 5px;">⛽ Combustible y Gasolineras</h4>
+            <p style="font-size: 0.9rem;">
+                <strong>Ingresar Registro:</strong> Añade siempre litros, precio y KM del contador en cada repostaje. <br>
+                <strong>Gestión y Eficiencia:</strong> La app compara automáticamente tus repostajes. El sistema marca como <strong>"Destacada"</strong> la gasolinera donde obtienes más KM por cada euro invertido.
+            </p>
+        </section>
+
+        <section>
+            <h4 style="margin-bottom: 5px;">📍 Control de Trayectos (Trabajo)</h4>
+            <p style="font-size: 0.9rem;">
+                Registra tu ruta habitual en el apartado de trayectos. El sistema multiplicará la distancia de tu ruta por tu <strong>consumo medio actual (L/100km)</strong>. <br>
+                <em>Uso:</em> Ideal para calcular cuánto te cuesta realmente ir y volver del trabajo mensualmente.
+            </p>
+        </section>
     </div>
+
     <button class="btn-custom" style="margin-top: 25px; width: 100%;" onclick="toggleAyuda()">Cerrar Guía</button>
 </div>
 
 <div id="panelInfo" style="display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); color: var(--text);">
     <h2 style="margin-top: 0; color: var(--primary);">ℹ️ Acerca de AutoControl IA Pro</h2>
-    <p style="color: var(--text-muted); font-size: 0.95rem;">Desarrollada para ofrecer una gestión técnica de precisión, esta aplicación integra algoritmos de análisis predictivo para la optimización del mantenimiento y la eficiencia operativa de sus vehiculos.</p>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Desarrollada para ofrecer una gestión técnica de precisión, esta aplicación integra algoritmos de análisis predictivo para la optimización del mantenimiento y la eficiencia operativa de sus vehiculos.
+    </p>
+    
+    <div style="display: grid; gap: 15px; margin: 20px 0;">
+        <section>
+            <h4 style="margin-bottom: 5px;">Tecnología y Propiedad</h4>
+            <p style="font-size: 0.9rem;">
+                Software de acceso libre y gratuito, concebido y diseñado por <strong>Manuel Fortuny Ruiz</strong>. La arquitectura y las capacidades predictivas del sistema han sido desarrolladas mediante la inteligencia artificial avanzada de <strong>Gemini</strong>, garantizando un flujo de datos optimizado y una toma de decisiones informada.
+            </p>
+        </section>
+
+        <section>
+            <h4 style="margin-bottom: 5px;">Soporte y Contacto</h4>
+            <p style="font-size: 0.9rem;">
+                Para consultas técnicas, sugerencias de nuevas funcionalidades o soporte, puede establecer contacto directo a través del correo electrónico: 
+                <br><strong><a href="mailto:manuelfortunyruiz@gmail.com" style="color: var(--primary);">manuelfortunyruiz@gmail.com</a></strong>
+            </p>
+        </section>
+    </div>
+
     <button class="btn-custom" style="margin-top: 25px; width: 100%;" onclick="toggleInfo()">Cerrar Información</button>
 </div>
 
-<!-- ==============================================
-     MODULO DE REGISTRO
-     ============================================== -->
 <div class="card">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2 class="card-title" style="margin-bottom: 0; border: none; padding: 0;">⛽ Nuevo Registro</h2>
     </div>
     
+    <!-- Botones selectores de modo -->
     <div class="button-row" style="margin-bottom: 20px; display: flex; gap: 10px;">
         <button type="button" id="btn-modo-combustible" class="btn btn-secondary" style="margin-top:0; border-color:var(--primary); color:var(--primary);" onclick="setModoRepostaje('combustible')">⛽ Combustible</button>
         <button type="button" id="btn-modo-electrico" class="btn btn-secondary" style="margin-top:0;" onclick="setModoRepostaje('electrico')">⚡ Eléctrico</button>
@@ -444,6 +688,7 @@ input[type="date"] {
             </div>
         </div>
 
+        <!-- Campo exclusivo para modo eléctrico -->
         <div class="floating-group" id="grupoPorcentajeBat" style="display: none;">
             <input type="text" id="porcentajeBat" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this)">
             <label class="floating-label">% Batería Final (Opcional)</label>
@@ -453,73 +698,73 @@ input[type="date"] {
     </form>
 </div>
 
-<!-- ==============================================
-     MODULO DE MAPA ACTUALIZADO (Calculadora Integrada)
-     ============================================== -->
 <div class="card" id="modulo-mapa">
     <h2 class="card-title">🗺️ Calculadora de Rutas</h2>
     
-    <div id="route-inputs" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
-        <!-- Origen -->
+    <!-- Controles de Origen, Destino y Paradas Dinámicas -->
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+        <!-- Campo Origen + Botón GPS -->
         <div style="display: flex; gap: 8px; align-items: center;">
             <div class="floating-group" style="margin-bottom: 0; flex: 1;">
                 <input type="text" id="origen-ruta" class="floating-input" required placeholder=" ">
-                <label class="floating-label">Origen (ej. Madrid o Mi Ubicación)</label>
+                <label class="floating-label">Origen (ej. Madrid)</label>
             </div>
-            <button type="button" class="btn-custom" onclick="usarUbicacionActual()" title="Usar mi ubicación actual" style="height: 48px; padding: 0 12px; font-size: 1.2em;">🎯</button>
+            <button type="button" class="btn-custom" onclick="usarUbicacionActual()" title="Usar mi ubicación actual" style="height: 48px; padding: 0 12px; font-size: 1.2em;">
+                🎯
+            </button>
         </div>
 
-        <!-- Contenedor dinámico de Paradas -->
-        <div id="waypoints-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        <!-- Contenedor para Paradas Dinámicas (Waypoints) -->
+        <div class="waypoints-controls">
+            <div id="waypoints-list" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Las paradas dinámicas se inyectarán aquí -->
+            </div>
 
-        <!-- Destino e Insertar Parada -->
+
+        <!-- Campo Destino -->
         <div style="display: flex; gap: 8px; align-items: center;">
             <div class="floating-group" style="margin-bottom: 0; flex: 1;">
                 <input type="text" id="destino-ruta" class="floating-input" required placeholder=" ">
                 <label class="floating-label">Destino (ej. Barcelona)</label>
             </div>
-            <button type="button" class="btn-custom" onclick="añadirParada()" title="Añadir Parada Intermedia" style="height: 48px; padding: 0 12px; font-size: 1.4em; color: var(--success); font-weight: bold;">+</button>
+
+				<button type="button" id="add-waypoint-btn" class="btn-icon-action" title="Añadir parada">+</button>
         </div>
-    </div>
 
-    <button type="button" class="btn" id="btn-calcular-ruta" style="margin-bottom: 20px;">
-        Calcular Ruta
-    </button>
-
-    <!-- Tarjeta de Resultados Simplificada -->
-    <div id="resultado-ruta" style="display: none; margin-bottom: 15px; padding: 12px; background: var(--background); border: 1px solid var(--border); border-radius: 8px;">
-        <div style="display: flex; justify-content: space-around; text-align: center;">
-            <div>
-                <span style="font-size: 0.85em; color: var(--text-muted);">Distancia</span>
-                <div style="font-size: 1.2em; font-weight: bold;"><span id="distancia-val">0</span> Km</div>
-            </div>
-            <div>
-                <span style="font-size: 0.85em; color: var(--text-muted);">Coste Estimado</span>
-                <div style="font-size: 1.2em; font-weight: bold; color: var(--primary);"><span id="coste-val">0.00</span> €</div>
-            </div>
         </div>
-    </div>
 
-    <!-- Botón de ir a Navegador Pantalla Completa (Visible al calcular) -->
-    <button type="button" class="btn btn-secondary" id="btn-ir-navegador" onclick="abrirNavegador()" style="margin-bottom: 15px; display: none;">
-        🚀 Ir al Navegador en Pantalla Completa
-    </button>
-    
-    <!-- Mapa y Overlay Controls -->
-    <div id="map-wrapper" style="position: relative; width: 100%;">
-        <div id="miMapa" style="height: 300px; width: 100%; border-radius: 8px; z-index: 1;"></div>
+        <button type="button" class="btn" id="btn-calcular-ruta" style="margin-bottom: 10px;">
+            Calcular Ruta
+        </button>
+
+        <button type="button" class="btn btn-secondary" id="btn-ir-navegador" onclick="abrirNavegador()" style="margin-bottom: 15px; display: none;">
+            🚀 Ir al Navegador en Pantalla Completa
+        </button>
         
-        <!-- Controles que aparecerán sólo en Pantalla Completa -->
-        <div id="map-overlay-controls" class="map-overlay-controls">
-            <button class="btn-overlay btn-gmaps" onclick="abrirEnGoogleMaps()">🚀 Abrir en Google Maps</button>
-            <button class="btn-overlay btn-exit" onclick="cerrarNavegador()">❌ Salir del Navegador</button>
+        <!-- Contenedor del mapa con Tarjeta Simplificada y Botón de Google Maps -->
+        <div style="position: relative;">
+            <div id="miMapa" style="height: 350px; width: 100%; border-radius: 8px; z-index: 1;"></div>
+            
+            <!-- Tarjeta de Resumen Simplificada (Solo Distancia Total y Coste Estimado) -->
+            <div id="resultado-ruta" class="route-summary-card" style="display: none;">
+                <div class="summary-item">
+                    <span class="summary-label">Distancia Total:</span>
+                    <span id="distancia-val" class="summary-value">0.0 km</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Coste Estimado:</span>
+                    <span id="coste-val" class="summary-value">0.00 €</span>
+                </div>
+            </div>
+
+            <!-- Botón Flotante para Salto Nativo a Google Maps -->
+            <button id="open-gmaps-btn" class="btn-floating-gmaps" style="display: none;">
+                📍 Abrir en Google Maps
+            </button>
         </div>
     </div>
 </div>
 
-<!-- ==============================================
-     MÓDULOS DE ESTADO Y ESTADÍSTICAS
-     ============================================== -->
 <div class="card">
     <h2 class="card-title">🛠️ Estado del Vehículo</h2>
     <div id="maintList">
@@ -545,11 +790,22 @@ input[type="date"] {
 
 <div class="card">
     <h3 class="card-title">⚖️ Comparativa de Eficiencia Global</h3>
-    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: -5px; margin-bottom: 15px;">Compara el coste real a los 100km entre tus vehículos de combustión y eléctricos.</p>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: -5px; margin-bottom: 15px;">
+        Compara el coste real a los 100km entre tus vehículos de combustión y eléctricos.
+    </p>
     <div class="tabla-responsiva">
         <table>
-            <thead><tr><th>Vehículo</th><th>Motor</th><th>Consumo Medio</th><th>Precio Medio</th><th>Coste / 100km</th></tr></thead>
-            <tbody id="body-comparativa"></tbody>
+            <thead>
+                <tr>
+                    <th>Vehículo</th>
+                    <th>Motor</th>
+                    <th>Consumo Medio</th>
+                    <th>Precio Medio</th>
+                    <th>Coste / 100km</th>
+                </tr>
+            </thead>
+            <tbody id="body-comparativa">
+            </tbody>
         </table>
     </div>
 </div>
@@ -557,10 +813,12 @@ input[type="date"] {
 <div class="card">
     <h2 class="card-title">🔮 Calculadora de Viajes Predictiva</h2>
     <p style="font-size: 0.9rem; color: var(--text-muted); margin-top:-10px;">Simula el consumo y coste de tu próxima ruta basándose en tu histórico real.</p>
+    
     <div class="floating-group">
         <input type="text" id="kmViajeInput" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); calcularViajePredictivo()">
         <label class="floating-label">Kilómetros del Viaje (Ej: 300)</label>
     </div>
+
     <div id="resultadoSimulacion" class="stat-box best-box" style="margin-top: 15px; display: none;">
         <span>Estimación de Ruta (Simulación IA)</span>
         <strong id="textoSimulacion" style="font-size: 1.1rem; line-height: 1.4; display:block; margin-top:5px;">-</strong>
@@ -619,9 +877,6 @@ input[type="date"] {
 
 <audio id="audio-secreto" src="https://github.com/M-Fortuny/AutoControl/raw/refs/heads/main/Audio.mp3" preload="auto"></audio>
 
-<!-- ==============================================
-     MODAL DE AJUSTES
-     ============================================== -->
 <div id="settingsModal" class="hidden modal-overlay">
     <div class="modal-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--background); padding-bottom: 15px;">
@@ -663,7 +918,7 @@ input[type="date"] {
                 <div class="floating-group"><input type="text" id="planRevision" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); guardarPlanesMantenimiento()"><label class="floating-label">Km Prox. Distribución</label></div>
 
                 <hr style="border:0; border-top:2px solid var(--background); margin:25px 0;">
-                <h4 style="margin:0 0 15px 0; font-weight: 800; color: var(--primary);">Registrar Cambios Hoy</h4>
+                <h4 style="margin:0 0 15px 0; font-weight: 800; color: var(--primary);">Registrar Cambios Hoy <br><span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">(Reinicia los contadores visuales)</span></h4>
                 
                 <select id="tipoNeumaticoCambio" style="width:100%; padding:12px; border-radius:10px; border:2px solid var(--border); background:var(--background); color:var(--text); margin-bottom:10px; font-weight: 600;">
                     <option value="Delanteros">Neumáticos Delanteros</option><option value="Traseros">Neumáticos Traseros</option>
@@ -735,10 +990,12 @@ input[type="date"] {
     </div>
 </div>
 
+<!-- Botón flotante para salir de pantalla completa -->
+<button id="btn-cerrar-navegador" onclick="cerrarNavegador()">
+    ❌ Salir del Navegador
+</button>
+
 <script>
-/* =======================================================
-   BASES DE DATOS Y ESTADO GLOBAL
-   ======================================================= */
 const staticVehiculosPredeterminados = { "MG3 Hybrid +": { kmActuales: 5000, proxAceite: 15000, proxFiltro: 15000, proxRevision: 100000, registros: [] } };
 const gasolinerasPredeterminadas = ["Avanza Oil", "Repsol", "Petrem ECO"];
 
@@ -747,17 +1004,8 @@ let gasolineras = JSON.parse(localStorage.getItem('app_gasolineras_data')) || ga
 let vehiculoActivo = localStorage.getItem('app_vehiculo_activo') || "MG3 Hybrid +";
 let miGrafico = null; 
 
-// Variables Mapa
-let mapa = null;
-let controlRuta = null;
-let marcadorOrigen = null;
-let stopCount = 0;
-
 if (!baseDatos[vehiculoActivo]) vehiculoActivo = Object.keys(baseDatos)[0];
 
-/* =======================================================
-   FUNCIONES DE UI Y GLOBALES
-   ======================================================= */
 function customDialog(type, message, title = "Aviso", defaultValue = "", inputMode = "text", selectOptions = null) {
     return new Promise(resolve => {
         const overlay = document.getElementById('ui-dialog');
@@ -773,7 +1021,9 @@ function customDialog(type, message, title = "Aviso", defaultValue = "", inputMo
         titleEl.textContent = title;
         msgEl.innerHTML = message;
         
-        inputGroup.classList.add('hidden'); selectGroup.classList.add('hidden'); btnCancel.classList.add('hidden');
+        inputGroup.classList.add('hidden');
+        selectGroup.classList.add('hidden');
+        btnCancel.classList.add('hidden');
         inputEl.oninput = null;
 
         if (type === 'prompt') {
@@ -781,28 +1031,52 @@ function customDialog(type, message, title = "Aviso", defaultValue = "", inputMo
             if (selectOptions) {
                 selectEl.innerHTML = '';
                 selectOptions.forEach(opt => {
-                    const option = document.createElement('option'); option.value = opt.value; option.textContent = opt.text; selectEl.appendChild(option);
+                    const option = document.createElement('option');
+                    option.value = opt.value;
+                    option.textContent = opt.text;
+                    selectEl.appendChild(option);
                 });
-                selectEl.value = defaultValue; selectGroup.classList.remove('hidden');
+                selectEl.value = defaultValue;
+                selectGroup.classList.remove('hidden');
             } else {
-                inputEl.value = defaultValue; inputGroup.classList.remove('hidden'); inputEl.setAttribute('inputmode', inputMode);
-                if(inputMode === 'decimal') inputEl.oninput = () => formatNumberInput(inputEl);
+                inputEl.value = defaultValue;
+                inputGroup.classList.remove('hidden');
+                inputEl.setAttribute('inputmode', inputMode);
+                if(inputMode === 'decimal') {
+                    inputEl.oninput = () => formatNumberInput(inputEl);
+                }
             }
         } else if (type === 'confirm') {
-            btnCancel.classList.remove('hidden'); btnOk.style.backgroundColor = 'var(--danger)'; btnOk.style.boxShadow = '0 4px 6px rgba(220, 38, 38, 0.2)';
+            btnCancel.classList.remove('hidden');
+            btnOk.style.backgroundColor = 'var(--danger)'; 
+            btnOk.style.boxShadow = '0 4px 6px rgba(220, 38, 38, 0.2)';
         } else {
-            btnOk.style.backgroundColor = 'var(--primary)'; btnOk.style.boxShadow = '0 4px 6px rgba(37, 99, 235, 0.2)';
+            btnOk.style.backgroundColor = 'var(--primary)';
+            btnOk.style.boxShadow = '0 4px 6px rgba(37, 99, 235, 0.2)';
         }
 
         overlay.classList.remove('hidden');
 
         const cleanup = () => {
-            overlay.classList.add('hidden'); btnOk.onclick = null; btnCancel.onclick = null;
-            btnOk.style.backgroundColor = 'var(--primary)'; btnOk.style.boxShadow = '0 4px 6px rgba(37, 99, 235, 0.2)';
+            overlay.classList.add('hidden');
+            btnOk.onclick = null;
+            btnCancel.onclick = null;
+            btnOk.style.backgroundColor = 'var(--primary)';
+            btnOk.style.boxShadow = '0 4px 6px rgba(37, 99, 235, 0.2)';
         };
 
-        btnOk.onclick = () => { cleanup(); if (type === 'prompt') resolve(selectOptions ? selectEl.value : inputEl.value); else if (type === 'confirm') resolve(true); else resolve(true); };
-        btnCancel.onclick = () => { cleanup(); if (type === 'prompt') resolve(null); else if (type === 'confirm') resolve(false); };
+        btnOk.onclick = () => {
+            cleanup();
+            if (type === 'prompt') resolve(selectOptions ? selectEl.value : inputEl.value);
+            else if (type === 'confirm') resolve(true);
+            else resolve(true); 
+        };
+
+        btnCancel.onclick = () => {
+            cleanup();
+            if (type === 'prompt') resolve(null);
+            else if (type === 'confirm') resolve(false);
+        };
     });
 }
 
@@ -811,39 +1085,68 @@ const customConfirm = (msg, title="¿Confirmar?") => customDialog('confirm', msg
 const customPrompt = (msg, def="", title="Ingresar", mode="text") => customDialog('prompt', msg, title, def, mode);
 const customSelectPrompt = (msg, options, def="", title="Seleccionar") => customDialog('prompt', msg, title, def, "text", options);
 
-function formatNumberInput(input) { input.value = input.value.replace(/,/g, '.').replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); }
-function escapeHTML(str) { return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)); }
-function mostrarNotificacion(mensaje) { const toast = document.createElement('div'); toast.className = 'toast'; toast.textContent = mensaje; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
-function toggleForm(id) { const form = document.getElementById(id); if (!form) return; form.classList.toggle('hidden'); if (!form.classList.contains('hidden')) cargarDatosVehiculo(); }
+function formatNumberInput(input) {
+    input.value = input.value.replace(/,/g, '.').replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+}
+
+function escapeHTML(str) {
+    return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+}
+
+function mostrarNotificacion(mensaje) {
+    const toast = document.createElement('div');
+    toast.className = 'toast'; toast.textContent = mensaje;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+function toggleForm(id) {
+    const form = document.getElementById(id);
+    if (!form) return;
+    form.classList.toggle('hidden');
+    if (!form.classList.contains('hidden')) cargarDatosVehiculo();
+}
 
 function setModoRepostaje(modo) {
     document.getElementById('modoRepostaje').value = modo;
-    const btnComb = document.getElementById('btn-modo-combustible'), btnElec = document.getElementById('btn-modo-electrico');
-    const lblPrecio = document.getElementById('lblPrecio'), lblCantidad = document.getElementById('lblCantidad'), lblTipoEnergia = document.getElementById('lblTipoEnergia');
-    const selCombustible = document.getElementById('tipoCombustible'), grupoPorcentaje = document.getElementById('grupoPorcentajeBat');
+    const btnComb = document.getElementById('btn-modo-combustible');
+    const btnElec = document.getElementById('btn-modo-electrico');
+    const lblPrecio = document.getElementById('lblPrecio');
+    const lblCantidad = document.getElementById('lblCantidad');
+    const lblTipoEnergia = document.getElementById('lblTipoEnergia');
+    const selCombustible = document.getElementById('tipoCombustible');
+    const grupoPorcentaje = document.getElementById('grupoPorcentajeBat');
 
     if (modo === 'electrico') {
         btnElec.style.borderColor = 'var(--primary)'; btnElec.style.color = 'var(--primary)';
         btnComb.style.borderColor = 'var(--border)'; btnComb.style.color = 'var(--text-muted)';
-        lblPrecio.textContent = 'Precio/kWh (€)'; lblCantidad.textContent = 'kWh Recargados'; lblTipoEnergia.textContent = 'Tipo de Carga';
+        lblPrecio.textContent = 'Precio/kWh (€)';
+        lblCantidad.textContent = 'kWh Recargados';
+        lblTipoEnergia.textContent = 'Tipo de Carga';
         selCombustible.innerHTML = '<option value="Carga CA (Lenta)">Carga CA (Lenta)</option><option value="Carga CC (Rápida)">Carga CC (Rápida)</option>';
         grupoPorcentaje.style.display = 'block';
     } else {
         btnComb.style.borderColor = 'var(--primary)'; btnComb.style.color = 'var(--primary)';
         btnElec.style.borderColor = 'var(--border)'; btnElec.style.color = 'var(--text-muted)';
-        lblPrecio.textContent = 'Precio/Litro (€)'; lblCantidad.textContent = 'Litros'; lblTipoEnergia.textContent = 'Combustible';
+        lblPrecio.textContent = 'Precio/Litro (€)';
+        lblCantidad.textContent = 'Litros';
+        lblTipoEnergia.textContent = 'Combustible';
         selCombustible.innerHTML = '<option value="Súper 95">Súper 95</option><option value="Súper 98">Súper 98</option><option value="Diesel">Diesel</option>';
-        grupoPorcentaje.style.display = 'none'; document.getElementById('porcentajeBat').value = '';
+        grupoPorcentaje.style.display = 'none';
+        document.getElementById('porcentajeBat').value = '';
     }
 }
 
-function toggleTopControls() { document.body.classList.toggle('controls-hidden'); }
+function toggleTopControls() {
+    document.body.classList.toggle('controls-hidden');
+}
 
 document.querySelectorAll('.accordion-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         this.classList.toggle('active');
         const content = this.nextElementSibling;
-        if (content.style.maxHeight) content.style.maxHeight = null; else content.style.maxHeight = content.scrollHeight + "px";
+        if (content.style.maxHeight) content.style.maxHeight = null;
+        else content.style.maxHeight = content.scrollHeight + "px";
     });
 });
 
@@ -853,130 +1156,223 @@ window.addEventListener('DOMContentLoaded', () => {
     
     const estaActivo = localStorage.getItem('autoMode') === 'true';
     const indicador = document.getElementById('indicador-auto');
-    if (indicador && estaActivo) { indicador.classList.add('activo'); aplicarModoSegunHora(); }
+    if (indicador && estaActivo) {
+        indicador.classList.add('activo');
+        aplicarModoSegunHora();
+    }
     
     inicializar();
-    actualizarReloj(); setInterval(actualizarReloj, 1000); setInterval(aplicarModoSegunHora, 60000);
+    actualizarReloj();
+    setInterval(actualizarReloj, 1000);
+    setInterval(aplicarModoSegunHora, 60000);
 });
 
 function inicializar() {
-    actualizarSelectorVehiculos(); actualizarSelectorGasolineras(); cargarDatosVehiculo(); inicializarMapa();
+    actualizarSelectorVehiculos();
+    actualizarSelectorGasolineras();
+    cargarDatosVehiculo();
+    initRoutePlanner();
 }
 
 function actualizarReloj() {
-    const relojContenedor = document.getElementById('fechaHora'); if (!relojContenedor) return;
+    const relojContenedor = document.getElementById('fechaHora');
+    if (!relojContenedor) return;
+    
     const ahora = new Date();
-    const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const opciones = { 
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', 
+        hour: '2-digit', minute: '2-digit', second: '2-digit' 
+    };
+    
     relojContenedor.textContent = ahora.toLocaleDateString('es-ES', opciones);
 }
 
 function aplicarModoSegunHora() {
     if (localStorage.getItem('autoMode') !== 'true') return;
     const hora = new Date().getHours();
-    if (hora >= 20 || hora < 7) document.body.classList.add('dark-mode'); else document.body.classList.remove('dark-mode');
+    if (hora >= 20 || hora < 7) document.body.classList.add('dark-mode');
+    else document.body.classList.remove('dark-mode');
 }
 
 function toggleAutoMode() {
-    const indicador = document.getElementById('indicador-auto'); const estaActivo = indicador.classList.toggle('activo');
-    localStorage.setItem('autoMode', estaActivo); if (estaActivo) aplicarModoSegunHora();
+    const indicador = document.getElementById('indicador-auto');
+    const estaActivo = indicador.classList.toggle('activo');
+    localStorage.setItem('autoMode', estaActivo);
+    if (estaActivo) aplicarModoSegunHora();
 }
 
-function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); }
-function toggleAyuda() { const pA = document.getElementById('panelAyuda'), pI = document.getElementById('panelInfo'); pI.style.display = 'none'; pA.style.display = (pA.style.display === 'none' || pA.style.display === '') ? 'block' : 'none'; }
-function toggleInfo() { const pA = document.getElementById('panelAyuda'), pI = document.getElementById('panelInfo'); pA.style.display = 'none'; pI.style.display = (pI.style.display === 'none' || pI.style.display === '') ? 'block' : 'none'; }
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+}
 
-/* =======================================================
-   NÚCLEO Y LÓGICA DE VEHÍCULOS
-   ======================================================= */
+function toggleAyuda() {
+    const panelA = document.getElementById('panelAyuda');
+    const panelI = document.getElementById('panelInfo');
+    if (!panelA || !panelI) return;
+    
+    panelI.style.display = 'none'; 
+    panelA.style.display = (panelA.style.display === 'none' || panelA.style.display === '') ? 'block' : 'none';
+}
+
+function toggleInfo() {
+    const panelI = document.getElementById('panelInfo');
+    const panelA = document.getElementById('panelAyuda');
+    if (!panelI || !panelA) return;
+    
+    panelA.style.display = 'none'; 
+    panelI.style.display = (panelI.style.display === 'none' || panelI.style.display === '') ? 'block' : 'none';
+}
+
 async function iniciarAsistenteNuevoVehiculo() {
     const nombre = await customPrompt("Nombre o modelo del vehículo:", "", "Nuevo Vehículo", "text");
     if (!nombre) return;
-    if (baseDatos[nombre]) { await customAlert("Ya existe un vehículo con ese nombre."); return; }
+    
+    if (baseDatos[nombre]) { 
+        await customAlert("Ya existe un vehículo con ese nombre."); 
+        return; 
+    }
 
     const opcionesMotor = [
-        { value: "Gasolina", text: "Gasolina" }, { value: "Gasoil", text: "Gasoil (Diésel)" },
-        { value: "MHEV", text: "Híbrido Suave (MHEV) - ECO" }, { value: "HEV", text: "Híbrido Completo (HEV) - ECO" },
-        { value: "PHEV", text: "Híbrido Enchufable (PHEV) - CERO" }, { value: "BEV", text: "Eléctrico Puro (BEV) - CERO" }
+        { value: "Gasolina", text: "Gasolina" },
+        { value: "Gasoil", text: "Gasoil (Diésel)" },
+        { value: "MHEV", text: "Híbrido Suave (MHEV) - ECO" },
+        { value: "HEV", text: "Híbrido Completo (HEV) - ECO" },
+        { value: "PHEV", text: "Híbrido Enchufable (PHEV) - CERO" },
+        { value: "BEV", text: "Eléctrico Puro (BEV) - CERO" }
     ];
 
-    let tipoMotor = await customSelectPrompt("Selecciona la motorización exacta:", opcionesMotor, "Gasolina", "Tipo de Vehículo");
+    let tipoMotor = await customSelectPrompt(
+        "Selecciona la motorización exacta:", 
+        opcionesMotor, 
+        "Gasolina", 
+        "Tipo de Vehículo"
+    );
     if (!tipoMotor) return;
 
-    const esElectrico = (tipoMotor === "BEV"); const esHibrido = (tipoMotor === "MHEV" || tipoMotor === "HEV" || tipoMotor === "PHEV"); const esCombustion = (tipoMotor === "Gasolina" || tipoMotor === "Gasoil");
-    
+    const esElectrico = (tipoMotor === "BEV");
+    const esHibrido = (tipoMotor === "MHEV" || tipoMotor === "HEV" || tipoMotor === "PHEV");
+    const esCombustion = (tipoMotor === "Gasolina" || tipoMotor === "Gasoil");
+    const tipoFinal = tipoMotor;
+
     let kmStr = await customPrompt("Kilómetros iniciales actuales:", "", "Odómetro", "decimal");
     if (kmStr === null) return;
     const kmActuales = parseFloat(kmStr) || 0;
     
-    let capacidadDeposito = 0, capacidadBateria = 0, proxAceite = 0;
+    let capacidadDeposito = 0;
+    let capacidadBateria = 0;
+
     if (esCombustion || esHibrido) {
         let capDep = await customPrompt("Capacidad del depósito (Litros):", "", "Depósito Combustible", "decimal");
-        if (capDep === null) return; capacidadDeposito = parseFloat(capDep) || 0;
-        let aceiteStr = await customPrompt("Próximo cambio de aceite (Km o 0):", kmActuales + 10000, "Mantenimiento", "decimal");
-        if (aceiteStr === null) return; proxAceite = parseFloat(aceiteStr) || 0;
+        if (capDep === null) return;
+        capacidadDeposito = parseFloat(capDep) || 0;
     }
+
     if (esElectrico || esHibrido) {
         let capBat = await customPrompt("Capacidad de la batería (kWh):", "", "Batería Eléctrica", "decimal");
-        if (capBat === null) return; capacidadBateria = parseFloat(capBat) || 0;
+        if (capBat === null) return;
+        capacidadBateria = parseFloat(capBat) || 0;
     }
 
-    let filtroStr = await customPrompt("Próximo cambio de filtros (Km o 0 para omitir):", kmActuales + 15000, "Mantenimiento", "decimal"); if (filtroStr === null) return;
-    let revisionStr = await customPrompt("Próxima revisión general (Km o 0 para omitir):", kmActuales + 20000, "Mantenimiento", "decimal"); if (revisionStr === null) return;
+    let proxAceite = 0;
+    if (esCombustion || esHibrido) {
+        let aceiteStr = await customPrompt("Próximo cambio de aceite (Km o 0 para omitir):", kmActuales + 10000, "Mantenimiento", "decimal");
+        if (aceiteStr === null) return;
+        proxAceite = parseFloat(aceiteStr) || 0;
+    }
+
+    let filtroStr = await customPrompt("Próximo cambio de filtros (Km o 0 para omitir):", kmActuales + 15000, "Mantenimiento", "decimal");
+    if (filtroStr === null) return;
+
+    let revisionStr = await customPrompt("Próxima revisión general (Km o 0 para omitir):", kmActuales + 20000, "Mantenimiento", "decimal");
+    if (revisionStr === null) return;
 
     baseDatos[nombre] = {
-        tipo: tipoMotor, kmActuales: kmActuales, capacidadDeposito: capacidadDeposito, capacidadBateria: capacidadBateria,       
-        proxAceite: proxAceite, proxFiltro: parseFloat(filtroStr) || 0, proxRevision: parseFloat(revisionStr) || 0,
-        historialBateria: [], registros: []
+        tipo: tipoFinal,
+        kmActuales: kmActuales,
+        capacidadDeposito: capacidadDeposito,     
+        capacidadBateria: capacidadBateria,       
+        proxAceite: proxAceite,                   
+        proxFiltro: parseFloat(filtroStr) || 0,
+        proxRevision: parseFloat(revisionStr) || 0,
+        historialBateria: [], 
+        registros: []
     };
 
-    vehiculoActivo = nombre; localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
-    guardarEnStorage(); actualizarSelectorVehiculos(); cargarDatosVehiculo(); toggleForm('settingsModal');
-    mostrarNotificacion(`Vehículo ${nombre} (${tipoMotor}) creado`);
+    vehiculoActivo = nombre;
+    localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
+    guardarEnStorage(); 
+    actualizarSelectorVehiculos(); 
+    cargarDatosVehiculo();
+    toggleForm('settingsModal');
+    mostrarNotificacion(`Vehículo ${nombre} (${tipoFinal}) creado con éxito`);
 }
 
 function actualizarSelectorVehiculos() {
-    const selector = document.getElementById('selectorVehiculo'); selector.innerHTML = '';
+    const selector = document.getElementById('selectorVehiculo');
+    selector.innerHTML = '';
     Object.keys(baseDatos).forEach(nombre => {
-        const opt = document.createElement('option'); opt.value = nombre; opt.textContent = nombre;
+        const opt = document.createElement('option');
+        opt.value = nombre; opt.textContent = nombre;
         if (nombre === vehiculoActivo) opt.selected = true;
         selector.appendChild(opt);
     });
 }
-function cambiarVehiculoActivo() { vehiculoActivo = document.getElementById('selectorVehiculo').value; localStorage.setItem('app_vehiculo_activo', vehiculoActivo); cargarDatosVehiculo(); }
+
+function cambiarVehiculoActivo() {
+    vehiculoActivo = document.getElementById('selectorVehiculo').value;
+    localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
+    cargarDatosVehiculo();
+}
 
 async function renombrarVehiculo() {
     const nuevoNombre = await customPrompt("Introduce el nuevo nombre para este vehículo:", vehiculoActivo, "Renombrar", "text");
     if (!nuevoNombre || nuevoNombre === vehiculoActivo) return;
-    if (baseDatos[nuevoNombre]) { await customAlert("Ya existe un vehículo con ese nombre."); return; }
-    baseDatos[nuevoNombre] = baseDatos[vehiculoActivo]; delete baseDatos[vehiculoActivo];
-    vehiculoActivo = nuevoNombre; localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
-    guardarEnStorage(); actualizarSelectorVehiculos(); cargarDatosVehiculo(); mostrarNotificacion("Vehículo renombrado");
+    
+    if (baseDatos[nuevoNombre]) {
+        await customAlert("Ya existe un vehículo con ese nombre."); return;
+    }
+    
+    baseDatos[nuevoNombre] = baseDatos[vehiculoActivo];
+    delete baseDatos[vehiculoActivo];
+    vehiculoActivo = nuevoNombre;
+    
+    localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
+    guardarEnStorage(); actualizarSelectorVehiculos(); cargarDatosVehiculo();
+    mostrarNotificacion("Vehículo renombrado");
 }
 
 async function editarDatosVehiculo() {
     const coche = baseDatos[vehiculoActivo];
     const cap = await customPrompt("Editar capacidad del depósito (L/kWh):", coche.capacidadDeposito || coche.capacidadBateria || "", "Editar Capacidad", "decimal");
     if (cap !== null) {
-        if(coche.tipo === "BEV") coche.capacidadBateria = parseFloat(cap); else coche.capacidadDeposito = parseFloat(cap);
-        guardarEnStorage(); cargarDatosVehiculo(); mostrarNotificacion("Capacidad actualizada");
+        if(coche.tipo === "BEV") coche.capacidadBateria = parseFloat(cap);
+        else coche.capacidadDeposito = parseFloat(cap);
+        guardarEnStorage(); cargarDatosVehiculo();
+        mostrarNotificacion("Capacidad actualizada");
     }
 }
 
 async function eliminarVehiculo() {
-    const conf = await customConfirm(`¿Estás seguro de eliminar el vehículo "${vehiculoActivo}" permanentemente?`, "Eliminar Vehículo");
+    const conf = await customConfirm(`¿Estás seguro de eliminar el vehículo "${vehiculoActivo}" y todo su historial de forma permanente?`, "Eliminar Vehículo");
     if (conf) {
         delete baseDatos[vehiculoActivo];
         const keys = Object.keys(baseDatos);
         if (keys.length > 0) {
-            vehiculoActivo = keys[0]; localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
+            vehiculoActivo = keys[0];
+            localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
             guardarEnStorage(); actualizarSelectorVehiculos(); cargarDatosVehiculo(); toggleForm('settingsModal');
         } else {
-            localStorage.removeItem('app_vehiculo_activo'); localStorage.removeItem('app_combustible_data'); location.reload(); 
+            localStorage.removeItem('app_vehiculo_activo');
+            localStorage.removeItem('app_combustible_data');
+            location.reload(); 
         }
     }
 }
 
-function guardarEnStorage() { localStorage.setItem('app_combustible_data', JSON.stringify(baseDatos)); }
+function guardarEnStorage() {
+    localStorage.setItem('app_combustible_data', JSON.stringify(baseDatos));
+}
 
 function cargarDatosVehiculo() {
     const coche = baseDatos[vehiculoActivo];
@@ -994,26 +1390,24 @@ function cargarDatosVehiculo() {
     document.getElementById('diasSemana').value = coche.diasSemana || '';
     document.getElementById('kmDiarios').value = coche.kmDiarios || '';
 
-    // Si tiene un input origen en el modulo mapa que no esté activo, podríamos blanquear o mantener
-    
-    // Funciones placeholders para simplificar el snippet de respuesta total:
-    // (Asumo que tienes estas implementaciones en tu código original para tablas y listados)
-    // Se deja el esqueleto base para que el DOM no de error:
-    actualizarTablayStats = () => {};
-    calcularAutonomia = () => {};
-    calcularGastoDesplazamiento = () => {};
-    calcularViajePredictivo = () => {};
-    
-    // Y las que sí gestionan UI directamente:
-    actualizarMantenimientoBateria(); actualizarMantenimientoRefrigerante(); actualizarMantenimientoNeumaticos();
-    calcularMantenimiento(); calcularEstadoITV(coche.fechaITV);
+    actualizarMantenimientoBateria(); 
+    actualizarMantenimientoRefrigerante();
+    actualizarMantenimientoNeumaticos();
+    actualizarTablayStats();
+    calcularMantenimiento();
+    calcularEstadoITV(coche.fechaITV);
+    calcularAutonomia();
+    calcularGastoDesplazamiento();
+    calcularViajePredictivo();
 }
 
 function guardarKmActuales() {
     const km = parseFloat(document.getElementById('kmOdom').value) || 0;
     if(baseDatos[vehiculoActivo]) {
-        baseDatos[vehiculoActivo].kmActuales = km; document.getElementById('displayKmActualesHero').textContent = km.toLocaleString();
-        guardarEnStorage(); calcularMantenimiento();
+        baseDatos[vehiculoActivo].kmActuales = km;
+        document.getElementById('displayKmActualesHero').textContent = km.toLocaleString();
+        guardarEnStorage();
+        calcularMantenimiento();
     }
 }
 
@@ -1021,14 +1415,19 @@ async function guardarPlanesMantenimiento() {
     const coche = baseDatos[vehiculoActivo];
     const fechaITVInput = document.getElementById('planITV').value;
     const hoy = new Date(); hoy.setHours(0, 0, 0, 0); 
+
     if (fechaITVInput && new Date(fechaITVInput) < hoy) {
-        await customAlert("La fecha de la ITV no puede ser anterior a hoy."); document.getElementById('planITV').value = ""; return;
+        await customAlert("La fecha de la ITV no puede ser anterior a hoy.");
+        document.getElementById('planITV').value = ""; 
+        return;
     }
+
     coche.fechaITV = fechaITVInput;
     coche.proxRevisionGen = parseFloat(document.getElementById('planRevisionGeneral').value) || 0;
     coche.proxAceite = parseFloat(document.getElementById('planAceite').value) || 0;
     coche.proxFiltro = parseFloat(document.getElementById('planFiltro').value) || 0;
     coche.proxRevision = parseFloat(document.getElementById('planRevision').value) || 0;
+    
     guardarEnStorage(); calcularMantenimiento(); calcularEstadoITV(coche.fechaITV);
 }
 
@@ -1040,20 +1439,33 @@ function calcularMantenimiento() {
     actualizarItemMantenimiento('maintFiltroText', 'statusFiltro', coche.proxFiltro || 0, coche.kmActuales);
     actualizarItemMantenimiento('maintRevisionText', 'statusRevision', coche.proxRevision || 0, coche.kmActuales);
 }
+
 function actualizarItemMantenimiento(textId, badgeId, kmDestino, kmActuales) {
-    const infoTexto = document.getElementById(textId), badge = document.getElementById(badgeId);
+    const infoTexto = document.getElementById(textId);
+    const badge = document.getElementById(badgeId);
     if(kmDestino === 0) { infoTexto.textContent = "No configurado"; badge.textContent="---"; badge.className="badge"; return; }
+    
     infoTexto.textContent = `Próximo objetivo: ${kmDestino.toLocaleString()} Km`;
     const kmRestantes = kmDestino - kmActuales;
-    if (kmRestantes > 0) { badge.textContent = `Faltan ${kmRestantes.toLocaleString()} Km`; badge.className = "badge success"; } 
-    else { badge.textContent = `Vencido (${Math.abs(kmRestantes).toLocaleString()} Km)`; badge.className = "badge danger"; }
+    
+    if (kmRestantes > 0) {
+        badge.textContent = `Faltan ${kmRestantes.toLocaleString()} Km`;
+        badge.className = "badge success";
+    } else {
+        badge.textContent = `Vencido (${Math.abs(kmRestantes).toLocaleString()} Km)`;
+        badge.className = "badge danger";
+    }
 }
+
 function calcularEstadoITV(fechaITV) {
-    const badge = document.getElementById('statusITV'), text = document.getElementById('maintITVText');
+    const badge = document.getElementById('statusITV');
+    const text = document.getElementById('maintITVText');
     if (!fechaITV) { text.textContent = "No configurada"; badge.textContent="---"; badge.className="badge"; return; }
+
     const hoy = new Date(); const fecha = new Date(fechaITV);
     const diffDays = Math.ceil((fecha - hoy) / (1000 * 60 * 60 * 24));
     text.textContent = `Vence el: ${fecha.toLocaleDateString('es-ES')}`;
+
     if (diffDays < 0) { badge.textContent = `¡ITV Vencida!`; badge.className = "badge danger"; } 
     else if (diffDays <= 15) { badge.textContent = `¡URGENTE: ${diffDays} días!`; badge.className = "badge danger"; } 
     else { badge.textContent = `Faltan ${diffDays} días`; badge.className = "badge success"; }
@@ -1063,10 +1475,14 @@ async function registrarCambio(tipo, historialKey, idInputFecha) {
     const coche = baseDatos[vehiculoActivo];
     const fecha = document.getElementById(idInputFecha).value;
     if (!fecha) { await customAlert("Selecciona una fecha válida primero.", "Aviso"); return; }
+    
     if (!coche[historialKey]) coche[historialKey] = [];
     coche[historialKey].unshift({ fecha: fecha, kmCambio: coche.kmActuales });
-    guardarEnStorage(); cargarDatosVehiculo(); mostrarNotificacion(`Cambio de ${tipo} guardado`);
+    
+    guardarEnStorage(); cargarDatosVehiculo();
+    mostrarNotificacion(`Cambio de ${tipo} guardado`);
 }
+
 function registrarCambioBateria() { registrarCambio('batería', 'historialBateria', 'fechaCambioBateria'); }
 function registrarCambioRefrigerante() { registrarCambio('refrigerante', 'historialRefrigerante', 'fechaCambioRefrigerante'); }
 function registrarCambioNeumatico() { 
@@ -1077,137 +1493,283 @@ function registrarCambioNeumatico() {
 function actualizarMantenimientoBateria() {
     const coche = baseDatos[vehiculoActivo];
     if (!coche.historialBateria || coche.historialBateria.length === 0) {
-        document.getElementById('maintBateriaText').textContent = "Sin registros (Est. 70k Km)"; document.getElementById('statusBateria').textContent = "---"; document.getElementById('statusBateria').className = "badge"; return;
+        document.getElementById('maintBateriaText').textContent = "Sin registros (Est. 70k Km)";
+        document.getElementById('statusBateria').textContent = "---";
+        document.getElementById('statusBateria').className = "badge";
+        return;
     }
-    const ult = coche.historialBateria[0], kmUso = coche.kmActuales - ult.kmCambio, meses = Math.floor((new Date() - new Date(ult.fecha)) / (1000*60*60*24*30));
+    const ult = coche.historialBateria[0];
+    const kmUso = coche.kmActuales - ult.kmCambio;
+    const meses = Math.floor((new Date() - new Date(ult.fecha)) / (1000*60*60*24*30));
     document.getElementById('maintBateriaText').textContent = `Uso: ${kmUso.toLocaleString()} Km | ${meses} meses`;
     const status = document.getElementById('statusBateria');
-    if (70000 - kmUso < 5000) { status.textContent = `Atención`; status.className = "badge danger"; } else { status.textContent = `Bien`; status.className = "badge success"; }
+    if (70000 - kmUso < 5000) { status.textContent = `Atención`; status.className = "badge danger"; } 
+    else { status.textContent = `Bien`; status.className = "badge success"; }
 }
+
 function actualizarMantenimientoRefrigerante() {
-    const coche = baseDatos[vehiculoActivo], elText = document.getElementById('maintRefrigeranteText'), elStatus = document.getElementById('statusRefrigerante');
-    if (!coche.historialRefrigerante || coche.historialRefrigerante.length === 0) { elText.textContent = "Sin registros (Est. 40k Km)"; elStatus.textContent = "---"; elStatus.className = "badge"; return; }
-    const ult = coche.historialRefrigerante[0], kmUso = coche.kmActuales - ult.kmCambio, meses = Math.floor((new Date() - new Date(ult.fecha)) / (1000*60*60*24*30));
+    const coche = baseDatos[vehiculoActivo];
+    const elText = document.getElementById('maintRefrigeranteText');
+    const elStatus = document.getElementById('statusRefrigerante');
+    if (!coche.historialRefrigerante || coche.historialRefrigerante.length === 0) {
+        elText.textContent = "Sin registros (Est. 40k Km)"; elStatus.textContent = "---"; elStatus.className = "badge"; return;
+    }
+    const ult = coche.historialRefrigerante[0];
+    const kmUso = coche.kmActuales - ult.kmCambio;
+    const meses = Math.floor((new Date() - new Date(ult.fecha)) / (1000*60*60*24*30));
     elText.textContent = `Uso: ${kmUso.toLocaleString()} Km | ${meses} meses`;
-    if (kmUso >= 37000 || meses >= 22) { elStatus.textContent = `Toca Revisión`; elStatus.className = "badge danger"; } else { elStatus.textContent = `Óptimo`; elStatus.className = "badge success"; }
+    if (kmUso >= 37000 || meses >= 22) { elStatus.textContent = `Toca Revisión`; elStatus.className = "badge danger"; } 
+    else { elStatus.textContent = `Óptimo`; elStatus.className = "badge success"; }
 }
+
 function actualizarMantenimientoNeumaticos() {
     const procesarEje = (key, tId, sId) => {
-        const coche = baseDatos[vehiculoActivo], hist = coche[key] || [], tEl = document.getElementById(tId), sEl = document.getElementById(sId);
+        const coche = baseDatos[vehiculoActivo];
+        const hist = coche[key] || [];
+        const tEl = document.getElementById(tId); const sEl = document.getElementById(sId);
         if(hist.length===0) { tEl.textContent="Sin registros (Est. 50k Km)"; sEl.textContent="---"; sEl.className="badge"; return; }
-        const kmUso = coche.kmActuales - hist[0].kmCambio, meses = Math.floor((new Date() - new Date(hist[0].fecha)) / (1000*60*60*24*30));
+        const kmUso = coche.kmActuales - hist[0].kmCambio;
+        const meses = Math.floor((new Date() - new Date(hist[0].fecha)) / (1000*60*60*24*30));
         tEl.textContent = `Uso: ${kmUso.toLocaleString()} Km | ${meses} meses`;
-        if(kmUso >= 45000 || meses >= 54) { sEl.textContent="¡Cambio!"; sEl.className="badge danger"; } else { sEl.textContent=`Salud: ${Math.max(0, Math.round(((1-kmUso/50000)+(1-meses/60))/2*100))}%`; sEl.className="badge success"; }
+        if(kmUso >= 45000 || meses >= 54) { sEl.textContent="¡Cambio!"; sEl.className="badge danger"; }
+        else { sEl.textContent=`Salud: ${Math.max(0, Math.round(((1-kmUso/50000)+(1-meses/60))/2*100))}%`; sEl.className="badge success"; }
     };
-    procesarEje("historialNeumDel", "maintNeumDelText", "statusNeumDel"); procesarEje("historialNeumTras", "maintNeumTrasText", "statusNeumTras");
+    procesarEje("historialNeumDel", "maintNeumDelText", "statusNeumDel");
+    procesarEje("historialNeumTras", "maintNeumTrasText", "statusNeumTras");
 }
 
 async function crearGasolinera() {
     const nombre = document.getElementById('nuevaGasolineraNombre').value.trim();
     if (!nombre) return;
     if (gasolineras.includes(nombre)) { await customAlert("Esta gasolinera ya está registrada."); return; }
-    gasolineras.push(nombre); localStorage.setItem('app_gasolineras_data', JSON.stringify(gasolineras));
-    actualizarSelectorGasolineras(); document.getElementById('nuevaGasolineraNombre').value = ''; mostrarNotificacion("Gasolinera añadida");
+    gasolineras.push(nombre);
+    localStorage.setItem('app_gasolineras_data', JSON.stringify(gasolineras));
+    actualizarSelectorGasolineras();
+    document.getElementById('nuevaGasolineraNombre').value = '';
+    mostrarNotificacion("Gasolinera añadida");
 }
 
 function actualizarSelectorGasolineras() {
-    const select = document.getElementById('gasolinera'); select.innerHTML = '';
+    const select = document.getElementById('gasolinera');
+    select.innerHTML = '';
     gasolineras.forEach(g => { const opt=document.createElement('option'); opt.value=g; opt.textContent=g; select.appendChild(opt); });
 }
 
-/* =======================================================
-   NUEVO MÓDULO DE MAPA Y NAVEGACIÓN (INTEGRADO)
-   ======================================================= */
+document.getElementById('fuelForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const coche = baseDatos[vehiculoActivo];
+    if (!coche) return;
 
-function inicializarMapa() {
-    if (mapa) return; 
+    const kmTot = parseFloat(document.getElementById('kmTotalesOdom').value);
+    const precio = parseFloat(document.getElementById('precioLitro').value);
+    const litros = parseFloat(document.getElementById('litros').value);
+    const modoActivo = document.getElementById('modoRepostaje').value;
+    const porcentaje = document.getElementById('porcentajeBat').value;
     
-    // Coordenadas Iniciales (Madrid por defecto)
-    mapa = L.map('miMapa').setView([40.4168, -3.7038], 6); 
+    if (kmTot <= coche.kmActuales) { await customAlert(`El kilometraje debe ser mayor al actual (${coche.kmActuales} Km).`, "Atención"); return; }
     
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(mapa);
+    const kmHechos = kmTot - coche.kmActuales;
+    const costeTotal = litros * precio;
+    const consMedio = (litros / kmHechos) * 100;
+    
+    coche.kmActuales = kmTot;
+    coche.registros.unshift({
+        fecha: new Date().toLocaleDateString('es-ES', {year:'numeric',month:'2-digit',day:'2-digit'}),
+        gasolinera: document.getElementById('gasolinera').value,
+        combustible: document.getElementById('tipoCombustible').value,
+        kmHechos, litros, precioLitro: precio,
+        costeTotal: costeTotal.toFixed(2), consumoMedio: consMedio.toFixed(2),
+        kmPorLitro: (kmHechos/litros).toFixed(2), precioPorKm: (costeTotal/kmHechos).toFixed(3),
+        modo: modoActivo,
+        porcentajeBateria: porcentaje || null
+    });
+    
+    guardarEnStorage();
+    document.getElementById('fuelForm').reset();
+    setModoRepostaje('combustible');
+    cargarDatosVehiculo();
+    mostrarNotificacion("Registro Guardado");
+});
 
-    // Intentar geolocalizar al inicio (Solución problema de inicio)
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            mapa.setView([lat, lng], 14);
-            
-            if(marcadorOrigen) mapa.removeLayer(marcadorOrigen);
-            marcadorOrigen = L.marker([lat, lng]).addTo(mapa)
-                .bindPopup("¡Estás aquí!")
-                .openPopup();
-                
-            document.getElementById('origen-ruta').value = "Mi Ubicación Actual";
-        }, (error) => {
-            console.warn("Geolocalización denegada o fallida en el inicio automático.");
-        });
+async function eliminarRegistro(index) {
+    const coche = baseDatos[vehiculoActivo];
+    if (!coche || !coche.registros[index]) return;
+
+    const conf = await customConfirm("¿Eliminar este registro y restaurar odómetro (si aplica)?", "Atención");
+    if (conf) {
+        if (index === 0) coche.kmActuales = Math.max(0, coche.kmActuales - coche.registros[0].kmHechos);
+        coche.registros.splice(index, 1);
+        guardarEnStorage(); cargarDatosVehiculo();
     }
 }
 
-function usarUbicacionActual() {
-    if (!navigator.geolocation) {
-        alert("Tu navegador o dispositivo no soporta la geolocalización.");
+async function compartirUltimoDeposito() {
+    const coche = baseDatos[vehiculoActivo];
+    if (!coche || !coche.registros || coche.registros.length === 0) {
+        await customAlert("No hay registros disponibles para compartir.", "Aviso");
         return;
     }
-    const origenInput = document.getElementById('origen-ruta');
-    origenInput.value = "Obteniendo ubicación...";
-    
-    navigator.geolocation.getCurrentPosition((pos) => {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-        origenInput.value = `${lat}, ${lon}`;
-        if(mapa) {
-            mapa.setView([lat, lon], 14);
-            if(marcadorOrigen) mapa.removeLayer(marcadorOrigen);
-            marcadorOrigen = L.marker([lat, lon]).addTo(mapa).bindPopup("¡Estás aquí!").openPopup();
+    const ult = coche.registros[0];
+    const shareText = `🚗 Mi viaje con el ${vehiculoActivo}: He recorrido ${ult.kmHechos} km con un consumo medio de ${ult.consumoMedio} L/100km. Gasto total: ${ult.costeTotal}€. ¡Supera esa eficiencia! 🏆 Registrado con AutoControl IA Pro.`;
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: 'AutoControl IA Pro - Estado del Vehículo',
+                text: shareText,
+            });
+        } catch (err) {
+            console.log('Compartir cancelado o no disponible', err);
         }
-    }, (error) => {
-        alert("No se pudo obtener tu ubicación.");
-        origenInput.value = "";
-    }, { enableHighAccuracy: true, timeout: 5000 });
+    } else {
+        navigator.clipboard.writeText(shareText);
+        await customAlert("¡Texto copiado al portapapeles!", "Portapapeles");
+    }
 }
 
-// Lógica de Paradas Dinámicas
-function añadirParada() {
-    stopCount++;
-    const container = document.getElementById('waypoints-container');
+function generarComparativaEficiencia() {
+    const tbody = document.getElementById('body-comparativa');
+    if (!tbody) return; 
     
-    const div = document.createElement('div');
-    div.className = 'input-group';
-    div.id = `stop-${stopCount}`;
-    div.style.display = 'flex';
-    div.style.gap = '8px';
-    div.style.alignItems = 'center';
-    
-    div.innerHTML = `
-        <div class="floating-group" style="margin-bottom: 0; flex: 1;">
-            <input type="text" class="floating-input waypoint-input" required placeholder=" ">
-            <label class="floating-label">Parada ${stopCount}</label>
-        </div>
-        <button type="button" class="btn-custom" onclick="eliminarParada('stop-${stopCount}')" title="Eliminar Parada" style="height: 48px; padding: 0 12px; font-size: 1.2em; color: var(--danger); font-weight: bold;">✕</button>
-    `;
-    
-    container.appendChild(div);
+    tbody.innerHTML = ''; 
+
+    Object.keys(baseDatos).forEach(nombreVehiculo => {
+        const coche = baseDatos[nombreVehiculo];
+        
+        if (coche.registros && coche.registros.length > 0) {
+            let costeTotalSum = 0;
+            let distanciaTotalSum = 0;
+            let energiaTotalSum = 0;
+
+            coche.registros.forEach(rep => {
+                costeTotalSum += parseFloat(rep.costeTotal) || 0;
+                distanciaTotalSum += parseFloat(rep.kmHechos) || 0;
+                energiaTotalSum += parseFloat(rep.litros) || 0; 
+            });
+
+            if (distanciaTotalSum > 0 && energiaTotalSum > 0) {
+                const coste100km = (costeTotalSum / distanciaTotalSum) * 100;
+                const consumoMedio = (energiaTotalSum / distanciaTotalSum) * 100;
+                const precioMedioUnidad = costeTotalSum / energiaTotalSum;
+
+                const esElectrico = coche.tipo === 'BEV';
+                const unidadEnergia = esElectrico ? 'kWh' : 'L';
+                const tipoMotorDisplay = coche.tipo || 'Combustión';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${escapeHTML(nombreVehiculo)}</strong></td>
+                    <td><span class="badge" style="background:var(--border); color:var(--text);">${escapeHTML(tipoMotorDisplay)}</span></td>
+                    <td style="color:var(--primary); font-weight:bold;">${consumoMedio.toFixed(2)} ${unidadEnergia}/100</td>
+                    <td>${precioMedioUnidad.toFixed(3)} €/${unidadEnergia}</td>
+                    <td style="color:var(--success); font-weight:bold;">${coste100km.toFixed(2)} €</td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+    });
 }
 
-function eliminarParada(id) {
-    const element = document.getElementById(id);
-    if(element) element.remove();
+// Variables globales para la Ruta y Navegación GPS
+let mapa = null; 
+let controlRuta = null;
+let userCoordinates = null; 
+let waypoints = []; 
+
+function initRoutePlanner() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                userCoordinates = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                inicializarMapa(userCoordinates);
+            },
+            (error) => {
+                console.warn("No se pudo obtener la geolocalización, usando respaldo por defecto.", error);
+                userCoordinates = { lat: 40.4168, lng: -3.7038 }; 
+                inicializarMapa(userCoordinates);
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    } else {
+        userCoordinates = { lat: 40.4168, lng: -3.7038 };
+        inicializarMapa(userCoordinates);
+    }
 }
 
-// Calcular Ruta con Múltiples Waypoints usando Leaflet Routing Machine
+function inicializarMapa(coords) {
+    if (mapa) return; 
+
+    mapa = L.map('miMapa').setView([coords.lat, coords.lng], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(mapa);
+
+    L.marker([coords.lat, coords.lng]).addTo(mapa)
+        .bindPopup('<b>¡Estás aquí!</b><br>Ubicación actual del dispositivo.')
+        .openPopup();
+}
+
+// Gestión dinámica del botón "+" para insertar paradas (Waypoints)
+document.getElementById('add-waypoint-btn').addEventListener('click', () => {
+    const waypointIndex = waypoints.length + 1;
+    waypoints.push({ id: waypointIndex, address: '' });
+    renderWaypointsUI();
+});
+
+function renderWaypointsUI() {
+    const container = document.getElementById('waypoints-list');
+    container.innerHTML = '';
+    waypoints.forEach((wp, index) => {
+        container.innerHTML += `
+            <div class="waypoint-item">
+                <input type="text" placeholder="Parada ${index + 1}" data-index="${index}" class="waypoint-input" value="${wp.address}" oninput="updateWaypointAddress(${index}, this.value)" />
+                <button type="button" onclick="removeWaypoint(${index})" class="btn-remove-wp">×</button>
+            </div>
+        `;
+    });
+}
+
+function updateWaypointAddress(index, value) {
+    if (waypoints[index]) {
+        waypoints[index].address = value;
+    }
+}
+
+function removeWaypoint(index) {
+    waypoints.splice(index, 1);
+    renderWaypointsUI();
+}
+
+// Generación de URL universal y salto nativo a Google Maps
+function setupGoogleMapsNavigation(destinationAddress) {
+    const gmapsBtn = document.getElementById('open-gmaps-btn');
+    
+    let waypointsQuery = '';
+    if (waypoints.length > 0) {
+        const wpString = waypoints.map(wp => encodeURIComponent(wp.address)).join('|');
+        waypointsQuery = `&waypoints=${wpString}`;
+    }
+
+    const encodedDestination = encodeURIComponent(destinationAddress);
+    const universalUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedDestination}${waypointsQuery}&travelmode=driving`;
+
+    gmapsBtn.style.display = 'block';
+    gmapsBtn.onclick = () => {
+        window.open(universalUrl, '_blank');
+    };
+}
+
 document.getElementById('btn-calcular-ruta').addEventListener('click', async () => {
     const origenTexto = document.getElementById('origen-ruta').value;
     const destinoTexto = document.getElementById('destino-ruta').value;
-    const waypointsInputs = document.querySelectorAll('.waypoint-input');
 
     if (!origenTexto || !destinoTexto) {
-        alert("Por favor, introduce al menos un origen y un destino.");
+        alert("Por favor, introduce un origen y un destino.");
         return;
     }
 
@@ -1215,45 +1777,56 @@ document.getElementById('btn-calcular-ruta').addEventListener('click', async () 
     btn.innerText = "Calculando...";
 
     try {
-        // Función auxiliar para geocodificar con Nominatim
-        const geocode = async (texto) => {
-            // Manejo especial de coordenadas directas o "Mi Ubicación Actual"
-            if (texto === "Mi Ubicación Actual" && marcadorOrigen) {
-                return marcadorOrigen.getLatLng();
+        let latLngOrigen;
+        if (userCoordinates && (origenTexto.includes(',') && !isNaN(origenTexto.split(',')[0]))) {
+            const partes = origenTexto.split(',');
+            latLngOrigen = L.latLng(parseFloat(partes[0]), parseFloat(partes[1]));
+        } else {
+            const resOrigen = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(origenTexto)}`);
+            const dataOrigen = await resOrigen.json();
+            if (dataOrigen.length === 0) {
+                alert("No se ha encontrado la ubicación de origen.");
+                btn.innerText = "Calcular Ruta";
+                return;
             }
-            
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(texto)}`);
-            const data = await res.json();
-            if(data.length === 0) throw new Error(`No se encontró: ${texto}`);
-            return L.latLng(data[0].lat, data[0].lon);
-        };
+            latLngOrigen = L.latLng(dataOrigen[0].lat, dataOrigen[0].lon);
+        }
 
-        let latLngs = [];
-        
-        // 1. Añadir Origen
-        latLngs.push(await geocode(origenTexto));
-        
-        // 2. Añadir Paradas
-        for(let input of waypointsInputs) {
-            if(input.value.trim() !== "") {
-                latLngs.push(await geocode(input.value));
+        // Resolver coordenadas de waypoints intermedios si los hay
+        let waypointLatLngs = [];
+        for (let wp of waypoints) {
+            if (wp.address.trim() !== '') {
+                const resWp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(wp.address)}`);
+                const dataWp = await resWp.json();
+                if (dataWp.length > 0) {
+                    waypointLatLngs.push(L.latLng(dataWp[0].lat, dataWp[0].lon));
+                }
             }
         }
-        
-        // 3. Añadir Destino
-        latLngs.push(await geocode(destinoTexto));
 
-        // Limpiar ruta anterior si existe
+        const resDestino = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destinoTexto)}`);
+        const dataDestino = await resDestino.json();
+
+        if (dataDestino.length === 0) {
+            alert("No se ha encontrado la ubicación de destino.");
+            btn.innerText = "Calcular Ruta";
+            return;
+        }
+
+        const latLngDestino = L.latLng(dataDestino[0].lat, dataDestino[0].lon);
+
         if (controlRuta) {
             mapa.removeControl(controlRuta);
         }
 
-        // Trazar nueva ruta con todas las paradas
+        // Construir la lista completa de waypoints para Leaflet Routing Machine
+        let allWaypoints = [latLngOrigen, ...waypointLatLngs, latLngDestino];
+
         controlRuta = L.Routing.control({
-            waypoints: latLngs,
+            waypoints: allWaypoints,
             routeWhileDragging: false,
             addWaypoints: false,
-            show: false, // Ocultar panel lateral de instrucciones de Leaflet
+            show: false,
             fitSelectedRoutes: true
         }).addTo(mapa);
 
@@ -1262,111 +1835,286 @@ document.getElementById('btn-calcular-ruta').addEventListener('click', async () 
             const distanciaMetros = rutas[0].summary.totalDistance;
             const kmTotales = (distanciaMetros / 1000).toFixed(1);
             
-            // Lógica de coste basada en el vehículo activo
             const coche = baseDatos[vehiculoActivo];
             let costeEstimado = 0;
-            
+
+            document.getElementById('btn-ir-navegador').style.display = 'block';
+
             if (coche && coche.registros && coche.registros.length > 0) {
-                const consumoMediaHist = parseFloat(coche.registros[0].consumoMedio) || (coche.tipo === 'BEV' ? 15 : 6); //Fallback
-                const precioMedioHist = parseFloat(coche.registros[0].precioLitro) || (coche.tipo === 'BEV' ? 0.35 : 1.6);
-                costeEstimado = (kmTotales / 100) * consumoMediaHist * precioMedioHist;
-            } else {
-                costeEstimado = kmTotales * 0.12; // Valor base si no hay registros
+                const ultimoRegistro = coche.registros[0];
+                const consumo = parseFloat(ultimoRegistro.consumoMedio) || 0;
+                const precio = parseFloat(ultimoRegistro.precioLitro) || 0;
+
+                const unidadesNecesarias = (kmTotales / 100) * consumo;
+                costeEstimado = unidadesNecesarias * precio;
             }
 
-            // Mostrar Tarjeta de Resultados Simplificada
-            document.getElementById('distancia-val').innerText = kmTotales;
-            document.getElementById('coste-val').innerText = costeEstimado.toFixed(2);
+            document.getElementById('distancia-val').innerText = `${kmTotales} km`;
+            document.getElementById('coste-val').innerText = `${costeEstimado.toFixed(2)} €`;
             document.getElementById('resultado-ruta').style.display = 'block';
 
-            // Mostrar botón de Pantalla Completa
-            document.getElementById('btn-ir-navegador').style.display = 'block';
+            // Activar enlace nativo a Google Maps
+            setupGoogleMapsNavigation(destinoTexto);
 
             btn.innerText = "Calcular Ruta";
         });
-        
-        controlRuta.on('routingerror', function(e) {
-             alert("No se pudo trazar una ruta entre los puntos especificados.");
-             btn.innerText = "Calcular Ruta";
-        });
 
     } catch (error) {
-        console.error(error);
-        alert(error.message || "Hubo un error al conectar con el servidor de mapas.");
+        console.error("Error al calcular la ruta:", error);
+        alert("Hubo un error al conectar con el servidor de mapas.");
         btn.innerText = "Calcular Ruta";
     }
 });
 
-// Funciones de Pantalla Completa y Enlace a Google Maps Nativo
-function abrirNavegador() {
-    const mapaDiv = document.getElementById("miMapa");
-    const mapWrapper = document.getElementById("map-wrapper");
-    const controls = document.getElementById("map-overlay-controls");
-    const btnEnterFS = document.getElementById("btn-ir-navegador");
+function calcularViajePredictivo() {
+    const coche = baseDatos[vehiculoActivo];
+    const kmInput = document.getElementById('kmViajeInput');
+    const resBox = document.getElementById('resultadoSimulacion');
+    const resText = document.getElementById('textoSimulacion');
 
-    mapaDiv.classList.add("modo-pantalla-completa");
-    controls.style.display = "flex";
-    btnEnterFS.style.display = "none";
+    if (!kmInput || !resBox || !resText) return;
+    const kmViaje = parseFloat(kmInput.value);
 
-    // Si el navegador soporta Fullscreen API real
-    if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch((err) => {
-            console.log(`Error al intentar iniciar pantalla completa: ${err.message}`);
-        });
+    if (!coche || !coche.registros || coche.registros.length === 0 || isNaN(kmViaje) || kmViaje <= 0) {
+        resBox.style.display = 'none';
+        return;
     }
 
-    // Refrescar tamaño del mapa de Leaflet
-    setTimeout(() => { if(mapa) mapa.invalidateSize(); }, 300);
+    let sumaConsumo = 0;
+    let sumaPrecio = 0;
+    const totalRegs = coche.registros.length;
+
+    coche.registros.forEach(r => {
+        sumaConsumo += parseFloat(r.consumoMedio) || 0;
+        sumaPrecio += parseFloat(r.precioLitro) || 0;
+    });
+
+    const consumoMedioHist = sumaConsumo / totalRegs;
+    const precioMedioHist = sumaPrecio / totalRegs;
+
+    const litrosNecesarios = (kmViaje * consumoMedioHist) / 100;
+    const costeEstimado = litrosNecesarios * precioMedioHist;
+
+    const esElectrico = coche.tipo === "BEV";
+    const unidad = esElectrico ? "kWh" : "Litros";
+
+    resText.innerHTML = `Estimación para ${kmViaje.toLocaleString()} km:<br>Necesitarás <strong>${litrosNecesarios.toFixed(1)} ${unidad}</strong> y te costará aprox. <strong>${costeEstimado.toFixed(2)} €</strong> <span style="font-size:0.8rem; display:block; color:var(--text-muted); margin-top:4px;">(Basado en tu consumo medio de ${consumoMedioHist.toFixed(2)} L/100km y ${precioMedioHist.toFixed(3)} €/L)</span>`;
+    
+    resBox.style.display = 'block';
+}
+
+function actualizarTablayStats() {
+    const coche = baseDatos[vehiculoActivo];
+    const tabla = document.getElementById('historialTab'); tabla.innerHTML = '';
+    
+    if (coche.registros.length > 0) {
+        const ult = coche.registros[0];
+        document.getElementById('calcConsumo').textContent = `${ult.consumoMedio} L/100`;
+        document.getElementById('calcKmLitro').textContent = `${ult.kmPorLitro} Km/L`;
+        document.getElementById('calcCoste').textContent = `${ult.costeTotal} €`;
+        document.getElementById('calcPrecioKm').textContent = `${ult.precioPorKm} €/Km`;
+    } else {
+        ['calcConsumo','calcKmLitro','calcCoste','calcPrecioKm'].forEach(id => document.getElementById(id).textContent = "-");
+    }
+
+    const fragment = document.createDocumentFragment();
+    coche.registros.forEach((r, idx) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td style="color:#64748b; font-weight:500; font-size:0.85rem;">${escapeHTML(r.fecha||'')}</td>
+            <td><strong>${escapeHTML(r.gasolinera)}</strong></td>
+            <td><span class="badge" style="background:var(--border); color:var(--text);">${escapeHTML(r.combustible||'-')}</span></td>
+            <td>${r.kmHechos}</td><td>${r.litros}L</td>
+            <td style="color:var(--primary); font-weight:bold;">${r.consumoMedio}</td><td>${r.costeTotal}€</td>
+            <td><button class="btn-delete" onclick="eliminarRegistro(${idx})">❌</button></td>`;
+        fragment.appendChild(row);
+    });
+    tabla.appendChild(fragment);
+    
+    calcularComparativaGasolineras(coche.registros);
+    calcularPremiosYDestacados();
+    renderizarGrafico(coche.registros);
+    calcularViajePredictivo();
+    generarComparativaEficiencia();
+}
+
+function calcularComparativaGasolineras(registros) {
+    const compTabla = document.getElementById('comparadorTab'); compTabla.innerHTML = '';
+    if (registros.length === 0) { compTabla.innerHTML = `<tr><td colspan="4" style="text-align:center;">Sin datos</td></tr>`; return; }
+    
+    const est = {};
+    registros.forEach(r => {
+        if (!est[r.gasolinera]) est[r.gasolinera] = { L:0, Km:0, pL:0, c:0 };
+        est[r.gasolinera].L += parseFloat(r.litros)||0; est[r.gasolinera].Km += parseFloat(r.kmHechos)||0;
+        est[r.gasolinera].pL += parseFloat(r.precioLitro)||0; est[r.gasolinera].c++;
+    });
+    
+    Object.keys(est).forEach(gas => {
+        const d = est[gas];
+        compTabla.innerHTML += `<tr><td><strong>${escapeHTML(gas)}</strong></td><td>${d.c}</td>
+            <td style="color:var(--primary); font-weight:bold;">${d.Km>0 ? ((d.L/d.Km)*100).toFixed(2) : "0.00"} L/100</td>
+            <td>${d.c>0 ? (d.pL/d.c).toFixed(3) : "0.000"} €/L</td></tr>`;
+    });
+}
+
+function calcularPremiosYDestacados() {
+    const regs = baseDatos[vehiculoActivo].registros || [];
+    if (regs.length > 0) {
+        const est = {};
+        regs.forEach(r => { if(!est[r.gasolinera])est[r.gasolinera]={L:0,Km:0}; est[r.gasolinera].L+=parseFloat(r.litros); est[r.gasolinera].Km+=parseFloat(r.kmHechos); });
+        let minC=Infinity, meG="Sin datos";
+        Object.keys(est).forEach(g=>{ if(est[g].Km>0){ let c=(est[g].L/est[g].Km)*100; if(c<minC){ minC=c; meG=`${g} (${c.toFixed(2)})`; } } });
+        document.getElementById('topGasolinera').textContent = meG;
+    } else document.getElementById('topGasolinera').textContent = "-";
+
+    let meV="Sin datos", minGlobal=Infinity;
+    Object.keys(baseDatos).forEach(nom => {
+        let tL=0, tKm=0;
+        (baseDatos[nom].registros||[]).forEach(r=>{ tL+=parseFloat(r.litros); tKm+=parseFloat(r.kmHechos); });
+        if(tKm>0){ let c=(tL/tKm)*100; if(c<minGlobal){ minGlobal=c; meV=`${nom} (${c.toFixed(2)})`; } }
+    });
+    document.getElementById('topVehiculo').textContent = meV;
+}
+
+function calcularAutonomia() {
+    const coche = baseDatos[vehiculoActivo];
+    if (!coche || coche.registros.length === 0 || !coche.capacidadDeposito) { document.getElementById('autonomiaEstimada').textContent = "- Km"; return; }
+    document.getElementById('autonomiaEstimada').textContent = `${((coche.capacidadDeposito / parseFloat(coche.registros[0].consumoMedio)) * 100).toFixed(0)} Km`;
+}
+
+function guardarDesplazamientoEnBD() {
+    const c = baseDatos[vehiculoActivo]; if(!c) return;
+    c.diasSemana = parseFloat(document.getElementById('diasSemana').value) || 0;
+    c.kmDiarios = parseFloat(document.getElementById('kmDiarios').value) || 0;
+    guardarEnStorage();
+}
+
+function calcularGastoDesplazamiento() {
+    const c = baseDatos[vehiculoActivo];
+    if(!c || c.registros.length===0 || !c.diasSemana || !c.kmDiarios) {
+        ['gastoDia','gastoSemana','gastoMes','gastoAno'].forEach(id => document.getElementById(id).textContent = "-"); return;
+    }
+    const r = c.registros[0];
+    const costeDia = (c.kmDiarios/100) * parseFloat(r.consumoMedio) * parseFloat(r.precioLitro);
+    const costeSem = costeDia * c.diasSemana;
+    
+    document.getElementById('gastoDia').textContent = `${costeDia.toFixed(2)} €`;
+    document.getElementById('gastoSemana').textContent = `${costeSem.toFixed(2)} €`;
+    document.getElementById('gastoMes').textContent = `${(costeSem*4.33).toFixed(2)} €`;
+    document.getElementById('gastoAno').textContent = `${(costeSem*52).toFixed(2)} €`;
+}
+
+function renderizarGrafico(registros) {
+    const ctx = document.getElementById('graficoCombustible').getContext('2d');
+    if (!registros || registros.length === 0) { if (miGrafico) miGrafico.destroy(); return; }
+
+    const rev = [...registros].reverse();
+    if (miGrafico) miGrafico.destroy();
+
+    miGrafico = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: rev.map(r=>r.fecha),
+            datasets: [
+                { label: 'Consumo (L/100km)', data: rev.map(r=>parseFloat(r.consumoMedio)), borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.1)', tension: 0.3, yAxisID: 'y' },
+                { label: 'Precio (€/L)', data: rev.map(r=>parseFloat(r.precioLitro)), borderColor: '#ef4444', backgroundColor: 'transparent', borderDash: [5,5], tension: 0.3, yAxisID: 'y1' }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                x: { grid: { display: false }, ticks: {font: {size: 10}} },
+                y: { type: 'linear', position: 'left', title: {display:true, text:'L/100km'} },
+                y1: { type: 'linear', position: 'right', grid: {display: false}, title: {display:true, text:'€/L'} }
+            }
+        }
+    });
+}
+
+function usarUbicacionActual() {
+    if (!navigator.geolocation) {
+        alert("Tu navegador o dispositivo no soporta la geolocalización.");
+        return;
+    }
+
+    const origenInput = document.getElementById('origen-ruta');
+    origenInput.value = "Obteniendo ubicación...";
+
+    navigator.geolocation.getCurrentPosition(
+        (posicion) => {
+            const lat = posicion.coords.latitude;
+            const lon = posicion.coords.longitude;
+            userCoordinates = { lat, lng: lon };
+            origenInput.value = `${lat}, ${lon}`;
+        },
+        (error) => {
+            alert("No se pudo obtener tu ubicación. Verifica los permisos de GPS de tu navegador.");
+            origenInput.value = "";
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+    );
+}
+
+function abrirNavegador() {
+    const mapaDiv = document.getElementById('miMapa');
+    const btnCerrar = document.getElementById('btn-cerrar-navegador');
+    
+    mapaDiv.classList.add('modo-pantalla-completa');
+    btnCerrar.style.display = 'block';
+
+    setTimeout(() => {
+        if (mapa) mapa.invalidateSize();
+    }, 200);
 }
 
 function cerrarNavegador() {
-    const mapaDiv = document.getElementById("miMapa");
-    const controls = document.getElementById("map-overlay-controls");
-    const btnEnterFS = document.getElementById("btn-ir-navegador");
+    const mapaDiv = document.getElementById('miMapa');
+    const btnCerrar = document.getElementById('btn-cerrar-navegador');
+    
+    mapaDiv.classList.remove('modo-pantalla-completa');
+    btnCerrar.style.display = 'none';
 
-    mapaDiv.classList.remove("modo-pantalla-completa");
-    controls.style.display = "none";
-    btnEnterFS.style.display = "block";
-
-    if (document.fullscreenElement) {
-        document.exitFullscreen().catch(err => console.log(err));
-    }
-
-    setTimeout(() => { if(mapa) mapa.invalidateSize(); }, 300);
+    setTimeout(() => {
+        if (mapa) mapa.invalidateSize();
+    }, 200);
 }
 
-function abrirEnGoogleMaps() {
-    let origenTexto = document.getElementById('origen-ruta').value.trim();
-    let destinoTexto = document.getElementById('destino-ruta').value.trim();
-    
-    // Si Origen es "Mi Ubicación Actual", en Google Maps a veces es mejor dejarlo vacío 
-    // o pasar parámetros especiales, pero omitirlo y dejar que maps asuma suele ser lo más limpio en móvil.
-    let usarUbicacionGmaps = (origenTexto.toLowerCase() === "mi ubicación actual" || origenTexto === "Obteniendo ubicación...");
-
-    const waypointInputs = document.querySelectorAll('.waypoint-input');
-    let waypointsArr = [];
-    waypointInputs.forEach(input => {
-        if(input.value.trim() !== "") waypointsArr.push(encodeURIComponent(input.value));
-    });
-    
-    let url = `https://www.google.com/maps/dir/?api=1`;
-    
-    if (!usarUbicacionGmaps && origenTexto !== "") {
-        url += `&origin=${encodeURIComponent(origenTexto)}`;
-    }
-    
-    if (destinoTexto !== "") {
-        url += `&destination=${encodeURIComponent(destinoTexto)}`;
-    }
-    
-    if (waypointsArr.length > 0) {
-        url += `&waypoints=${waypointsArr.join('%7C')}`; // %7C es el separador |
-    }
-
-    // Lanza la aplicación nativa en iOS/Android o la pestaña web en PC
-    window.open(url, '_blank');
+function exportarDatos() {
+    const blob = new Blob([JSON.stringify({ baseDatos, gasolineras })], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = "backup_autocontrol.json";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
+async function importarDatos(event) {
+    const input = event.target;
+    if(!input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = async function() {
+        try {
+            const data = JSON.parse(reader.result);
+            if(data.baseDatos && data.gasolineras) {
+                baseDatos = data.baseDatos; gasolineras = data.gasolineras;
+                guardarEnStorage(); localStorage.setItem('app_gasolineras_data', JSON.stringify(gasolineras));
+                vehiculoActivo = Object.keys(baseDatos)[0]; localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
+                inicializar(); await customAlert("¡Datos restaurados con éxito!"); toggleForm('settingsModal');
+            } else throw new Error();
+        } catch(e) { await customAlert("Archivo corrupto o inválido.", "Error"); }
+    };
+    reader.readAsText(input.files[0]);
+}
+
+document.getElementById('easter-egg-trigger').addEventListener('click', () => {
+    document.body.classList.toggle('orange-mode');
+    localStorage.setItem('orangeMode', document.body.classList.contains('orange-mode') ? 'enabled' : 'disabled');
+    
+    if (document.body.classList.contains('orange-mode')) {
+        const audio = document.getElementById('audio-secreto');
+        if (audio) { audio.currentTime = 0; audio.play().catch(e=>console.log(e)); }
+    }
+});
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(e=>console.log(e));
 </script>
 </body>
 </html>
