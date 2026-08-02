@@ -1242,36 +1242,79 @@ async function processOdometroOCR(input) {
     const file = input.files[0];
 
     const spinner = document.getElementById('ocrSpinner');
-    document.getElementById('ocrSpinnerText').textContent = "Leyendo cuentakilómetros...";
-    spinner.style.display = 'flex';
+    const spinnerText = document.getElementById('ocrSpinnerText');
+    if (spinnerText) spinnerText.textContent = "Leyendo cuentakilómetros...";
+    if (spinner) spinner.style.display = 'flex';
 
     try {
-        const result = await Tesseract.recognize(file, 'eng+spa');
-        spinner.style.display = 'none';
+        // MEJORA: Forzamos a Tesseract a buscar solo números y a tratar el texto como una línea/bloque único (PSM 7/11)
+        // Usamos 'eng' ya que para números puros es más eficiente y evita falsas interpretaciones de caracteres del español
+        const result = await Tesseract.recognize(file, 'eng', {
+            config: {
+                tessedit_char_whitelist: '0123456789', // Destruye cualquier confusión con letras, agujas o símbolos
+            },
+            legacyCore: false,
+            legacyLang: false
+        });
+
+        if (spinner) spinner.style.display = 'none';
         input.value = '';
 
+        // Limpiamos el texto eliminando espacios intermedios y saltos de línea molestos
         const text = result.data.text;
-        const matches = text.match(/\b\d{5,6}\b/g);
+        const textCompacto = text.replace(/[\s\n\r]/g, '');
+
+        // 1. Buscamos bloques lógicos de kilometraje en España/Europa (habitualmente entre 4 y 6 dígitos consecutivos)
+        const matches = textCompacto.match(/\d{4,6}/g);
+        
         if (matches && matches.length > 0) {
-            document.getElementById('kmTotalesOdom').value = matches[0];
-            document.getElementById('kmTotalesOdom').dispatchEvent(new Event('input')); // Dispara la etiqueta flotante
-            mostrarNotificacion("Odómetro detectado correctamente ✅");
-        } else {
-            const cleanNum = text.replace(/\D/g, '');
-            if (cleanNum.length >= 5) {
-                document.getElementById('kmTotalesOdom').value = cleanNum.substring(0, 6);
-                document.getElementById('kmTotalesOdom').dispatchEvent(new Event('input'));
-                mostrarNotificacion("Odómetro extraído parcialmente ⚠️");
-            } else {
-                customAlert("No se ha podido leer con claridad el kilometraje. Intenta con otra foto o escríbelo a mano.");
+            // Si hay varios números (ej: detecta el "40" de velocidad y los "195893" km), nos quedamos con el más largo
+            const kilometrajeCorrecto = matches.reduce((a, b) => a.length >= b.length ? a : b);
+            
+            // Validamos que tenga una longitud coherente
+            if (kilometrajeCorrecto.length >= 4) {
+                const elKm = document.getElementById('kmTotalesOdom');
+                if (elKm) {
+                    elKm.value = kilometrajeCorrecto;
+                    elKm.dispatchEvent(new Event('input'));
+                }
+                if (typeof mostrarNotificacion === 'function') {
+                    mostrarNotificacion("Odómetro detectado correctamente ✅");
+                }
+                return;
             }
         }
+
+        // 2. Respaldo agresivo: Si las expresiones regulares fallan por ruido visual, extraemos todos los números limpios
+        const cleanNum = textCompacto.replace(/\D/g, '');
+        if (cleanNum.length >= 4) {
+            const elKm = document.getElementById('kmTotalesOdom');
+            if (elKm) {
+                // Limitamos a un máximo de 6 dígitos (un kilometraje normal no supera los 999.999 km)
+                elKm.value = cleanNum.substring(0, 6);
+                elKm.dispatchEvent(new Event('input'));
+            }
+            if (typeof mostrarNotificacion === 'function') {
+                mostrarNotificacion("Odómetro extraído parcialmente ⚠️");
+            }
+        } else {
+            if (typeof customAlert === 'function') {
+                customAlert("No se ha podido leer con claridad el kilometraje. Intenta enfocar más de cerca el totalizador ODO o escríbelo a mano.");
+            }
+        }
+
     } catch (err) {
-        spinner.style.display = 'none';
+        if (spinner) spinner.style.display = 'none';
         input.value = '';
-        customAlert("Error de sistema al procesar la imagen del odómetro.");
+        console.error("Error OCR Odómetro:", err);
+        if (typeof customAlert === 'function') {
+            customAlert("Error de sistema al procesar la imagen del odómetro.");
+        }
     }
 }
+
+
+
 
 async function processTicketOCR(input) {
     if (!input.files || !input.files[0]) return;
@@ -1409,8 +1452,8 @@ async function processTicketOCR(input) {
             if (matchBat && document.getElementById('porcentajeBat')) document.getElementById('porcentajeBat').value = matchBat[1];
         }
 
-        // 4. Disparar eventos de input
-        ['precioLitro', 'litros', 'porcentajeBat'].forEach(id => {
+        // 4. Actualizar UI al procesar un ticket
+        ['precioLitro', 'litros'].forEach(id => {
             const el = document.getElementById(id);
             if (el && el.value) el.dispatchEvent(new Event('input'));
         });
