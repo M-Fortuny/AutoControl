@@ -610,13 +610,15 @@ input[type="date"] {
         </div>
 
         <div class="floating-group">
-            <select id="tipoCombustible" class="floating-select" required>
-                <option value="Súper 95">Súper 95</option>
-                <option value="Súper 98">Súper 98</option>
-                <option value="Diesel">Diesel</option>
-            </select>
-            <label class="floating-label" id="lblTipoEnergia">Combustible</label>
-        </div>
+    <select id="tipoCombustible" class="floating-select" required>
+        <option value="Súper 95">Súper 95</option>
+        <option value="Súper 98">Súper 98</option>
+        <option value="Diesel">Diesel</option>
+        <option value="Diésel +">Diésel +</option> <!-- ¡Nueva opción premium añadida! -->
+    </select>
+    <label class="floating-label" id="lblTipoEnergia">Combustible</label>
+</div>
+
 
         <div class="floating-group">
             <input type="text" id="kmTotalesOdom" class="floating-input" inputmode="decimal" required placeholder=" " oninput="formatNumberInput(this)">
@@ -669,20 +671,19 @@ input[type="date"] {
     <button type="button" class="btn" id="btn-calcular-ruta" style="margin-bottom:20px;">Calcular Ruta</button>
 
     <div id="resultado-ruta" class="route-summary-card" style="display:none;margin-bottom:15px;position:relative;top:auto;left:auto;">
-    <div class="summary-item">
-        <span class="summary-label">Distancia Total:</span>
-        <span id="distancia-val" class="summary-value">0.0 km</span>
+        <div class="summary-item">
+            <span class="summary-label">Distancia Total:</span>
+            <span id="distancia-val" class="summary-value">0.0 km</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Litros Consumidos:</span>
+            <span id="litros-val" class="summary-value">0.0 L</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Coste Estimado:</span>
+            <span id="coste-val" class="summary-value">0.00 €</span>
+        </div>
     </div>
-    <div class="summary-item">
-        <span class="summary-label">Litros Consumidos:</span>
-        <span id="litros-val" class="summary-value">0.0 L</span>
-    </div>
-    <div class="summary-item">
-        <span class="summary-label">Coste Estimado:</span>
-        <span id="coste-val" class="summary-value">0.00 €</span>
-    </div>
-</div>
-
 
     <button type="button" class="btn btn-secondary" id="btn-ir-navegador" onclick="abrirNavegador()" style="margin-bottom:15px;display:none;">🧭 Pantalla Completa</button>
 
@@ -695,6 +696,7 @@ input[type="date"] {
         </div>
     </div>
 </div>
+
 
 <div class="card">
     <h2 class="card-title">🛠️ Estado del Vehículo</h2>
@@ -932,6 +934,63 @@ input[type="date"] {
     <div id="ocrSpinnerText" style="margin-top: 15px;">Procesando imagen con IA...</div>
 </div>
 
+
+<!-- Modal Gestión de Rutas, Favoritos y Waypoints -->
+<div id="modal-gestion-rutas" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+    <div class="card" style="width:90%; max-width:400px; max-height:85vh; overflow-y:auto; padding:20px; position:relative;">
+        
+        <!-- Cabecera del Modal -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h3 class="card-title" style="margin:0;">⭐ Gestión Avanzada</h3>
+            <button type="button" onclick="cerrarGestionRutasFavoritos()" style="background:none; border:none; font-size:1.5em; cursor:pointer;">❌</button>
+        </div>
+
+        <!-- 1. Gestión de Favoritos -->
+        <div style="margin-bottom:20px;">
+            <h4 style="margin-bottom:10px; font-size:1.1em; border-bottom:1px solid #ddd; padding-bottom:5px;">1. Favoritos</h4>
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <button type="button" class="btn btn-secondary" onclick="seleccionarFavorito('Casa')" style="flex:1;">🏠 Casa</button>
+                <button type="button" class="btn btn-secondary" onclick="seleccionarFavorito('Trabajo')" style="flex:1;">💼 Trabajo</button>
+            </div>
+            <button type="button" class="btn" onclick="añadirFavorito()" style="width:100%;">+ Añadir nuevo favorito</button>
+        </div>
+
+        <!-- 2. Gestión de Rutas -->
+        <div style="margin-bottom:20px;">
+            <h4 style="margin-bottom:10px; font-size:1.1em; border-bottom:1px solid #ddd; padding-bottom:5px;">2. Rutas</h4>
+            <div style="display:flex; gap:10px;">
+                <button type="button" class="btn" onclick="guardarRuta()" style="flex:1;">💾 Guardar Ruta</button>
+                <button type="button" class="btn btn-secondary" onclick="cargarRuta()" style="flex:1;">📂 Cargar Ruta</button>
+            </div>
+        </div>
+
+        <!-- 3. Waypoints / Puntos de Interés -->
+        <div>
+            <h4 style="margin-bottom:10px; font-size:1.1em; border-bottom:1px solid #ddd; padding-bottom:5px;">3. Mostrar en Mapa</h4>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                    <input type="checkbox" id="check-gasolineras" onchange="toggleWaypoint('gasolineras')" style="width:20px; height:20px;">
+                    ⛽ Gasolineras
+                </label>
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                    <input type="checkbox" id="check-poi" onchange="toggleWaypoint('poi')" style="width:20px; height:20px;">
+                    📸 Puntos de Interés (POI)
+                </label>
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                    <input type="checkbox" id="check-radares" onchange="toggleWaypoint('radares')" style="width:20px; height:20px;">
+                    🚨 Radares
+                </label>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
 <script>
 const staticVehiculosPredeterminados = { "MG3 Hybrid +": { kmActuales: 5000, proxAceite: 15000, proxFiltro: 15000, proxRevision: 100000, registros: [] } };
 const gasolinerasPredeterminadas = ["Avanza Oil", "Repsol", "Petrem ECO"];
@@ -1039,16 +1098,20 @@ function setModoRepostaje(modo) {
         lblPrecio.textContent = 'Precio/kWh (€)'; lblCantidad.textContent = 'kWh Recargados'; lblTipoEnergia.textContent = 'Tipo de Carga';
         selCombustible.innerHTML = '<option value="Carga CA (Lenta)">Carga CA (Lenta)</option><option value="Carga CC (Rápida)">Carga CC (Rápida)</option>';
         grupoPorcentaje.style.display = 'block';
-    } else {
+        } else {
         // Asume modo 'combustible' por defecto, para no romper lógica anterior
         btnComb.style.borderColor = 'var(--primary)'; btnComb.style.color = 'var(--primary)';
         btnElec.style.borderColor = 'var(--border)'; btnElec.style.color = 'var(--text-muted)';
         lblPrecio.textContent = 'Precio/Litro (€)'; lblCantidad.textContent = 'Litros'; lblTipoEnergia.textContent = 'Combustible';
-        selCombustible.innerHTML = '<option value="Súper 95">Súper 95</option><option value="Súper 98">Súper 98</option><option value="Diesel">Diesel</option>';
+        
+        // ¡Corregido! Añadimos 'Diésel +' al renderizado dinámico del desplegable
+        selCombustible.innerHTML = '<option value="Súper 95">Súper 95</option><option value="Súper 98">Súper 98</option><option value="Diesel">Diesel</option><option value="Diésel +">Diésel +</option>';
+        
         grupoPorcentaje.style.display = 'none'; 
         document.getElementById('porcentajeBat').value = '';
     }
 }
+
 
 document.querySelectorAll('.accordion-btn').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -1215,63 +1278,159 @@ async function processTicketOCR(input) {
     const file = input.files[0];
 
     const spinner = document.getElementById('ocrSpinner');
-    document.getElementById('ocrSpinnerText').textContent = "Analizando ticket con IA...";
-    spinner.style.display = 'flex';
+    const spinnerText = document.getElementById('ocrSpinnerText');
+    if (spinnerText) spinnerText.textContent = "Analizando ticket con IA...";
+    if (spinner) spinner.style.display = 'flex';
 
     try {
-        const result = await Tesseract.recognize(file, 'spa');
-        spinner.style.display = 'none';
+        const result = await Tesseract.recognize(file, 'spa+eng');
+        if (spinner) spinner.style.display = 'none';
         input.value = '';
 
         const text = result.data.text;
         const txtLower = text.toLowerCase();
+        const txtUpper = text.toUpperCase();
 
-        // 1. Detectar si es recarga eléctrica o de combustión
-        const esElectrico = txtLower.includes('kwh') || txtLower.includes('recarga') || txtLower.includes('ionity') || txtLower.includes('tesla') || txtLower.includes('endesa') || txtLower.includes('cc') || txtLower.includes('ca');
-        
-        if (esElectrico) {
-            setModoRepostaje('electrico');
-            
-            const matchPrecioElec = text.match(/(\d[.,]\d{2,3})\s*(?:€\/kwh|€|eur)/i);
-            if (matchPrecioElec) document.getElementById('precioLitro').value = matchPrecioElec[1].replace(',', '.');
-            
-            const matchKWh = text.match(/(\d+[.,]\d{2})\s*(?:kwh)/i);
-            if (matchKWh) document.getElementById('litros').value = matchKWh[1].replace(',', '.');
-            
-            const matchBat = text.match(/(?:soc|bateria|hasta)?\s*(\d{2})\s*%/i);
-            if (matchBat) document.getElementById('porcentajeBat').value = matchBat[1];
+        // 1. Determinar el modo activo actual en la interfaz
+        const btnElectrico = document.querySelector('[onclick*="electrico"]') || document.getElementById('btn-electrico');
+        let modoActivo = (btnElectrico && btnElectrico.classList.contains('active')) ? 'electrico' : 'combustible';
 
-        } else {
-            setModoRepostaje('combustible');
-            
-            const matchPrecio = text.match(/(\d[.,]\d{2,3})\s*(?:€|\/l|eur)/i);
-            if (matchPrecio) document.getElementById('precioLitro').value = matchPrecio[1].replace(',', '.');
-            
-            const matchLitros = text.match(/(\d+[.,]\d{2})\s*(?:l|litros)/i);
-            if (matchLitros) document.getElementById('litros').value = matchLitros[1].replace(',', '.');
-            
-            const selCombustible = document.getElementById('tipoCombustible');
-            if (txtLower.includes('98')) selCombustible.value = 'Súper 98';
-            else if (txtLower.includes('diesel') || txtLower.includes('gasoleo')) selCombustible.value = 'Diesel';
-            else selCombustible.value = 'Súper 95';
+        // 2. Detección inteligente de tipo de ticket
+        const esTicketElectrico = /kwh|ionity|tesla|endesa|recarga/i.test(txtLower);
+        const esTicketCombustible = /litro|gasoil|diesel|diésel|gasoleo|gasóleo|95|98|plomo/i.test(txtLower);
+
+        if (esTicketElectrico && modoActivo !== 'electrico') {
+            modoActivo = 'electrico';
+            if (typeof setModoRepostaje === 'function') setModoRepostaje('electrico');
+        } else if (esTicketCombustible && modoActivo !== 'combustible') {
+            modoActivo = 'combustible';
+            if (typeof setModoRepostaje === 'function') setModoRepostaje('combustible');
         }
 
-        // Actualizar UI Flotante forzando el evento input
+        // EXTRA: Detección de Gasolinera Española
+        const elEstablecimiento = document.getElementById('establecimiento') || document.getElementById('gasolinera');
+        if (elEstablecimiento) {
+            if (/REPSOL|SOLRED|CAMPSA|PETRONOR/i.test(txtUpper)) elEstablecimiento.value = "Repsol";
+            else if (/CEPSA|MOEVE|GOW/i.test(txtUpper)) elEstablecimiento.value = "Moeve / Cepsa";
+            else if (/BP\s|ULTIMATE|BONOPO/i.test(txtUpper)) elEstablecimiento.value = "BP";
+            else if (/PLENOIL/i.test(txtUpper)) elEstablecimiento.value = "Plenoil";
+            else if (/BALLENOIL/i.test(txtUpper)) elEstablecimiento.value = "Ballenoil";
+            else if (/PETROPRIX/i.test(txtUpper)) elEstablecimiento.value = "Petroprix";
+            else if (/GALP/i.test(txtUpper)) elEstablecimiento.value = "Galp";
+            else if (/SHELL/i.test(txtUpper)) elEstablecimiento.value = "Shell";
+            else if (/AVIA/i.test(txtUpper)) elEstablecimiento.value = "Avia";
+            else if (/CARREFOUR/i.test(txtUpper)) elEstablecimiento.value = "Carrefour";
+            else if (/ALCAMPO/i.test(txtUpper)) elEstablecimiento.value = "Alcampo";
+        }
+
+        // 3. Extracción con patrones de alta precisión
+        if (modoActivo === 'combustible') {
+            // A) Precio por Litro
+            let matchPrecio = text.match(/\b([1-2][.,]\d{3})\b/) || text.match(/(\d[.,]\d{2,3})\s*(?:€\/l|eur\/l|€\/litro|\/l)/i);
+            let precioEncontrado = null;
+            if (matchPrecio) {
+                precioEncontrado = parseFloat(matchPrecio[1].replace(',', '.'));
+                const elPrecio = document.getElementById('precioLitro');
+                if (elPrecio) elPrecio.value = precioEncontrado.toFixed(3);
+            }
+
+            // EXTRA: Capturar Importe Total
+            let matchTotal = text.match(/(?:total|importe|import|pago|eur)[:\s]*(\d{1,3}[.,]\d{2})\b/i) || text.match(/(\d{1,3}[.,]\d{2})\s*(?:€|eur)/i);
+            let totalEncontrado = null;
+            if (matchTotal) totalEncontrado = parseFloat(matchTotal[1].replace(',', '.'));
+
+            // B) Litros (Directo, Exclusión y Respaldo Matemático)
+            let matchLitros = text.match(/(?:litros|volumen|cant|qty|lts)[:\s]*(\d{1,3}[.,]\d{2,3})\b/i) || text.match(/(\d{1,3}[.,]\d{2,3})\s*(?:l|litros|lts)\b/i);
+            let litrosEstablecidos = false;
+
+            if (matchLitros) {
+                const elLitros = document.getElementById('litros');
+                if (elLitros) {
+                    elLitros.value = parseFloat(matchLitros[1].replace(',', '.')).toFixed(2);
+                    litrosEstablecidos = true;
+                }
+            } 
+            
+            if (!litrosEstablecidos) {
+                const posiblesDecimales = text.match(/\b(\d{1,3}[.,]\d{2})\b/g);
+                if (posiblesDecimales) {
+                    for (const num of posiblesDecimales) {
+                        const limpioNum = parseFloat(num.replace(',', '.'));
+                        if (precioEncontrado && Math.abs(limpioNum - precioEncontrado) < 0.1) continue;
+                        if (totalEncontrado && Math.abs(limpioNum - totalEncontrado) < 0.1) continue;
+                        if (limpioNum > 95.00) continue; 
+                        
+                        const elLitros = document.getElementById('litros');
+                        if (elLitros) {
+                            elLitros.value = limpioNum.toFixed(2);
+                            litrosEstablecidos = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!litrosEstablecidos && totalEncontrado && precioEncontrado > 0) {
+                const litrosCalculados = totalEncontrado / precioEncontrado;
+                if (litrosCalculados > 0 && litrosCalculados < 120) {
+                    const elLitros = document.getElementById('litros');
+                    if (elLitros) {
+                        elLitros.value = litrosCalculados.toFixed(2);
+                        litrosEstablecidos = true;
+                    }
+                }
+            }
+
+                        // D) Tipo de Combustible (Alineado con tus <option> del HTML)
+            const selCombustible = document.getElementById('tipoCombustible');
+            if (selCombustible) {
+                if (/DIESEL\s*E\+|DIÉSEL\s*E\+|GASOLEO\s*E\+|GASÓLEO\s*E\+|DIESEL\+|DIÉSEL\+|GASOIL\+|OPTIMA\s*DIESEL|ULTIMATE\s*DIESEL|EFITEC\s*DIESEL|E\+/i.test(txtUpper)) {
+                    selCombustible.value = 'Diésel +'; // Asigna la nueva opción premium
+                } else if (/DIESEL|DIÉSEL|GASOIL|GASOLEO|GASÓLEO|B7|DIESEL\s*A/i.test(txtUpper)) {
+                    selCombustible.value = 'Diesel';    // Asigna tu opción estándar (sin tilde)
+                } else if (/98|S98|EFITEC\s*98|OPTIMA\s*98|ULTIMATE\s*98/i.test(txtUpper)) {
+                    selCombustible.value = 'Súper 98';
+                } else if (/95|S95|SUPER\s*95|EFITEC\s*95|OPTIMA\s*95|ULTIMATE\s*95|E5/i.test(txtUpper)) {
+                    selCombustible.value = 'Súper 95';
+                }
+                selCombustible.dispatchEvent(new Event('change'));
+            }
+
+
+        } else {
+            // MODO ELÉCTRICO
+            const matchKwh = text.match(/(\d+[\.,]\d{2})\s*(?:kWh|kwh)/i) || text.match(/\b(\d{2,3}[.,]\d{2})\b/);
+            if (matchKwh) document.getElementById('litros').value = matchKwh[1].replace(',', '.');
+
+            const matchPrecioKwh = text.match(/([0-9][.,]\d{2,3})\s*(?:€\/kwh|eur\/kwh|€)/i) || text.match(/\b([.,]\d{2,3})\b/);
+            if (matchPrecioKwh) document.getElementById('precioLitro').value = matchPrecioKwh[1].replace(',', '.');
+
+            const matchBat = text.match(/(?:soc|bateria|hasta)?\s*(\d{2})\s*%/i);
+            if (matchBat && document.getElementById('porcentajeBat')) document.getElementById('porcentajeBat').value = matchBat[1];
+        }
+
+        // 4. Disparar eventos de input
         ['precioLitro', 'litros', 'porcentajeBat'].forEach(id => {
             const el = document.getElementById(id);
             if (el && el.value) el.dispatchEvent(new Event('input'));
         });
-        const st = document.getElementById('tipoCombustible');
-        if (st) st.dispatchEvent(new Event('change'));
 
-        customAlert("Datos extraídos correctamente. Revisa y ajusta antes de guardar.", "IA Completada 🤖");
+        if (typeof mostrarNotificacion === 'function') mostrarNotificacion("Datos extraídos con éxito ✅");
+
     } catch (err) {
-        spinner.style.display = 'none';
+        if (spinner) spinner.style.display = 'none';
         input.value = '';
-        customAlert("Error al procesar el ticket de recarga/repostaje. Prueba de nuevo.");
+        if (typeof customAlert === 'function') {
+            customAlert("Error al procesar el ticket de recarga/repostaje. Prueba de nuevo.");
+        }
     }
 }
+
+
+
 /* ===================================================================== */
+
+
 
 
 async function iniciarAsistenteNuevoVehiculo() {
