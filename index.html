@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>AutoControl IA Pro</title>
     <link rel="manifest" href="manifest.json">
 
@@ -57,9 +57,24 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
     margin: 0;
-    padding: 15px;
+    padding: calc(15px + env(safe-area-inset-top, 20px)) 15px calc(15px + env(safe-area-inset-bottom, 0px)) 15px;
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
+}
+
+/* Difuminado y sombreado superior para la barra de estado de iOS */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(env(safe-area-inset-top, 20px) + 12px);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.08) 60%, rgba(0, 0, 0, 0) 100%);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    z-index: 999999;
+    pointer-events: none;
 }
 
 .hero-toggle {
@@ -545,6 +560,7 @@ input[type="date"] {
     backdrop-filter: blur(5px);
 }
 </style>
+
 </head>
 <body>
 
@@ -757,21 +773,28 @@ input[type="date"] {
     <button class="btn" onclick="compartirUltimoDeposito()" style="margin-top:15px;display:flex;align-items:center;justify-content:center;gap:8px;">📲 Compartir Último Depósito</button>
 </div>
 
-<div class="card tabla-responsiva">
+<!-- 📍 COMPARADOR ESTABLECIMIENTOS -->
+<div class="card">
     <h2 class="card-title">📍 Comparador Establecimientos</h2>
-    <table>
-        <thead><tr><th>Gasolinera</th><th>Viajes</th><th>Consumo</th><th>Precio L.</th></tr></thead>
-        <tbody id="comparadorTab"></tbody>
-    </table>
+    <div class="tabla-responsiva">
+        <table>
+            <thead><tr><th>Gasolinera</th><th>Viajes</th><th>Consumo</th><th>Precio L.</th></tr></thead>
+            <tbody id="comparadorTab"></tbody>
+        </table>
+    </div>
 </div>
 
-<div class="card tabla-responsiva">
+<!-- 🛣️ HISTORIAL DE VIAJES -->
+<div class="card">
     <h2 class="card-title">🛣️ Historial de Viajes</h2>
-    <table>
-        <thead><tr><th>Fecha</th><th>Lugar</th><th>Comb.</th><th>Km</th><th>Litros</th><th>L/100</th><th>Coste</th><th>Borrar</th></tr></thead>
-        <tbody id="historialTab"></tbody>
-    </table>
+    <div class="tabla-responsiva">
+        <table>
+            <thead><tr><th>Fecha</th><th>Lugar</th><th>Comb.</th><th>Km</th><th>Litros</th><th>L/100</th><th>Coste</th><th>Borrar</th></tr></thead>
+            <tbody id="historialTab"></tbody>
+        </table>
+    </div>
 </div>
+
 
 <div class="card">
     <h2 class="card-title">🔮 Calculadora de Viajes Predictiva</h2>
@@ -1242,79 +1265,36 @@ async function processOdometroOCR(input) {
     const file = input.files[0];
 
     const spinner = document.getElementById('ocrSpinner');
-    const spinnerText = document.getElementById('ocrSpinnerText');
-    if (spinnerText) spinnerText.textContent = "Leyendo cuentakilómetros...";
-    if (spinner) spinner.style.display = 'flex';
+    document.getElementById('ocrSpinnerText').textContent = "Leyendo cuentakilómetros...";
+    spinner.style.display = 'flex';
 
     try {
-        // MEJORA: Forzamos a Tesseract a buscar solo números y a tratar el texto como una línea/bloque único (PSM 7/11)
-        // Usamos 'eng' ya que para números puros es más eficiente y evita falsas interpretaciones de caracteres del español
-        const result = await Tesseract.recognize(file, 'eng', {
-            config: {
-                tessedit_char_whitelist: '0123456789', // Destruye cualquier confusión con letras, agujas o símbolos
-            },
-            legacyCore: false,
-            legacyLang: false
-        });
-
-        if (spinner) spinner.style.display = 'none';
+        const result = await Tesseract.recognize(file, 'eng+spa');
+        spinner.style.display = 'none';
         input.value = '';
 
-        // Limpiamos el texto eliminando espacios intermedios y saltos de línea molestos
         const text = result.data.text;
-        const textCompacto = text.replace(/[\s\n\r]/g, '');
-
-        // 1. Buscamos bloques lógicos de kilometraje en España/Europa (habitualmente entre 4 y 6 dígitos consecutivos)
-        const matches = textCompacto.match(/\d{4,6}/g);
-        
+        const matches = text.match(/\b\d{5,6}\b/g);
         if (matches && matches.length > 0) {
-            // Si hay varios números (ej: detecta el "40" de velocidad y los "195893" km), nos quedamos con el más largo
-            const kilometrajeCorrecto = matches.reduce((a, b) => a.length >= b.length ? a : b);
-            
-            // Validamos que tenga una longitud coherente
-            if (kilometrajeCorrecto.length >= 4) {
-                const elKm = document.getElementById('kmTotalesOdom');
-                if (elKm) {
-                    elKm.value = kilometrajeCorrecto;
-                    elKm.dispatchEvent(new Event('input'));
-                }
-                if (typeof mostrarNotificacion === 'function') {
-                    mostrarNotificacion("Odómetro detectado correctamente ✅");
-                }
-                return;
-            }
-        }
-
-        // 2. Respaldo agresivo: Si las expresiones regulares fallan por ruido visual, extraemos todos los números limpios
-        const cleanNum = textCompacto.replace(/\D/g, '');
-        if (cleanNum.length >= 4) {
-            const elKm = document.getElementById('kmTotalesOdom');
-            if (elKm) {
-                // Limitamos a un máximo de 6 dígitos (un kilometraje normal no supera los 999.999 km)
-                elKm.value = cleanNum.substring(0, 6);
-                elKm.dispatchEvent(new Event('input'));
-            }
-            if (typeof mostrarNotificacion === 'function') {
-                mostrarNotificacion("Odómetro extraído parcialmente ⚠️");
-            }
+            document.getElementById('kmTotalesOdom').value = matches[0];
+            document.getElementById('kmTotalesOdom').dispatchEvent(new Event('input')); // Dispara la etiqueta flotante
+            mostrarNotificacion("Odómetro detectado correctamente ✅");
         } else {
-            if (typeof customAlert === 'function') {
-                customAlert("No se ha podido leer con claridad el kilometraje. Intenta enfocar más de cerca el totalizador ODO o escríbelo a mano.");
+            const cleanNum = text.replace(/\D/g, '');
+            if (cleanNum.length >= 5) {
+                document.getElementById('kmTotalesOdom').value = cleanNum.substring(0, 6);
+                document.getElementById('kmTotalesOdom').dispatchEvent(new Event('input'));
+                mostrarNotificacion("Odómetro extraído parcialmente ⚠️");
+            } else {
+                customAlert("No se ha podido leer con claridad el kilometraje. Intenta con otra foto o escríbelo a mano.");
             }
         }
-
     } catch (err) {
-        if (spinner) spinner.style.display = 'none';
+        spinner.style.display = 'none';
         input.value = '';
-        console.error("Error OCR Odómetro:", err);
-        if (typeof customAlert === 'function') {
-            customAlert("Error de sistema al procesar la imagen del odómetro.");
-        }
+        customAlert("Error de sistema al procesar la imagen del odómetro.");
     }
 }
-
-
-
 
 async function processTicketOCR(input) {
     if (!input.files || !input.files[0]) return;
@@ -1452,8 +1432,8 @@ async function processTicketOCR(input) {
             if (matchBat && document.getElementById('porcentajeBat')) document.getElementById('porcentajeBat').value = matchBat[1];
         }
 
-        // 4. Actualizar UI al procesar un ticket
-        ['precioLitro', 'litros'].forEach(id => {
+        // 4. Disparar eventos de input
+        ['precioLitro', 'litros', 'porcentajeBat'].forEach(id => {
             const el = document.getElementById(id);
             if (el && el.value) el.dispatchEvent(new Event('input'));
         });
