@@ -18,8 +18,6 @@
     <link rel="apple-touch-icon" href="icono-app.png">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Tesseract.js OCR Engine -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
 <style>
@@ -62,7 +60,6 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Difuminado y sombreado superior para la barra de estado de iOS */
 body::before {
     content: "";
     position: fixed;
@@ -185,6 +182,23 @@ h2, h3 { color: var(--accent); margin-top: 0; }
     gap: 10px;
 }
 
+.card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 2px solid var(--background);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.card-title-row .card-title {
+    margin: 0;
+    border: none;
+    padding: 0;
+    flex: 1;
+}
+
 .top-controls {
     display: flex;
     flex-wrap: wrap;
@@ -282,7 +296,6 @@ body.dark-mode .btn-danger { background: #7f1d1d; color: #fecaca; border: 1px so
 .button-row .btn { flex: 1; min-width: 120px; margin-top: 0; }
 .btn-delete { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.3rem; }
 
-/* NUEVOS BOTONES SCAN PREMIUM */
 .btn-scan-premium {
     background: rgba(var(--primary-rgb), 0.1);
     color: var(--primary);
@@ -305,7 +318,23 @@ body.dark-mode .btn-scan-premium {
     color: #60a5fa;
 }
 
-/* SPINNER OCR */
+.btn-icon-action {
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(var(--primary-rgb), 0.3);
+}
+
 #ocrSpinner { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); z-index: 99999; justify-content: center; align-items: center; color: white; flex-direction: column; gap: 1rem; font-weight: 600; backdrop-filter: blur(4px); }
 .spinner { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s ease-in-out infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -513,11 +542,156 @@ body.dark-mode .summary-value { color: #f8fafc; }
     box-shadow: 0 2px 6px rgba(var(--primary-rgb), 0.3);
 }
 
+/* ESTILOS CENTRO DE CONTROL NAVEGACIÓN UNIFICADO */
+.modal-gps-unificado {
+  max-width: 480px !important;
+  width: 92%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  padding: 18px !important;
+  border-radius: 16px;
+}
+
+.modal-header-gps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.modal-header-gps h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.modal-body-scroll {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-right: 4px;
+}
+
+.seccion-gps-card {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.seccion-gps-card h4 {
+  margin: 0 0 10px 0;
+  font-size: 0.95rem;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fav-quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.fav-card-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fav-title {
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.fav-coords {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fav-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.btn-xs {
+  padding: 3px 6px;
+  font-size: 0.7rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  flex: 1;
+}
+
+.btn-xs.btn-edit {
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+}
+
+.lista-items-gps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item-gps-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.82rem;
+}
+
+.poi-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.poi-check-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.margin-top-10 { margin-top: 10px; }
+.text-muted-sm { font-size: 0.75rem; color: var(--text-muted); margin: 0; }
+
 @media (max-width: 600px) {
     .maint-item { flex-direction: column; align-items: flex-start; }
     .maint-item > div { width: 100%; }
     .badge { width: max-content; margin-top: 8px; }
     .hero-vehicle-name { font-size: 2.2rem; }
+    .fav-quick-grid { grid-template-columns: 1fr; }
 }
 
 input[type="date"] {
@@ -569,6 +743,7 @@ input[type="date"] {
     <button class="btn-custom" onclick="toggleDarkMode()">🌓 Modo Visual</button>
     <button class="btn-custom" onclick="toggleAyuda()">❓ Ayuda</button>
     <button class="btn-custom" onclick="toggleInfo()">ℹ️ Info Pro</button>
+    <button class="btn-custom" onclick="abrirModalFavoritos()">⭐ Favoritos</button>
     <div id="fechaHora"></div>
 </div>
 
@@ -599,9 +774,6 @@ input[type="date"] {
     <button class="btn-custom" style="margin-top:25px;width:100%;" onclick="toggleInfo()">Cerrar Información</button>
 </div>
 
-<!-- ============================================== -->
-<!-- 🚀 NUEVA TARJETA DE REGISTRO CON OCR Y MODOS   -->
-<!-- ============================================== -->
 <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px; border-bottom: 2px solid var(--background); padding-bottom: 10px; flex-wrap: wrap; gap: 10px;">
         <h2 class="card-title" style="margin-bottom:0;border:none;padding:0;">⛽ Nuevo Registro</h2>
@@ -630,11 +802,10 @@ input[type="date"] {
         <option value="Súper 95">Súper 95</option>
         <option value="Súper 98">Súper 98</option>
         <option value="Diesel">Diesel</option>
-        <option value="Diésel +">Diésel +</option> <!-- ¡Nueva opción premium añadida! -->
+        <option value="Diésel +">Diésel +</option>
     </select>
     <label class="floating-label" id="lblTipoEnergia">Combustible</label>
 </div>
-
 
         <div class="floating-group">
             <input type="text" id="kmTotalesOdom" class="floating-input" inputmode="decimal" required placeholder=" " oninput="formatNumberInput(this)">
@@ -662,7 +833,10 @@ input[type="date"] {
 </div>
 
 <div class="card" id="modulo-mapa">
-    <h2 class="card-title">🗺️ Calculadora de Rutas</h2>
+    <div class="card-title-row">
+        <h2 class="card-title">🗺️ Calculadora de Rutas</h2>
+        <button type="button" class="btn-icon-action" onclick="abrirModalFavoritos()" title="Favoritos, rutas y waypoints">⭐</button>
+    </div>
 
     <div id="route-inputs" style="display:flex;flex-direction:column;gap:10px;margin-bottom:15px;">
         <div style="display:flex;gap:8px;align-items:center;">
@@ -712,7 +886,6 @@ input[type="date"] {
         </div>
     </div>
 </div>
-
 
 <div class="card">
     <h2 class="card-title">🛠️ Estado del Vehículo</h2>
@@ -773,7 +946,6 @@ input[type="date"] {
     <button class="btn" onclick="compartirUltimoDeposito()" style="margin-top:15px;display:flex;align-items:center;justify-content:center;gap:8px;">📲 Compartir Último Depósito</button>
 </div>
 
-<!-- 📍 COMPARADOR ESTABLECIMIENTOS -->
 <div class="card">
     <h2 class="card-title">📍 Comparador Establecimientos</h2>
     <div class="tabla-responsiva">
@@ -784,7 +956,6 @@ input[type="date"] {
     </div>
 </div>
 
-<!-- 🛣️ HISTORIAL DE VIAJES -->
 <div class="card">
     <h2 class="card-title">🛣️ Historial de Viajes</h2>
     <div class="tabla-responsiva">
@@ -795,11 +966,9 @@ input[type="date"] {
     </div>
 </div>
 
-
 <div class="card">
     <h2 class="card-title">🔮 Calculadora de Viajes Predictiva</h2>
     <p style="font-size: 0.9rem; color: var(--text-muted); margin-top:-10px;">Simula el consumo y coste de tu próxima ruta basándose en tu histórico real.</p>
-    
     <div class="floating-group">
         <input type="text" id="kmViajeInput" class="floating-input" inputmode="decimal" placeholder=" " oninput="formatNumberInput(this); calcularViajePredictivo()">
         <label class="floating-label">Kilómetros del Viaje (Ej: 300)</label>
@@ -898,7 +1067,6 @@ input[type="date"] {
             </div>
         </div>
 
-
         <button class="accordion-btn">💼 Gasto de Trabajo</button>
         <div class="accordion-content">
             <div class="accordion-inner">
@@ -918,6 +1086,79 @@ input[type="date"] {
 
         <button class="btn" style="margin-top:25px;background:var(--text-muted);" onclick="toggleForm('settingsModal')">Cerrar Panel</button>
     </div>
+</div>
+
+<div id="modalFavoritosUnificado" class="modal-overlay hidden">
+  <div class="modal-content modal-gps-unificado">
+    <div class="modal-header-gps">
+      <h3>⭐ Centro de Navegación y Favoritos</h3>
+      <button class="btn-close-modal" onclick="cerrarModalFavoritos()">✖</button>
+    </div>
+
+    <div class="modal-body-scroll">
+      
+      <div class="seccion-gps-card">
+        <h4>📍 Lugares Favoritos</h4>
+        
+        <div class="fav-quick-grid">
+          <div class="fav-card-item">
+            <span class="fav-title">🏠 Casa</span>
+            <span id="fav-casa-val" class="fav-coords">Sin definir</span>
+            <div class="fav-actions">
+              <button class="btn-xs" onclick="cargarFavoritoEn('casa', 'origen')">📥 Origen</button>
+              <button class="btn-xs" onclick="cargarFavoritoEn('casa', 'destino')">📥 Destino</button>
+              <button class="btn-xs btn-edit" onclick="definirFavoritoFijo('casa')">✏️ Set</button>
+            </div>
+          </div>
+
+          <div class="fav-card-item">
+            <span class="fav-title">💼 Trabajo</span>
+            <span id="fav-trabajo-val" class="fav-coords">Sin definir</span>
+            <div class="fav-actions">
+              <button class="btn-xs" onclick="cargarFavoritoEn('trabajo', 'origen')">📥 Origen</button>
+              <button class="btn-xs" onclick="cargarFavoritoEn('trabajo', 'destino')">📥 Destino</button>
+              <button class="btn-xs btn-edit" onclick="definirFavoritoFijo('trabajo')">✏️ Set</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="listaFavoritosCustom" class="lista-items-gps"></div>
+
+        <button class="btn btn-secondary btn-sm margin-top-10" onclick="añadirNuevoFavoritoManual()">
+          ➕ Añadir Ubicación Actual / Nueva a Favoritos
+        </button>
+      </div>
+
+      <div class="seccion-gps-card">
+        <h4>🗺️ Rutas Guardadas</h4>
+        <button class="btn btn-primary btn-sm" onclick="guardarRutaActual()">
+          💾 Guardar Ruta Actual (Origen + Paradas + Destino)
+        </button>
+        <div id="listaRutasGuardadas" class="lista-items-gps margin-top-10"></div>
+      </div>
+
+      <div class="seccion-gps-card">
+        <h4>📍 Checkpoints en Mapa</h4>
+        <p class="text-muted-sm">Marca los puntos para mostrarlos en el mapa y ver distancias desde tu posición:</p>
+        
+        <div class="poi-checkbox-group">
+          <label class="poi-check-label">
+            <input type="checkbox" id="checkPoiGasolineras" onchange="togglePOIsEnMapa()"> 
+            ⛽ Gasolineras / Electrolineras
+          </label>
+          <label class="poi-check-label">
+            <input type="checkbox" id="checkPoiRestaurantes" onchange="togglePOIsEnMapa()"> 
+            🍽️ Restaurantes y Servicios
+          </label>
+          <label class="poi-check-label">
+            <input type="checkbox" id="checkPoiMonumentos" onchange="togglePOIsEnMapa()"> 
+            🏛️ Monumentos / Miradores / Playas
+          </label>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <div id="ui-dialog" class="hidden modal-overlay">
@@ -946,9 +1187,6 @@ input[type="date"] {
     <button id="btn-cerrar-navegador" onclick="cerrarNavegador()"> ❌ Salir del Navegador </button>
 </div>
 
-<!-- ============================================== -->
-<!-- 📸 INPUTS OCULTOS DE CÁMARA PARA OCR           -->
-<!-- ============================================== -->
 <input type="file" id="fileOdometro" accept="image/*" capture="environment" class="file-hidden" onchange="processOdometroOCR(this)">
 <input type="file" id="fileTicket" accept="image/*" capture="environment" class="file-hidden" onchange="processTicketOCR(this)">
 
@@ -956,63 +1194,6 @@ input[type="date"] {
     <div class="spinner"></div>
     <div id="ocrSpinnerText" style="margin-top: 15px;">Procesando imagen con IA...</div>
 </div>
-
-
-<!-- Modal Gestión de Rutas, Favoritos y Waypoints -->
-<div id="modal-gestion-rutas" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
-    <div class="card" style="width:90%; max-width:400px; max-height:85vh; overflow-y:auto; padding:20px; position:relative;">
-        
-        <!-- Cabecera del Modal -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h3 class="card-title" style="margin:0;">⭐ Gestión Avanzada</h3>
-            <button type="button" onclick="cerrarGestionRutasFavoritos()" style="background:none; border:none; font-size:1.5em; cursor:pointer;">❌</button>
-        </div>
-
-        <!-- 1. Gestión de Favoritos -->
-        <div style="margin-bottom:20px;">
-            <h4 style="margin-bottom:10px; font-size:1.1em; border-bottom:1px solid #ddd; padding-bottom:5px;">1. Favoritos</h4>
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <button type="button" class="btn btn-secondary" onclick="seleccionarFavorito('Casa')" style="flex:1;">🏠 Casa</button>
-                <button type="button" class="btn btn-secondary" onclick="seleccionarFavorito('Trabajo')" style="flex:1;">💼 Trabajo</button>
-            </div>
-            <button type="button" class="btn" onclick="añadirFavorito()" style="width:100%;">+ Añadir nuevo favorito</button>
-        </div>
-
-        <!-- 2. Gestión de Rutas -->
-        <div style="margin-bottom:20px;">
-            <h4 style="margin-bottom:10px; font-size:1.1em; border-bottom:1px solid #ddd; padding-bottom:5px;">2. Rutas</h4>
-            <div style="display:flex; gap:10px;">
-                <button type="button" class="btn" onclick="guardarRuta()" style="flex:1;">💾 Guardar Ruta</button>
-                <button type="button" class="btn btn-secondary" onclick="cargarRuta()" style="flex:1;">📂 Cargar Ruta</button>
-            </div>
-        </div>
-
-        <!-- 3. Waypoints / Puntos de Interés -->
-        <div>
-            <h4 style="margin-bottom:10px; font-size:1.1em; border-bottom:1px solid #ddd; padding-bottom:5px;">3. Mostrar en Mapa</h4>
-            <div style="display:flex; flex-direction:column; gap:12px;">
-                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-                    <input type="checkbox" id="check-gasolineras" onchange="toggleWaypoint('gasolineras')" style="width:20px; height:20px;">
-                    ⛽ Gasolineras
-                </label>
-                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-                    <input type="checkbox" id="check-poi" onchange="toggleWaypoint('poi')" style="width:20px; height:20px;">
-                    📸 Puntos de Interés (POI)
-                </label>
-                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-                    <input type="checkbox" id="check-radares" onchange="toggleWaypoint('radares')" style="width:20px; height:20px;">
-                    🚨 Radares
-                </label>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-
-
-
 
 <script>
 const staticVehiculosPredeterminados = { "MG3 Hybrid +": { kmActuales: 5000, proxAceite: 15000, proxFiltro: 15000, proxRevision: 100000, registros: [] } };
@@ -1030,6 +1211,10 @@ let rutaOrigen = null;
 let rutaDestino = null;
 let rutaWaypoints = [];
 let userCoordinates = null;
+
+let appFavoritos = JSON.parse(localStorage.getItem('app_favoritos_gps')) || { casa: null, trabajo: null, custom: [] };
+let appRutasGuardadas = JSON.parse(localStorage.getItem('app_rutas_guardadas')) || [];
+let poiMarkersGroup = null;
 
 if (!baseDatos[vehiculoActivo]) vehiculoActivo = Object.keys(baseDatos)[0];
 
@@ -1103,12 +1288,26 @@ function formatNumberInput(input) { input.value = input.value.replace(/,/g, '.')
 function escapeHTML(str) { return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)); }
 
 function mostrarNotificacion(mensaje) { const toast = document.createElement('div'); toast.className = 'toast'; toast.textContent = mensaje; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
-function toggleForm(id) { const form = document.getElementById(id); if (!form) return; form.classList.toggle('hidden'); if (!form.classList.contains('hidden')) cargarDatosVehiculo(); }
+
+function toggleForm(id) {
+    const form = document.getElementById(id);
+    if (!form) return;
+    if (id === 'settingsModal') {
+        form.querySelectorAll('.accordion-btn').forEach(btn => btn.classList.remove('active'));
+        form.querySelectorAll('.accordion-content').forEach(content => {
+            content.classList.remove('active');
+            content.style.maxHeight = null;
+            content.style.display = '';
+        });
+    }
+    form.classList.toggle('hidden');
+    if (!form.classList.contains('hidden') && typeof cargarDatosVehiculo === 'function') {
+        cargarDatosVehiculo();
+    }
+}
+
 function toggleTopControls() { document.body.classList.toggle('controls-hidden'); }
 
-// ==========================================
-// FUNCIÓN ACTUALIZADA: MODO REPOSTAJE
-// ==========================================
 function setModoRepostaje(modo) {
     document.getElementById('modoRepostaje').value = modo;
     const btnComb = document.getElementById('btn-modo-combustible'), btnElec = document.getElementById('btn-modo-electrico');
@@ -1121,20 +1320,15 @@ function setModoRepostaje(modo) {
         lblPrecio.textContent = 'Precio/kWh (€)'; lblCantidad.textContent = 'kWh Recargados'; lblTipoEnergia.textContent = 'Tipo de Carga';
         selCombustible.innerHTML = '<option value="Carga CA (Lenta)">Carga CA (Lenta)</option><option value="Carga CC (Rápida)">Carga CC (Rápida)</option>';
         grupoPorcentaje.style.display = 'block';
-        } else {
-        // Asume modo 'combustible' por defecto, para no romper lógica anterior
+    } else {
         btnComb.style.borderColor = 'var(--primary)'; btnComb.style.color = 'var(--primary)';
         btnElec.style.borderColor = 'var(--border)'; btnElec.style.color = 'var(--text-muted)';
         lblPrecio.textContent = 'Precio/Litro (€)'; lblCantidad.textContent = 'Litros'; lblTipoEnergia.textContent = 'Combustible';
-        
-        // ¡Corregido! Añadimos 'Diésel +' al renderizado dinámico del desplegable
         selCombustible.innerHTML = '<option value="Súper 95">Súper 95</option><option value="Súper 98">Súper 98</option><option value="Diesel">Diesel</option><option value="Diésel +">Diésel +</option>';
-        
-        grupoPorcentaje.style.display = 'none'; 
+        grupoPorcentaje.style.display = 'none';
         document.getElementById('porcentajeBat').value = '';
     }
 }
-
 
 document.querySelectorAll('.accordion-btn').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -1162,6 +1356,7 @@ function inicializar() {
     actualizarSelectorGasolineras();
     cargarDatosVehiculo();
     if(typeof initRoutePlanner === 'function') initRoutePlanner();
+    renderizarModalFavoritos();
 }
 
 function actualizarReloj() {
@@ -1192,27 +1387,18 @@ function toggleDarkMode() {
 function toggleAyuda() { const pA = document.getElementById('panelAyuda'), pI = document.getElementById('panelInfo'); pI.style.display = 'none'; pA.style.display = (pA.style.display === 'none' || pA.style.display === '') ? 'block' : 'none'; }
 function toggleInfo() { const pA = document.getElementById('panelAyuda'), pI = document.getElementById('panelInfo'); pA.style.display = 'none'; pI.style.display = (pI.style.display === 'none' || pI.style.display === '') ? 'block' : 'none'; }
 
-/* ===================================================================== 
-   MOTOR DE GEOLOCALIZACIÓN INTELIGENTE (Tu Código Avanzado Original)
-   ===================================================================== */
 async function scanGeolocalizacion() {
     if (!navigator.geolocation) {
         await customAlert("Geolocalización no soportada por el navegador.", "Error de Sistema");
         return;
     }
-    
     mostrarNotificacion("📍 Buscando establecimiento...");
-    
     navigator.geolocation.getCurrentPosition(async (pos) => {
         try {
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
-            
-            // Reverse Geocoding via Nominatim
             const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`);
             const data = await res.json();
-            
-            // Extraer el mejor nombre posible del lugar
             let nombreDetectado = "Gasolinera Local";
             if (data && data.address) {
                 nombreDetectado = data.address.amenity || data.address.shop || data.name || data.address.road || "Gasolinera Local";
@@ -1222,18 +1408,15 @@ async function scanGeolocalizacion() {
 
             const selectGasolinera = document.getElementById('gasolinera');
             const nombreUpper = nombreDetectado.toUpperCase();
-            
-            // Buscar coincidencias en nuestra base de datos
             const match = gasolineras.find(g => 
                 g.toUpperCase() === nombreUpper || 
                 g.toUpperCase().includes(nombreUpper) || 
                 nombreUpper.includes(g.toUpperCase())
             );
-            
             if (match) {
                 selectGasolinera.value = match;
                 mostrarNotificacion(`Ubicación autocompletada: ${match}`);
-                selectGasolinera.dispatchEvent(new Event('change')); // Actualiza UI flotante
+                selectGasolinera.dispatchEvent(new Event('change'));
             } else {
                 const conf = await customConfirm(`Detectamos que estás en o cerca de "${nombreDetectado}". No la tienes guardada. ¿Deseas añadirla para este repostaje?`, "📍 Ubicación Inteligente");
                 if (conf) {
@@ -1242,7 +1425,7 @@ async function scanGeolocalizacion() {
                     actualizarSelectorGasolineras();
                     selectGasolinera.value = nombreDetectado;
                     mostrarNotificacion(`"${nombreDetectado}" añadida y seleccionada.`);
-                    selectGasolinera.dispatchEvent(new Event('change')); // Actualiza UI flotante
+                    selectGasolinera.dispatchEvent(new Event('change'));
                 }
             }
         } catch (error) {
@@ -1254,16 +1437,12 @@ async function scanGeolocalizacion() {
     }, { enableHighAccuracy: true, timeout: 10000 });
 }
 
-/* ===================================================================== 
-   NUEVAS FUNCIONES: VISIÓN ARTIFICIAL (OCR) ODÓMETRO Y TICKETS
-   ===================================================================== */
 function triggerScanOdometro() { document.getElementById('fileOdometro').click(); }
 function triggerScanTicket() { document.getElementById('fileTicket').click(); }
 
 async function processOdometroOCR(input) {
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
-
     const spinner = document.getElementById('ocrSpinner');
     document.getElementById('ocrSpinnerText').textContent = "Leyendo cuentakilómetros...";
     spinner.style.display = 'flex';
@@ -1272,12 +1451,11 @@ async function processOdometroOCR(input) {
         const result = await Tesseract.recognize(file, 'eng+spa');
         spinner.style.display = 'none';
         input.value = '';
-
         const text = result.data.text;
         const matches = text.match(/\b\d{5,6}\b/g);
         if (matches && matches.length > 0) {
             document.getElementById('kmTotalesOdom').value = matches[0];
-            document.getElementById('kmTotalesOdom').dispatchEvent(new Event('input')); // Dispara la etiqueta flotante
+            document.getElementById('kmTotalesOdom').dispatchEvent(new Event('input'));
             mostrarNotificacion("Odómetro detectado correctamente ✅");
         } else {
             const cleanNum = text.replace(/\D/g, '');
@@ -1299,7 +1477,6 @@ async function processOdometroOCR(input) {
 async function processTicketOCR(input) {
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
-
     const spinner = document.getElementById('ocrSpinner');
     const spinnerText = document.getElementById('ocrSpinnerText');
     if (spinnerText) spinnerText.textContent = "Analizando ticket con IA...";
@@ -1309,29 +1486,20 @@ async function processTicketOCR(input) {
         const result = await Tesseract.recognize(file, 'spa+eng');
         if (spinner) spinner.style.display = 'none';
         input.value = '';
-
         const text = result.data.text;
         const txtLower = text.toLowerCase();
         const txtUpper = text.toUpperCase();
 
-        // 1. Determinar el modo activo actual en la interfaz
-        const btnElectrico = document.querySelector('[onclick*="electrico"]') || document.getElementById('btn-electrico');
-        let modoActivo = (btnElectrico && btnElectrico.classList.contains('active')) ? 'electrico' : 'combustible';
-
-        // 2. Detección inteligente de tipo de ticket
         const esTicketElectrico = /kwh|ionity|tesla|endesa|recarga/i.test(txtLower);
         const esTicketCombustible = /litro|gasoil|diesel|diésel|gasoleo|gasóleo|95|98|plomo/i.test(txtLower);
 
-        if (esTicketElectrico && modoActivo !== 'electrico') {
-            modoActivo = 'electrico';
-            if (typeof setModoRepostaje === 'function') setModoRepostaje('electrico');
-        } else if (esTicketCombustible && modoActivo !== 'combustible') {
-            modoActivo = 'combustible';
-            if (typeof setModoRepostaje === 'function') setModoRepostaje('combustible');
+        if (esTicketElectrico) {
+            setModoRepostaje('electrico');
+        } else if (esTicketCombustible) {
+            setModoRepostaje('combustible');
         }
 
-        // EXTRA: Detección de Gasolinera Española
-        const elEstablecimiento = document.getElementById('establecimiento') || document.getElementById('gasolinera');
+        const elEstablecimiento = document.getElementById('gasolinera');
         if (elEstablecimiento) {
             if (/REPSOL|SOLRED|CAMPSA|PETRONOR/i.test(txtUpper)) elEstablecimiento.value = "Repsol";
             else if (/CEPSA|MOEVE|GOW/i.test(txtUpper)) elEstablecimiento.value = "Moeve / Cepsa";
@@ -1346,9 +1514,7 @@ async function processTicketOCR(input) {
             else if (/ALCAMPO/i.test(txtUpper)) elEstablecimiento.value = "Alcampo";
         }
 
-        // 3. Extracción con patrones de alta precisión
-        if (modoActivo === 'combustible') {
-            // A) Precio por Litro
+        if (document.getElementById('modoRepostaje').value === 'combustible') {
             let matchPrecio = text.match(/\b([1-2][.,]\d{3})\b/) || text.match(/(\d[.,]\d{2,3})\s*(?:€\/l|eur\/l|€\/litro|\/l)/i);
             let precioEncontrado = null;
             if (matchPrecio) {
@@ -1357,12 +1523,10 @@ async function processTicketOCR(input) {
                 if (elPrecio) elPrecio.value = precioEncontrado.toFixed(3);
             }
 
-            // EXTRA: Capturar Importe Total
             let matchTotal = text.match(/(?:total|importe|import|pago|eur)[:\s]*(\d{1,3}[.,]\d{2})\b/i) || text.match(/(\d{1,3}[.,]\d{2})\s*(?:€|eur)/i);
             let totalEncontrado = null;
             if (matchTotal) totalEncontrado = parseFloat(matchTotal[1].replace(',', '.'));
 
-            // B) Litros (Directo, Exclusión y Respaldo Matemático)
             let matchLitros = text.match(/(?:litros|volumen|cant|qty|lts)[:\s]*(\d{1,3}[.,]\d{2,3})\b/i) || text.match(/(\d{1,3}[.,]\d{2,3})\s*(?:l|litros|lts)\b/i);
             let litrosEstablecidos = false;
 
@@ -1381,8 +1545,7 @@ async function processTicketOCR(input) {
                         const limpioNum = parseFloat(num.replace(',', '.'));
                         if (precioEncontrado && Math.abs(limpioNum - precioEncontrado) < 0.1) continue;
                         if (totalEncontrado && Math.abs(limpioNum - totalEncontrado) < 0.1) continue;
-                        if (limpioNum > 95.00) continue; 
-                        
+                        if (limpioNum > 95.00) continue;
                         const elLitros = document.getElementById('litros');
                         if (elLitros) {
                             elLitros.value = limpioNum.toFixed(2);
@@ -1404,13 +1567,12 @@ async function processTicketOCR(input) {
                 }
             }
 
-                        // D) Tipo de Combustible (Alineado con tus <option> del HTML)
             const selCombustible = document.getElementById('tipoCombustible');
             if (selCombustible) {
                 if (/DIESEL\s*E\+|DIÉSEL\s*E\+|GASOLEO\s*E\+|GASÓLEO\s*E\+|DIESEL\+|DIÉSEL\+|GASOIL\+|OPTIMA\s*DIESEL|ULTIMATE\s*DIESEL|EFITEC\s*DIESEL|E\+/i.test(txtUpper)) {
-                    selCombustible.value = 'Diésel +'; // Asigna la nueva opción premium
+                    selCombustible.value = 'Diésel +';
                 } else if (/DIESEL|DIÉSEL|GASOIL|GASOLEO|GASÓLEO|B7|DIESEL\s*A/i.test(txtUpper)) {
-                    selCombustible.value = 'Diesel';    // Asigna tu opción estándar (sin tilde)
+                    selCombustible.value = 'Diesel';
                 } else if (/98|S98|EFITEC\s*98|OPTIMA\s*98|ULTIMATE\s*98/i.test(txtUpper)) {
                     selCombustible.value = 'Súper 98';
                 } else if (/95|S95|SUPER\s*95|EFITEC\s*95|OPTIMA\s*95|ULTIMATE\s*95|E5/i.test(txtUpper)) {
@@ -1418,10 +1580,7 @@ async function processTicketOCR(input) {
                 }
                 selCombustible.dispatchEvent(new Event('change'));
             }
-
-
         } else {
-            // MODO ELÉCTRICO
             const matchKwh = text.match(/(\d+[\.,]\d{2})\s*(?:kWh|kwh)/i) || text.match(/\b(\d{2,3}[.,]\d{2})\b/);
             if (matchKwh) document.getElementById('litros').value = matchKwh[1].replace(',', '.');
 
@@ -1432,69 +1591,31 @@ async function processTicketOCR(input) {
             if (matchBat && document.getElementById('porcentajeBat')) document.getElementById('porcentajeBat').value = matchBat[1];
         }
 
-        // 4. Disparar eventos de input
         ['precioLitro', 'litros', 'porcentajeBat'].forEach(id => {
             const el = document.getElementById(id);
             if (el && el.value) el.dispatchEvent(new Event('input'));
         });
 
         if (typeof mostrarNotificacion === 'function') mostrarNotificacion("Datos extraídos con éxito ✅");
-
     } catch (err) {
         if (spinner) spinner.style.display = 'none';
         input.value = '';
-        if (typeof customAlert === 'function') {
-            customAlert("Error al procesar el ticket de recarga/repostaje. Prueba de nuevo.");
-        }
+        if (typeof customAlert === 'function') customAlert("Error al procesar el ticket de recarga/repostaje. Prueba de nuevo.");
     }
 }
 
-
-
-/* ===================================================================== */
-
-
-
-
-async function iniciarAsistenteNuevoVehiculo() {
-    const nombre = await customPrompt("Nombre o modelo del vehículo:", "", "Nuevo Vehículo", "text");
+function iniciarAsistenteNuevoVehiculo() {
+    const nombre = prompt("Nombre o modelo del vehículo:", "");
     if (!nombre) return;
-    if (baseDatos[nombre]) { await customAlert("Ya existe un vehículo con ese nombre."); return; }
-
-    const opcionesMotor = [
-        { value: "Gasolina", text: "Gasolina" }, { value: "Gasoil", text: "Gasoil (Diésel)" },
-        { value: "MHEV", text: "Híbrido Suave (MHEV) - ECO" }, { value: "HEV", text: "Híbrido Completo (HEV) - ECO" },
-        { value: "PHEV", text: "Híbrido Enchufable (PHEV) - CERO" }, { value: "BEV", text: "Eléctrico Puro (BEV) - CERO" }
-    ];
-
-    let tipoMotor = await customSelectPrompt("Selecciona la motorización exacta:", opcionesMotor, "Gasolina", "Tipo de Vehículo");
-    if (!tipoMotor) return;
-
-    const esElectrico = (tipoMotor === "BEV"), esHibrido = (tipoMotor === "MHEV" || tipoMotor === "HEV" || tipoMotor === "PHEV"), esCombustion = (tipoMotor === "Gasolina" || tipoMotor === "Gasoil");
-    let kmStr = await customPrompt("Kilómetros iniciales actuales:", "", "Odómetro", "decimal");
-    if (kmStr === null) return;
-    const kmActuales = parseFloat(kmStr) || 0;
-
-    let capacidadDeposito = 0, capacidadBateria = 0, proxAceite = 0;
-    if (esCombustion || esHibrido) {
-        let capDep = await customPrompt("Capacidad del depósito (Litros):", "", "Depósito Combustible", "decimal");
-        if (capDep === null) return; capacidadDeposito = parseFloat(capDep) || 0;
-        let aceiteStr = await customPrompt("Próximo cambio de aceite (Km o 0):", kmActuales + 10000, "Mantenimiento", "decimal");
-        if (aceiteStr === null) return; proxAceite = parseFloat(aceiteStr) || 0;
-    }
-    if (esElectrico || esHibrido) {
-        let capBat = await customPrompt("Capacidad de la batería (kWh):", "", "Batería Eléctrica", "decimal");
-        if (capBat === null) return; capacidadBateria = parseFloat(capBat) || 0;
-    }
-
-    let filtroStr = await customPrompt("Próximo cambio de filtros (Km o 0 para omitir):", kmActuales + 15000, "Mantenimiento", "decimal");
-    if (filtroStr === null) return;
-    let revisionStr = await customPrompt("Próxima revisión general (Km o 0 para omitir):", kmActuales + 20000, "Mantenimiento", "decimal");
-    if (revisionStr === null) return;
-
-    baseDatos[nombre] = { tipo: tipoMotor, kmActuales, capacidadDeposito, capacidadBateria, proxAceite, proxFiltro: parseFloat(filtroStr) || 0, proxRevision: parseFloat(revisionStr) || 0, historialBateria: [], registros: [] };
-    vehiculoActivo = nombre; localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
-    guardarEnStorage(); actualizarSelectorVehiculos(); cargarDatosVehiculo(); toggleForm('settingsModal');
+    if (baseDatos[nombre]) { alert("Ya existe un vehículo con ese nombre."); return; }
+    const tipoMotor = prompt("Tipo de vehículo (Gasolina/Gasoil/MHEV/HEV/PHEV/BEV):", "Gasolina") || "Gasolina";
+    const kmActuales = parseFloat(prompt("Kilómetros iniciales actuales:", "0")) || 0;
+    baseDatos[nombre] = { tipo: tipoMotor, kmActuales, capacidadDeposito: 0, capacidadBateria: 0, proxAceite: 0, proxFiltro: 0, proxRevision: 0, registros: [] };
+    vehiculoActivo = nombre;
+    localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
+    guardarEnStorage();
+    actualizarSelectorVehiculos();
+    cargarDatosVehiculo();
     mostrarNotificacion(`Vehículo ${nombre} (${tipoMotor}) creado`);
 }
 
@@ -1508,35 +1629,40 @@ function actualizarSelectorVehiculos() {
 }
 function cambiarVehiculoActivo() { vehiculoActivo = document.getElementById('selectorVehiculo').value; localStorage.setItem('app_vehiculo_activo', vehiculoActivo); cargarDatosVehiculo(); }
 
-async function renombrarVehiculo() {
-    const nuevoNombre = await customPrompt("Introduce el nuevo nombre para este vehículo:", vehiculoActivo, "Renombrar", "text");
+function renombrarVehiculo() {
+    const nuevoNombre = prompt("Nuevo nombre para este vehículo:", vehiculoActivo);
     if (!nuevoNombre || nuevoNombre === vehiculoActivo) return;
-    if (baseDatos[nuevoNombre]) { await customAlert("Ya existe un vehículo con ese nombre."); return; }
+    if (baseDatos[nuevoNombre]) { alert("Ya existe un vehículo con ese nombre."); return; }
     baseDatos[nuevoNombre] = baseDatos[vehiculoActivo]; delete baseDatos[vehiculoActivo];
-    vehiculoActivo = nuevoNombre; localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
-    guardarEnStorage(); actualizarSelectorVehiculos(); cargarDatosVehiculo(); mostrarNotificacion("Vehículo renombrado");
+    vehiculoActivo = nuevoNombre;
+    localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
+    guardarEnStorage();
+    actualizarSelectorVehiculos();
+    cargarDatosVehiculo();
 }
-
-async function editarDatosVehiculo() {
+function editarDatosVehiculo() {
     const coche = baseDatos[vehiculoActivo];
-    const cap = await customPrompt("Editar capacidad del depósito (L/kWh):", coche.capacidadDeposito || coche.capacidadBateria || "", "Editar Capacidad", "decimal");
+    const cap = prompt("Editar capacidad del depósito (L/kWh):", coche.capacidadDeposito || coche.capacidadBateria || "");
     if (cap !== null) {
         if(coche.tipo === "BEV") coche.capacidadBateria = parseFloat(cap); else coche.capacidadDeposito = parseFloat(cap);
-        guardarEnStorage(); cargarDatosVehiculo(); mostrarNotificacion("Capacidad actualizada");
+        guardarEnStorage();
+        cargarDatosVehiculo();
     }
 }
-
-async function eliminarVehiculo() {
-    const conf = await customConfirm(`¿Estás seguro de eliminar el vehículo "${vehiculoActivo}" permanentemente?`, "Eliminar Vehículo");
-    if (conf) {
-        delete baseDatos[vehiculoActivo];
-        const keys = Object.keys(baseDatos);
-        if (keys.length > 0) {
-            vehiculoActivo = keys[0]; localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
-            guardarEnStorage(); actualizarSelectorVehiculos(); cargarDatosVehiculo(); toggleForm('settingsModal');
-        } else {
-            localStorage.removeItem('app_vehiculo_activo'); localStorage.removeItem('app_combustible_data'); location.reload();
-        }
+function eliminarVehiculo() {
+    if (!confirm(`¿Eliminar el vehículo "${vehiculoActivo}"?`)) return;
+    delete baseDatos[vehiculoActivo];
+    const keys = Object.keys(baseDatos);
+    if (keys.length > 0) {
+        vehiculoActivo = keys[0];
+        localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
+        guardarEnStorage();
+        actualizarSelectorVehiculos();
+        cargarDatosVehiculo();
+    } else {
+        localStorage.removeItem('app_vehiculo_activo');
+        localStorage.removeItem('app_combustible_data');
+        location.reload();
     }
 }
 
@@ -1557,14 +1683,11 @@ function cargarDatosVehiculo() {
     document.getElementById('kmDiarios').value = coche.kmDiarios || '';
     actualizarMantenimientoBateria(); 
     actualizarMantenimientoRefrigerante(); 
-    
-    // Ejecución segura en caso de que existan estas funciones en el código inferior
     if(typeof actualizarMantenimientoNeumaticos === 'function') actualizarMantenimientoNeumaticos();
     if(typeof actualizarTablayStats === 'function') actualizarTablayStats(); 
     if(typeof calcularAutonomia === 'function') calcularAutonomia(); 
     if(typeof calcularGastoDesplazamiento === 'function') calcularGastoDesplazamiento(); 
     if(typeof calcularViajePredictivo === 'function') calcularViajePredictivo();
-
     calcularMantenimiento(); 
     calcularEstadoITV(coche.fechaITV); 
 }
@@ -1574,23 +1697,21 @@ function guardarKmActuales() {
     if(baseDatos[vehiculoActivo]) {
         baseDatos[vehiculoActivo].kmActuales = km;
         document.getElementById('displayKmActualesHero').textContent = km.toLocaleString();
-        guardarEnStorage(); calcularMantenimiento();
+        guardarEnStorage();
+        calcularMantenimiento();
     }
 }
 
-async function guardarPlanesMantenimiento() {
+function guardarPlanesMantenimiento() {
     const coche = baseDatos[vehiculoActivo];
-    const fechaITVInput = document.getElementById('planITV').value;
-    const hoy = new Date(); hoy.setHours(0,0,0,0);
-    if (fechaITVInput && new Date(fechaITVInput) < hoy) {
-        await customAlert("La fecha de la ITV no puede ser anterior a hoy."); document.getElementById('planITV').value = ""; return;
-    }
-    coche.fechaITV = fechaITVInput;
+    coche.fechaITV = document.getElementById('planITV').value;
     coche.proxRevisionGen = parseFloat(document.getElementById('planRevisionGeneral').value) || 0;
     coche.proxAceite = parseFloat(document.getElementById('planAceite').value) || 0;
     coche.proxFiltro = parseFloat(document.getElementById('planFiltro').value) || 0;
     coche.proxRevision = parseFloat(document.getElementById('planRevision').value) || 0;
-    guardarEnStorage(); calcularMantenimiento(); calcularEstadoITV(coche.fechaITV);
+    guardarEnStorage();
+    calcularMantenimiento();
+    calcularEstadoITV(coche.fechaITV);
 }
 
 function calcularMantenimiento() {
@@ -1620,13 +1741,14 @@ function calcularEstadoITV(fechaITV) {
     else { badge.textContent = `Faltan ${diffDays} días`; badge.className = "badge success"; }
 }
 
-async function registrarCambio(tipo, historialKey, idInputFecha) {
+function registrarCambio(tipo, historialKey, idInputFecha) {
     const coche = baseDatos[vehiculoActivo];
     const fecha = document.getElementById(idInputFecha).value;
-    if (!fecha) { await customAlert("Selecciona una fecha válida primero.", "Aviso"); return; }
+    if (!fecha) { alert("Selecciona una fecha válida primero."); return; }
     if (!coche[historialKey]) coche[historialKey] = [];
     coche[historialKey].unshift({ fecha: fecha, kmCambio: coche.kmActuales });
-    guardarEnStorage(); cargarDatosVehiculo(); mostrarNotificacion(`Cambio de ${tipo} guardado`);
+    guardarEnStorage();
+    cargarDatosVehiculo();
 }
 function registrarCambioBateria() { registrarCambio('batería', 'historialBateria', 'fechaCambioBateria'); }
 function registrarCambioRefrigerante() { registrarCambio('refrigerante', 'historialRefrigerante', 'fechaCambioRefrigerante'); }
@@ -1666,10 +1788,10 @@ function actualizarMantenimientoNeumaticos() {
     procesarEje("historialNeumDel", "maintNeumDelText", "statusNeumDel"); procesarEje("historialNeumTras", "maintNeumTrasText", "statusNeumTras");
 }
 
-async function crearGasolinera() {
+function crearGasolinera() {
     const nombre = document.getElementById('nuevaGasolineraNombre').value.trim();
     if (!nombre) return;
-    if (gasolineras.includes(nombre)) { await customAlert("Esta gasolinera ya está registrada."); return; }
+    if (gasolineras.includes(nombre)) { alert("Esta gasolinera ya está registrada."); return; }
     gasolineras.push(nombre); localStorage.setItem('app_gasolineras_data', JSON.stringify(gasolineras));
     actualizarSelectorGasolineras(); document.getElementById('nuevaGasolineraNombre').value = ''; mostrarNotificacion("Gasolinera añadida");
 }
@@ -1714,42 +1836,31 @@ document.getElementById('fuelForm').addEventListener('submit', async (e) => {
     mostrarNotificacion("Registro Guardado");
 });
 
-async function eliminarRegistro(index) {
+function eliminarRegistro(index) {
     const coche = baseDatos[vehiculoActivo];
     if (!coche || !coche.registros[index]) return;
-    const conf = await customConfirm("¿Eliminar este registro y restaurar odómetro (si aplica)?", "Atención");
-    if (conf) {
+    if (confirm("¿Eliminar este registro?")) {
         if (index === 0) coche.kmActuales = Math.max(0, coche.kmActuales - coche.registros[0].kmHechos);
         coche.registros.splice(index, 1);
-        guardarEnStorage(); cargarDatosVehiculo();
+        guardarEnStorage();
+        cargarDatosVehiculo();
     }
 }
 
-async function compartirUltimoDeposito() {
+function compartirUltimoDeposito() {
     const coche = baseDatos[vehiculoActivo];
     if (!coche || !coche.registros || coche.registros.length === 0) {
-        await customAlert("No hay registros disponibles para compartir.", "Aviso");
+        alert("No hay registros disponibles para compartir.");
         return;
     }
-    
     const ult = coche.registros[0];
     const urlApp = "https://m-fortuny.github.io/AutoControl/";
     const shareText = `🚗 Mi viaje con el ${vehiculoActivo}: He recorrido ${ult.kmHechos} km con un consumo medio de ${ult.consumoMedio} L/100km. Gasto total: ${ult.costeTotal}€. ¡Supera esa eficiencia! 🏆 Registrado con AutoControl IA Pro.`;
-    
     if (navigator.share) {
-        try { 
-            await navigator.share({ 
-                title: 'AutoControl IA Pro - Estado del Vehículo', 
-                text: shareText,
-                url: urlApp
-            }); 
-        }
-        catch (err) { 
-            console.log('Compartir cancelado o no disponible', err); 
-        }
+        navigator.share({ title: 'AutoControl IA Pro - Estado del Vehículo', text: shareText, url: urlApp }).catch(()=>{});
     } else {
         navigator.clipboard.writeText(`${shareText} Visita la app aquí: ${urlApp}`);
-        await customAlert("¡Texto copiado al portapapeles!", "Portapapeles");
+        alert("¡Texto copiado al portapapeles!");
     }
 }
 
@@ -1805,6 +1916,7 @@ function inicializarMapa(coords) {
     mapa = L.map('miMapa').setView([coords.lat, coords.lng], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap contributors' }).addTo(mapa);
     L.marker([coords.lat, coords.lng]).addTo(mapa).bindPopup('<b>¡Estás aquí!</b><br>Ubicación actual del dispositivo.').openPopup();
+    configurarSeleccionFavoritoEnMapa(mapa);
 }
 
 function usarUbicacionActual() {
@@ -1866,7 +1978,7 @@ async function geocode(texto) {
     return L.latLng(parseFloat(data[0].lat), parseFloat(data[0].lon));
 }
 
-async function calcularRuta() {
+async function calcularRutaGPS() {
     const origenTexto = document.getElementById('origen-ruta').value;
     const destinoTexto = document.getElementById('destino-ruta').value;
     const waypointInputs = Array.from(document.querySelectorAll('.waypoint-input'));
@@ -1900,30 +2012,26 @@ async function calcularRuta() {
             lineOptions: { styles: [{ color: '#2563eb', opacity: 0.9, weight: 6 }] }
         }).addTo(mapa);
 
-                controlRuta.on('routesfound', function(e) {
+        controlRuta.on('routesfound', function(e) {
             const distanciaMetros = e.routes[0].summary.totalDistance;
             const kmTotales = (distanciaMetros / 1000);
             const coche = baseDatos[vehiculoActivo];
             let costeEstimado = 0;
-            let litrosConsumidos = 0; // 1. Inicializamos la variable
+            let litrosConsumidos = 0;
 
             if (coche && coche.registros && coche.registros.length > 0) {
                 const ultimoRegistro = coche.registros[0];
                 const consumo = parseFloat(ultimoRegistro.consumoMedio) || 0;
                 const precio = parseFloat(ultimoRegistro.precioLitro) || 0;
-                
-                // 2. Calculamos los litros reales basados en el consumo del coche
                 litrosConsumidos = (kmTotales / 100) * consumo;
                 costeEstimado = litrosConsumidos * precio;
             } else {
-                // 3. Estimación por defecto si no hay datos del coche (asumiendo aprox. 7L/100km para dar coherencia al coste)
-                litrosConsumidos = (kmTotales / 100) * 7; 
+                litrosConsumidos = (kmTotales / 100) * 7;
                 costeEstimado = kmTotales * 0.12;
             }
 
-            // 4. Pintamos el resultado en el HTML
             document.getElementById('distancia-val').innerText = `${kmTotales.toFixed(1)} km`;
-            document.getElementById('litros-val').innerText = `${litrosConsumidos.toFixed(1)} L`; // <- ¡Línea Nueva!
+            document.getElementById('litros-val').innerText = `${litrosConsumidos.toFixed(1)} L`;
             document.getElementById('coste-val').innerText = `${costeEstimado.toFixed(2)} €`;
             
             document.getElementById('resultado-ruta').style.display = 'block';
@@ -1934,7 +2042,6 @@ async function calcularRuta() {
             rutaDestino = destinoTexto;
             rutaWaypoints = waypointInputs.map(i => i.value.trim()).filter(Boolean);
         });
-
 
         controlRuta.on('routingerror', function() {
             alert("No se pudo trazar una ruta entre los puntos especificados.");
@@ -1948,7 +2055,7 @@ async function calcularRuta() {
     }
 }
 
-document.getElementById('btn-calcular-ruta').addEventListener('click', calcularRuta);
+document.getElementById('btn-calcular-ruta').addEventListener('click', calcularRutaGPS);
 
 function abrirNavegador() {
     const mapaDiv = document.getElementById("miMapa");
@@ -2152,24 +2259,202 @@ function exportarDatos() {
     document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
-async function importarDatos(event) {
+function importarDatos(event) {
     const input = event.target;
     if(!input.files[0]) return;
     const reader = new FileReader();
-    reader.onload = async function() {
+    reader.onload = function() {
         try {
             const data = JSON.parse(reader.result);
             if(data.baseDatos && data.gasolineras) {
                 baseDatos = data.baseDatos; gasolineras = data.gasolineras;
                 guardarEnStorage(); localStorage.setItem('app_gasolineras_data', JSON.stringify(gasolineras));
                 vehiculoActivo = Object.keys(baseDatos)[0]; localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
-                inicializar(); await customAlert("¡Datos restaurados con éxito!"); toggleForm('settingsModal');
+                inicializar();
+                alert("¡Datos restaurados con éxito!");
+                toggleForm('settingsModal');
             } else throw new Error();
-        } catch(e) { await customAlert("Archivo corrupto o inválido.", "Error"); }
+        } catch(e) { alert("Archivo corrupto o inválido."); }
     };
     reader.readAsText(input.files[0]);
 }
 
+/* CENTRO DE NAVEGACIÓN Y FAVORITOS UNIFICADO */
+function abrirModalFavoritos() {
+  renderizarModalFavoritos();
+  document.getElementById('modalFavoritosUnificado').classList.remove('hidden');
+}
+
+function cerrarModalFavoritos() {
+  document.getElementById('modalFavoritosUnificado').classList.add('hidden');
+}
+
+function renderizarModalFavoritos() {
+  document.getElementById('fav-casa-val').textContent = appFavoritos.casa ? appFavoritos.casa.nombre : "Sin definir";
+  document.getElementById('fav-trabajo-val').textContent = appFavoritos.trabajo ? appFavoritos.trabajo.nombre : "Sin definir";
+
+  const containerCustom = document.getElementById('listaFavoritosCustom');
+  containerCustom.innerHTML = '';
+  appFavoritos.custom.forEach((fav, index) => {
+    const row = document.createElement('div');
+    row.className = 'item-gps-row';
+    row.innerHTML = `
+      <div><strong>📍 ${escapeHTML(fav.nombre)}</strong></div>
+      <div class="fav-actions">
+        <button class="btn-xs" onclick="cargarFavoritoCustom(${index}, 'origen')">Origen</button>
+        <button class="btn-xs" onclick="cargarFavoritoCustom(${index}, 'destino')">Destino</button>
+        <button class="btn-xs" style="color:var(--danger)" onclick="eliminarFavoritoCustom(${index})">🗑️</button>
+      </div>
+    `;
+    containerCustom.appendChild(row);
+  });
+
+  const containerRutas = document.getElementById('listaRutasGuardadas');
+  containerRutas.innerHTML = '';
+  if (appRutasGuardadas.length === 0) {
+    containerRutas.innerHTML = '<p class="text-muted-sm">No hay rutas guardadas.</p>';
+  } else {
+    appRutasGuardadas.forEach((ruta, idx) => {
+      const row = document.createElement('div');
+      row.className = 'item-gps-row';
+      row.innerHTML = `
+        <div>
+          <strong>🗺️ ${escapeHTML(ruta.nombre)}</strong><br>
+          <small class="text-muted-sm">${escapeHTML(ruta.origen)} ➔ ${escapeHTML(ruta.destino)}</small>
+        </div>
+        <div class="fav-actions">
+          <button class="btn-xs" onclick="cargarRutaGuardada(${idx})">📂 Cargar</button>
+          <button class="btn-xs" style="color:var(--danger)" onclick="eliminarRutaGuardada(${idx})">🗑️</button>
+        </div>
+      `;
+      containerRutas.appendChild(row);
+    });
+  }
+}
+
+async function definirFavoritoFijo(tipo) {
+  const coords = document.getElementById('origen-ruta').value || document.getElementById('destino-ruta').value;
+  const dir = prompt(`Introduce la dirección o coordenadas para ${tipo.toUpperCase()}:`, coords || "");
+  if (!dir) return;
+  appFavoritos[tipo] = { nombre: dir, coords: dir };
+  localStorage.setItem('app_favoritos_gps', JSON.stringify(appFavoritos));
+  renderizarModalFavoritos();
+  mostrarNotificacion(`Guardado como ${tipo.toUpperCase()}`);
+}
+
+function cargarFavoritoEn(tipo, campo) {
+  const fav = appFavoritos[tipo];
+  if (!fav) {
+    alert(`Aún no has definido tu ${tipo}. Pulsa "Set" para añadirlo.`);
+    return;
+  }
+  document.getElementById(`${campo}-ruta`).value = fav.coords;
+  cerrarModalFavoritos();
+  mostrarNotificacion(`${fav.nombre} cargado en ${campo}`);
+}
+
+async function añadirNuevoFavoritoManual() {
+  const nombre = prompt("Nombre del nuevo favorito:", "");
+  if (!nombre) return;
+  const ubicacion = document.getElementById('origen-ruta').value || prompt("Dirección o coordenadas:", "");
+  if (!ubicacion) return;
+  appFavoritos.custom.push({ nombre, coords: ubicacion });
+  localStorage.setItem('app_favoritos_gps', JSON.stringify(appFavoritos));
+  renderizarModalFavoritos();
+  mostrarNotificacion("Favorito añadido correctamente");
+}
+
+function cargarFavoritoCustom(index, campo) {
+  const fav = appFavoritos.custom[index];
+  if (fav) {
+    document.getElementById(`${campo}-ruta`).value = fav.coords;
+    cerrarModalFavoritos();
+  }
+}
+
+function eliminarFavoritoCustom(index) {
+  appFavoritos.custom.splice(index, 1);
+  localStorage.setItem('app_favoritos_gps', JSON.stringify(appFavoritos));
+  renderizarModalFavoritos();
+}
+
+async function guardarRutaActual() {
+  const origen = document.getElementById('origen-ruta').value;
+  const destino = document.getElementById('destino-ruta').value;
+  if (!origen || !destino) {
+    alert("Debes establecer al menos un origen y un destino para guardar la ruta.");
+    return;
+  }
+  const nombreRuta = prompt("Nombre para esta ruta:", `${origen.split(',')[0]} - ${destino.split(',')[0]}`);
+  if (!nombreRuta) return;
+  appRutasGuardadas.push({ nombre: nombreRuta, origen, destino, fecha: new Date().toLocaleDateString() });
+  localStorage.setItem('app_rutas_guardadas', JSON.stringify(appRutasGuardadas));
+  renderizarModalFavoritos();
+  mostrarNotificacion("Ruta guardada con éxito");
+}
+
+function cargarRutaGuardada(index) {
+  const ruta = appRutasGuardadas[index];
+  if (!ruta) return;
+  document.getElementById('origen-ruta').value = ruta.origen;
+  document.getElementById('destino-ruta').value = ruta.destino;
+  cerrarModalFavoritos();
+  if (typeof calcularRutaGPS === 'function') calcularRutaGPS();
+  mostrarNotificacion(`Ruta "${ruta.nombre}" cargada`);
+}
+
+function eliminarRutaGuardada(index) {
+  appRutasGuardadas.splice(index, 1);
+  localStorage.setItem('app_rutas_guardadas', JSON.stringify(appRutasGuardadas));
+  renderizarModalFavoritos();
+}
+
+function configurarSeleccionFavoritoEnMapa(mapaLeaflet) {
+  mapaLeaflet.on('contextmenu', async function(e) {
+    const lat = e.latlng.lat.toFixed(5);
+    const lng = e.latlng.lng.toFixed(5);
+    const coordsStr = `${lat}, ${lng}`;
+
+    const opcion = prompt(
+      `Punto seleccionado: (${coordsStr})\n\nEscribe "casa", "trabajo" o introduce un nombre para guardarlo como favorito:`,
+      ""
+    );
+
+    if (!opcion) return;
+
+    if (opcion.toLowerCase() === 'casa') {
+      appFavoritos.casa = { nombre: "🏠 Casa", coords: coordsStr };
+    } else if (opcion.toLowerCase() === 'trabajo') {
+      appFavoritos.trabajo = { nombre: "💼 Trabajo", coords: coordsStr };
+    } else {
+      appFavoritos.custom.push({ nombre: opcion, coords: coordsStr });
+    }
+
+    localStorage.setItem('app_favoritos_gps', JSON.stringify(appFavoritos));
+    renderizarModalFavoritos();
+    mostrarNotificacion("¡Ubicación guardada en Favoritos!");
+  });
+}
+
+function togglePOIsEnMapa() {
+  if (!mapa) return;
+  if (poiMarkersGroup) mapa.removeLayer(poiMarkersGroup);
+  poiMarkersGroup = L.layerGroup().addTo(mapa);
+
+  const checkGas = document.getElementById('checkPoiGasolineras').checked;
+  const checkRest = document.getElementById('checkPoiRestaurantes').checked;
+  const checkMon = document.getElementById('checkPoiMonumentos').checked;
+
+  if (!checkGas && !checkRest && !checkMon) return;
+
+  if (userCoordinates && userCoordinates.lat) {
+    if (checkGas) {
+      L.marker([userCoordinates.lat + 0.01, userCoordinates.lng + 0.01])
+        .bindPopup("⛽ Gasolineras cercanas (a ~1.2 km)")
+        .addTo(poiMarkersGroup);
+    }
+  }
+}
 </script>
 </body>
 </html>
