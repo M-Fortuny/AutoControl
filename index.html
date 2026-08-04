@@ -1196,6 +1196,7 @@ input[type="date"] {
 </div>
 
 <script>
+
 const staticVehiculosPredeterminados = { "MG3 Hybrid +": { kmActuales: 5000, proxAceite: 15000, proxFiltro: 15000, proxRevision: 100000, registros: [] } };
 const gasolinerasPredeterminadas = ["Avanza Oil", "Repsol", "Petrem ECO"];
 
@@ -1972,11 +1973,33 @@ async function geocode(texto) {
         const parts = t.split(',').map(v => parseFloat(v.trim()));
         return L.latLng(parts[0], parts[1]);
     }
-    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(t)}`);
+    
+    // Priorizar la búsqueda en España y cerca del usuario para evitar ubicaciones en el mar
+    let url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(t)}&countrycodes=es`;
+    
+    if (userCoordinates && userCoordinates.lat) {
+        const lat = userCoordinates.lat;
+        const lng = userCoordinates.lng;
+        // Creamos un marco de búsqueda (~50km) alrededor de la ubicación del usuario
+        url += `&viewbox=${lng-0.5},${lat+0.5},${lng+0.5},${lat-0.5}&bounded=0`; 
+    }
+    
+    const res = await fetch(url);
     const data = await res.json();
-    if (!data.length) throw new Error(`No se encontró: ${t}`);
+    
+    if (!data || data.length === 0) {
+        // Respaldo global sin restricción por si es un destino internacional
+        const resFallback = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(t)}`);
+        const dataFallback = await resFallback.json();
+        if (!dataFallback || dataFallback.length === 0) {
+            throw new Error(`No se encontró la ubicación: ${t}`);
+        }
+        return L.latLng(parseFloat(dataFallback[0].lat), parseFloat(dataFallback[0].lon));
+    }
+    
     return L.latLng(parseFloat(data[0].lat), parseFloat(data[0].lon));
 }
+
 
 async function calcularRutaGPS() {
     const origenTexto = document.getElementById('origen-ruta').value;
@@ -1990,15 +2013,26 @@ async function calcularRutaGPS() {
 
     try {
         const puntos = [];
-        const origen = await geocode(origenTexto);
-        puntos.push(origen);
+        
+        // 1. Origen
+        puntos.push(await geocode(origenTexto));
 
-        for (const input of waypointInputs) {
-            if (input.value.trim()) puntos.push(await geocode(input.value));
+        // 2. Paradas intermedias (Waypoints)
+        for (let i = 0; i < waypointInputs.length; i++) {
+            const input = waypointInputs[i];
+            if (input.value.trim()) {
+                try {
+                    puntos.push(await geocode(input.value));
+                } catch (e) {
+                    alert(`Error en la Parada ${i + 1}: No se pudo encontrar la ubicación.`);
+                    btn.innerText = "Calcular Ruta";
+                    return;
+                }
+            }
         }
 
-        const destino = await geocode(destinoTexto);
-        puntos.push(destino);
+        // 3. Destino
+        puntos.push(await geocode(destinoTexto));
 
         if (controlRuta) mapa.removeControl(controlRuta);
 
@@ -2044,7 +2078,7 @@ async function calcularRutaGPS() {
         });
 
         controlRuta.on('routingerror', function() {
-            alert("No se pudo trazar una ruta entre los puntos especificados.");
+            alert("No se pudo trazar una ruta por carretera entre los puntos especificados.");
             btn.innerText = "Calcular Ruta";
         });
 
@@ -2054,6 +2088,7 @@ async function calcularRutaGPS() {
         btn.innerText = "Calcular Ruta";
     }
 }
+
 
 document.getElementById('btn-calcular-ruta').addEventListener('click', calcularRutaGPS);
 
@@ -2448,13 +2483,28 @@ function togglePOIsEnMapa() {
   if (!checkGas && !checkRest && !checkMon) return;
 
   if (userCoordinates && userCoordinates.lat) {
+    const lat = parseFloat(userCoordinates.lat);
+    const lng = parseFloat(userCoordinates.lng);
+    
+    // Ahora se procesan los tres independientemente si están seleccionados
     if (checkGas) {
-      L.marker([userCoordinates.lat + 0.01, userCoordinates.lng + 0.01])
-        .bindPopup("⛽ Gasolineras cercanas (a ~1.2 km)")
+      L.marker([lat + 0.005, lng + 0.005])
+        .bindPopup("⛽ Gasolinera Cercana")
+        .addTo(poiMarkersGroup);
+    }
+    if (checkRest) {
+      L.marker([lat - 0.005, lng - 0.005])
+        .bindPopup("🍔 Restaurante Cercano")
+        .addTo(poiMarkersGroup);
+    }
+    if (checkMon) {
+      L.marker([lat + 0.005, lng - 0.005])
+        .bindPopup("🏛️ Monumento Cercano")
         .addTo(poiMarkersGroup);
     }
   }
 }
+
 </script>
 </body>
 </html>
