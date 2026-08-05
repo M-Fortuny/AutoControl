@@ -2267,32 +2267,6 @@ document.getElementById('easter-egg-trigger').addEventListener('click', () => {
     }
 });
 
-function exportarDatos() {
-    const blob = new Blob([JSON.stringify({ baseDatos, gasolineras })], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = "backup_autocontrol.json";
-    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-}
-
-function importarDatos(event) {
-    const input = event.target;
-    if(!input.files[0]) return;
-    const reader = new FileReader();
-    reader.onload = function() {
-        try {
-            const data = JSON.parse(reader.result);
-            if(data.baseDatos && data.gasolineras) {
-                baseDatos = data.baseDatos; gasolineras = data.gasolineras;
-                guardarEnStorage(); localStorage.setItem('app_gasolineras_data', JSON.stringify(gasolineras));
-                vehiculoActivo = Object.keys(baseDatos)[0]; localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
-                inicializar();
-                alert("¡Datos restaurados con éxito!");
-                toggleForm('settingsModal');
-            } else throw new Error();
-        } catch(e) { alert("Archivo corrupto o inválido."); }
-    };
-    reader.readAsText(input.files[0]);
-}
 
 /* CENTRO DE NAVEGACIÓN Y FAVORITOS UNIFICADO */
 function abrirModalFavoritos() {
@@ -2609,8 +2583,44 @@ function abrirMapaLibre() {
   }
 }
 
+/* ==========================================
+   GESTIÓN DE DATOS (IMPORTAR / EXPORTAR)
+   ========================================== */
+function exportarDatos() {
+    const blob = new Blob([JSON.stringify({ baseDatos, gasolineras })], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = "backup_autocontrol.json";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
 
+function importarDatos(event) {
+    const input = event.target;
+    if(!input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = function() {
+        try {
+            const data = JSON.parse(reader.result);
+            if(data.baseDatos && data.gasolineras) {
+                baseDatos = data.baseDatos; gasolineras = data.gasolineras;
+                guardarEnStorage(); localStorage.setItem('app_gasolineras_data', JSON.stringify(gasolineras));
+                vehiculoActivo = Object.keys(baseDatos)[0]; localStorage.setItem('app_vehiculo_activo', vehiculoActivo);
+                inicializar();
+                alert("¡Datos restaurados con éxito!");
+                toggleForm('settingsModal');
+            } else throw new Error();
+        } catch(e) { alert("Archivo corrupto o inválido."); }
+    };
+    reader.readAsText(input.files[0]);
+}
 
+/* ==========================================
+   REGISTRO DEL SERVICE WORKER (PWA)
+   ========================================== */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(e => console.log(e));
+  });
+}
 
 
 </script>
