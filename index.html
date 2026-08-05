@@ -743,7 +743,6 @@ input[type="date"] {
     <button class="btn-custom" onclick="toggleDarkMode()">🌓 Modo Visual</button>
     <button class="btn-custom" onclick="toggleAyuda()">❓ Ayuda</button>
     <button class="btn-custom" onclick="toggleInfo()">ℹ️ Info Pro</button>
-    <button class="btn-custom" onclick="abrirModalFavoritos()">⭐ Favoritos</button>
     <div id="fechaHora"></div>
 </div>
 
@@ -1097,6 +1096,20 @@ input[type="date"] {
 
     <div class="modal-body-scroll">
       
+      <!-- NUEVA SECCIÓN: MODO EXPLORACIÓN Y MAPA LIBRE -->
+      <div class="seccion-gps-card">
+        <h4>🌍 Exploración Libre</h4>
+        <p class="text-muted-sm" style="margin-bottom: 10px;">Centra tu ubicación o abre el mapa a pantalla completa sin calcular ruta:</p>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-secondary btn-sm" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;" onclick="ubicarMiPosicionActual()">
+            📍 Activar Posición
+          </button>
+          <button class="btn btn-primary btn-sm" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;" onclick="abrirMapaLibre()">
+            🗺️ Abrir Mapa Grande
+          </button>
+        </div>
+      </div>
+
       <div class="seccion-gps-card">
         <h4>📍 Lugares Favoritos</h4>
         
@@ -1160,6 +1173,7 @@ input[type="date"] {
     </div>
   </div>
 </div>
+
 
 <div id="ui-dialog" class="hidden modal-overlay">
     <div class="modal-content" style="text-align:center;max-width:350px;padding:35px 25px;">
@@ -1973,33 +1987,11 @@ async function geocode(texto) {
         const parts = t.split(',').map(v => parseFloat(v.trim()));
         return L.latLng(parts[0], parts[1]);
     }
-    
-    // Priorizar la búsqueda en España y cerca del usuario para evitar ubicaciones en el mar
-    let url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(t)}&countrycodes=es`;
-    
-    if (userCoordinates && userCoordinates.lat) {
-        const lat = userCoordinates.lat;
-        const lng = userCoordinates.lng;
-        // Creamos un marco de búsqueda (~50km) alrededor de la ubicación del usuario
-        url += `&viewbox=${lng-0.5},${lat+0.5},${lng+0.5},${lat-0.5}&bounded=0`; 
-    }
-    
-    const res = await fetch(url);
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(t)}`);
     const data = await res.json();
-    
-    if (!data || data.length === 0) {
-        // Respaldo global sin restricción por si es un destino internacional
-        const resFallback = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(t)}`);
-        const dataFallback = await resFallback.json();
-        if (!dataFallback || dataFallback.length === 0) {
-            throw new Error(`No se encontró la ubicación: ${t}`);
-        }
-        return L.latLng(parseFloat(dataFallback[0].lat), parseFloat(dataFallback[0].lon));
-    }
-    
+    if (!data.length) throw new Error(`No se encontró: ${t}`);
     return L.latLng(parseFloat(data[0].lat), parseFloat(data[0].lon));
 }
-
 
 async function calcularRutaGPS() {
     const origenTexto = document.getElementById('origen-ruta').value;
@@ -2013,26 +2005,15 @@ async function calcularRutaGPS() {
 
     try {
         const puntos = [];
-        
-        // 1. Origen
-        puntos.push(await geocode(origenTexto));
+        const origen = await geocode(origenTexto);
+        puntos.push(origen);
 
-        // 2. Paradas intermedias (Waypoints)
-        for (let i = 0; i < waypointInputs.length; i++) {
-            const input = waypointInputs[i];
-            if (input.value.trim()) {
-                try {
-                    puntos.push(await geocode(input.value));
-                } catch (e) {
-                    alert(`Error en la Parada ${i + 1}: No se pudo encontrar la ubicación.`);
-                    btn.innerText = "Calcular Ruta";
-                    return;
-                }
-            }
+        for (const input of waypointInputs) {
+            if (input.value.trim()) puntos.push(await geocode(input.value));
         }
 
-        // 3. Destino
-        puntos.push(await geocode(destinoTexto));
+        const destino = await geocode(destinoTexto);
+        puntos.push(destino);
 
         if (controlRuta) mapa.removeControl(controlRuta);
 
@@ -2078,7 +2059,7 @@ async function calcularRutaGPS() {
         });
 
         controlRuta.on('routingerror', function() {
-            alert("No se pudo trazar una ruta por carretera entre los puntos especificados.");
+            alert("No se pudo trazar una ruta entre los puntos especificados.");
             btn.innerText = "Calcular Ruta";
         });
 
@@ -2088,7 +2069,6 @@ async function calcularRutaGPS() {
         btn.innerText = "Calcular Ruta";
     }
 }
-
 
 document.getElementById('btn-calcular-ruta').addEventListener('click', calcularRutaGPS);
 
@@ -2368,14 +2348,25 @@ function renderizarModalFavoritos() {
 }
 
 async function definirFavoritoFijo(tipo) {
-  const coords = document.getElementById('origen-ruta').value || document.getElementById('destino-ruta').value;
-  const dir = prompt(`Introduce la dirección o coordenadas para ${tipo.toUpperCase()}:`, coords || "");
+  // Verificamos si hay coordenadas GPS activas primero
+  let coordsPorDefecto = "";
+  if (typeof userCoordinates !== 'undefined' && userCoordinates && userCoordinates.lat) {
+    coordsPorDefecto = `${userCoordinates.lat}, ${userCoordinates.lng}`;
+  } else {
+    // Si no hay GPS, intentamos coger lo que haya en los inputs de ruta
+    coordsPorDefecto = document.getElementById('origen-ruta').value || document.getElementById('destino-ruta').value || "";
+  }
+  
+  const dir = prompt(`Introduce la dirección o coordenadas para ${tipo.toUpperCase()}:`, coordsPorDefecto);
   if (!dir) return;
+  
   appFavoritos[tipo] = { nombre: dir, coords: dir };
   localStorage.setItem('app_favoritos_gps', JSON.stringify(appFavoritos));
+  
   renderizarModalFavoritos();
   mostrarNotificacion(`Guardado como ${tipo.toUpperCase()}`);
 }
+
 
 function cargarFavoritoEn(tipo, campo) {
   const fav = appFavoritos[tipo];
@@ -2391,13 +2382,26 @@ function cargarFavoritoEn(tipo, campo) {
 async function añadirNuevoFavoritoManual() {
   const nombre = prompt("Nombre del nuevo favorito:", "");
   if (!nombre) return;
-  const ubicacion = document.getElementById('origen-ruta').value || prompt("Dirección o coordenadas:", "");
+  
+  // Verificamos si hay coordenadas GPS activas
+  let coordsPorDefecto = "";
+  if (typeof userCoordinates !== 'undefined' && userCoordinates && userCoordinates.lat) {
+    coordsPorDefecto = `${userCoordinates.lat}, ${userCoordinates.lng}`;
+  } else {
+    coordsPorDefecto = document.getElementById('origen-ruta').value || "";
+  }
+
+  const ubicacion = prompt("Dirección o coordenadas:", coordsPorDefecto);
   if (!ubicacion) return;
+  
   appFavoritos.custom.push({ nombre, coords: ubicacion });
   localStorage.setItem('app_favoritos_gps', JSON.stringify(appFavoritos));
+  
   renderizarModalFavoritos();
   mostrarNotificacion("Favorito añadido correctamente");
 }
+
+
 
 function cargarFavoritoCustom(index, campo) {
   const fav = appFavoritos.custom[index];
@@ -2471,7 +2475,7 @@ function configurarSeleccionFavoritoEnMapa(mapaLeaflet) {
   });
 }
 
-function togglePOIsEnMapa() {
+async function togglePOIsEnMapa() {
   if (!mapa) return;
   if (poiMarkersGroup) mapa.removeLayer(poiMarkersGroup);
   poiMarkersGroup = L.layerGroup().addTo(mapa);
@@ -2482,28 +2486,132 @@ function togglePOIsEnMapa() {
 
   if (!checkGas && !checkRest && !checkMon) return;
 
+  let lat, lng;
   if (userCoordinates && userCoordinates.lat) {
-    const lat = parseFloat(userCoordinates.lat);
-    const lng = parseFloat(userCoordinates.lng);
+    lat = parseFloat(userCoordinates.lat);
+    lng = parseFloat(userCoordinates.lng);
+  } else {
+    const centro = mapa.getCenter();
+    lat = centro.lat;
+    lng = centro.lng;
+  }
+
+  const buscarYMarcarMultiplesPOIs = async (tipo, queryOsm, emoji) => {
+    // Pedimos hasta 50 resultados en un radio de 15km para asegurarnos de no perder los cercanos
+    const query = `[out:json];node${queryOsm}(around:15000,${lat},${lng});out 50;`;
+    const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
     
-    // Ahora se procesan los tres independientemente si están seleccionados
-    if (checkGas) {
-      L.marker([lat + 0.005, lng + 0.005])
-        .bindPopup("⛽ Gasolinera Cercana")
-        .addTo(poiMarkersGroup);
+    try {
+      const respuesta = await fetch(url);
+      const datos = await respuesta.json();
+      
+      if (datos.elements && datos.elements.length > 0) {
+        
+        // 1. Calculamos la distancia de todos los resultados encontrados
+        let poisConDistancia = datos.elements.map(poi => {
+          const distanciaMetros = mapa.distance([lat, lng], [poi.lat, poi.lon]);
+          return {
+            ...poi,
+            distanciaMetros: distanciaMetros,
+            distanciaKm: (distanciaMetros / 1000).toFixed(2)
+          };
+        });
+
+        // 2. Ordenamos el array de menor a mayor distancia (¡Clave para que salgan los cercanos!)
+        poisConDistancia.sort((a, b) => a.distanciaMetros - b.distanciaMetros);
+
+        // 3. Nos quedamos solo con los 15 más cercanos reales
+        const poisMasCercanos = poisConDistancia.slice(0, 15);
+
+        // 4. Los pintamos en el mapa
+        poisMasCercanos.forEach(poi => {
+          const nombrePoi = (poi.tags && poi.tags.name) ? poi.tags.name : `${tipo} sin nombre`;
+          L.marker([poi.lat, poi.lon])
+            .bindPopup(`<b>${emoji} ${nombrePoi}</b><br>📍 Distancia: ${poi.distanciaKm} km`)
+            .addTo(poiMarkersGroup);
+        });
+      } else {
+        console.log(`No se encontraron ${tipo}s cercanos.`);
+      }
+    } catch (error) {
+      console.error(`Error buscando ${tipo}:`, error);
     }
-    if (checkRest) {
-      L.marker([lat - 0.005, lng - 0.005])
-        .bindPopup("🍔 Restaurante Cercano")
-        .addTo(poiMarkersGroup);
+  };
+
+  if (checkGas) await buscarYMarcarMultiplesPOIs('Gasolinera', '["amenity"="fuel"]', '⛽');
+  if (checkRest) await buscarYMarcarMultiplesPOIs('Restaurante', '["amenity"="restaurant"]', '🍽️');
+  if (checkMon) await buscarYMarcarMultiplesPOIs('Monumento', '["tourism"~"viewpoint|museum|artwork|attraction"]', '🏛️');
+}
+
+
+
+
+function ubicarMiPosicionActual() {
+  if (!navigator.geolocation) {
+    alert("Tu navegador no soporta la geolocalización.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      // Actualizamos tu variable global de coordenadas
+      userCoordinates = { 
+        lat: pos.coords.latitude, 
+        lng: pos.coords.longitude 
+      };
+      
+      if (mapa) {
+        mapa.setView([userCoordinates.lat, userCoordinates.lng], 15);
+        L.marker([userCoordinates.lat, userCoordinates.lng])
+          .addTo(mapa)
+          .bindPopup("📍 Estás aquí")
+          .openPopup();
+      }
+      alert("Posición GPS actualizada.");
+    },
+    (err) => {
+      alert("No se pudo obtener la ubicación. Comprueba el GPS.");
     }
-    if (checkMon) {
-      L.marker([lat + 0.005, lng - 0.005])
-        .bindPopup("🏛️ Monumento Cercano")
-        .addTo(poiMarkersGroup);
+  );
+}
+
+function abrirMapaLibre() {
+  // 1. Cerramos la ventana de la estrella
+  if (typeof cerrarModalFavoritos === 'function') {
+    cerrarModalFavoritos();
+  }
+  
+  // 2. Ocultamos el cuadro de texto de los resultados de ruta (si estuviera abierto)
+  const resultadoRuta = document.getElementById('resultado-ruta');
+  if (resultadoRuta) {
+    resultadoRuta.style.display = 'none';
+  }
+  
+  // 3. ¡LA MAGIA! Llamamos a tu propia función original que ya lo hace todo perfecto
+  if (typeof abrirNavegador === 'function') {
+    abrirNavegador();
+  } else {
+    // Respaldo manual por si la función abrirNavegador tuviera otro nombre
+    const contenedorMapa = document.getElementById('miMapa');
+    if (contenedorMapa) {
+      contenedorMapa.style.display = 'block';
+      contenedorMapa.classList.add('modo-pantalla-completa');
     }
+    const overlay = document.getElementById('map-overlay-controls');
+    if (overlay) overlay.style.display = 'flex'; // o 'block' según tu CSS
+  }
+  
+  // 4. Refrescamos el lienzo de Leaflet para que los mapas carguen al tamaño completo
+  if (typeof mapa !== 'undefined' && mapa !== null) {
+    setTimeout(() => {
+      mapa.invalidateSize();
+    }, 300);
   }
 }
+
+
+
+
 
 </script>
 </body>
